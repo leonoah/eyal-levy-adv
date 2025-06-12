@@ -20,11 +20,11 @@ const Header = () => {
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center space-x-3 space-x-reverse">
             <img 
-              src="https://lovable.dev/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
+              src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
               alt="לוגו עו&quot;ד אייל לוי" 
               className="h-10 w-auto"
               onError={(e) => {
-                console.log('Logo failed to load');
+                console.log('Logo failed to load from:', e.currentTarget.src);
                 e.currentTarget.style.display = 'none';
               }}
             />
