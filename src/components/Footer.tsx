@@ -1,9 +1,51 @@
 
 import { Phone, Mail, MapPin, Facebook, Linkedin, Instagram } from 'lucide-react';
 import { useContentManager } from '@/hooks/useContentManager';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+
+interface SocialLink {
+  id: string;
+  platform: string;
+  url: string;
+  is_active: boolean;
+}
 
 const Footer = () => {
   const content = useContentManager();
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
+
+  useEffect(() => {
+    fetchSocialLinks();
+  }, []);
+
+  const fetchSocialLinks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('social_links')
+        .select('*')
+        .eq('is_active', true)
+        .order('platform');
+      
+      if (error) throw error;
+      setSocialLinks(data || []);
+    } catch (error) {
+      console.error('Error fetching social links:', error);
+    }
+  };
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform) {
+      case 'facebook':
+        return Facebook;
+      case 'linkedin':
+        return Linkedin;
+      case 'instagram':
+        return Instagram;
+      default:
+        return Facebook;
+    }
+  };
 
   const quickLinks = [
     { href: '#home', label: 'דף הבית' },
@@ -17,12 +59,6 @@ const Footer = () => {
     { href: '#', label: 'מדיניות פרטיות' },
     { href: '#', label: 'תנאי שימוש' },
     { href: '#', label: 'הצהרת נגישות' },
-  ];
-
-  const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
   ];
 
   return (
@@ -97,16 +133,21 @@ const Footer = () => {
             <div>
               <h5 className="text-lawyer-gold font-semibold mb-3">עקבו אחרינו</h5>
               <div className="flex space-x-3 space-x-reverse">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    className="w-10 h-10 bg-lawyer-divider rounded-lg flex items-center justify-center text-lawyer-silver hover:bg-lawyer-gold hover:text-lawyer-black transition-all"
-                    aria-label={social.label}
-                  >
-                    <social.icon size={20} />
-                  </a>
-                ))}
+                {socialLinks.map((social) => {
+                  const IconComponent = getSocialIcon(social.platform);
+                  return (
+                    <a
+                      key={social.id}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-lawyer-divider rounded-lg flex items-center justify-center text-lawyer-silver hover:bg-lawyer-gold hover:text-lawyer-black transition-all"
+                      aria-label={social.platform}
+                    >
+                      <IconComponent size={20} />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>

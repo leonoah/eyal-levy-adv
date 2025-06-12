@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,8 +5,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
-import { Save, Eye, ArrowRight, Upload } from 'lucide-react';
+import { Save, Eye, ArrowRight, Upload, Facebook, Linkedin, Instagram } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+
+interface SocialLink {
+  id: string;
+  platform: string;
+  url: string;
+  is_active: boolean;
+}
 
 interface SiteContent {
   hero: {
@@ -78,6 +85,7 @@ const defaultContent: SiteContent = {
 
 const Admin = () => {
   const [content, setContent] = useState<SiteContent>(defaultContent);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [newArticle, setNewArticle] = useState({
     title: '',
     excerpt: '',
@@ -91,7 +99,64 @@ const Admin = () => {
     if (savedContent) {
       setContent(JSON.parse(savedContent));
     }
+    fetchSocialLinks();
   }, []);
+
+  const fetchSocialLinks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('social_links')
+        .select('*')
+        .order('platform');
+      
+      if (error) throw error;
+      setSocialLinks(data || []);
+    } catch (error) {
+      console.error('Error fetching social links:', error);
+      toast({
+        title: "שגיאה",
+        description: "לא ניתן לטעון את קישורי המדיה החברתית",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const updateSocialLink = async (platform: string, url: string) => {
+    try {
+      const { error } = await supabase
+        .from('social_links')
+        .update({ url, updated_at: new Date().toISOString() })
+        .eq('platform', platform);
+      
+      if (error) throw error;
+      
+      await fetchSocialLinks();
+      toast({
+        title: "קישור עודכן בהצלחה",
+        description: `קישור ${platform} נשמר`
+      });
+    } catch (error) {
+      console.error('Error updating social link:', error);
+      toast({
+        title: "שגיאה",
+        description: "לא ניתן לעדכן את הקישור",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform) {
+      case 'facebook':
+        return <Facebook size={20} />;
+      case 'linkedin':
+        return <Linkedin size={20} />;
+      case 'instagram':
+        return <Instagram size={20} />;
+      default:
+        return null;
+    }
+  };
 
   const saveContent = () => {
     localStorage.setItem('siteContent', JSON.stringify(content));
@@ -203,11 +268,12 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="hero" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 bg-lawyer-block border border-lawyer-divider">
+          <TabsList className="grid w-full grid-cols-5 mb-8 bg-lawyer-block border border-lawyer-divider">
             <TabsTrigger value="hero" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">עמוד ראשי</TabsTrigger>
             <TabsTrigger value="about" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">אודות</TabsTrigger>
             <TabsTrigger value="articles" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מאמרים</TabsTrigger>
             <TabsTrigger value="contact" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">יצירת קשר</TabsTrigger>
+            <TabsTrigger value="social" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מדיה חברתית</TabsTrigger>
           </TabsList>
 
           <TabsContent value="hero">
@@ -435,6 +501,48 @@ const Admin = () => {
                     placeholder="הכניסו כתובת"
                   />
                 </div>
+              </div>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="social">
+            <Card className="p-6 bg-lawyer-block border-lawyer-divider">
+              <h2 className="text-2xl font-bold text-lawyer-gold mb-6">עריכת קישורי מדיה חברתית</h2>
+              <div className="space-y-6">
+                {socialLinks.map((link) => (
+                  <div key={link.platform} className="space-y-2">
+                    <Label className="text-lawyer-white text-base font-medium mb-2 block flex items-center gap-2">
+                      {getSocialIcon(link.platform)}
+                      {link.platform === 'facebook' && 'פייסבוק'}
+                      {link.platform === 'linkedin' && 'לינקדין'}
+                      {link.platform === 'instagram' && 'אינסטגרם'}
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        value={link.url}
+                        onChange={(e) => {
+                          const newUrl = e.target.value;
+                          setSocialLinks(prev => 
+                            prev.map(item => 
+                              item.platform === link.platform 
+                                ? { ...item, url: newUrl }
+                                : item
+                            )
+                          );
+                        }}
+                        className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
+                        placeholder="הכניסו קישור..."
+                      />
+                      <Button
+                        onClick={() => updateSocialLink(link.platform, link.url)}
+                        className="bg-lawyer-gold text-lawyer-black hover:bg-yellow-400 px-6 font-semibold"
+                      >
+                        <Save className="ml-2" size={16} />
+                        שמירה
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </Card>
           </TabsContent>
