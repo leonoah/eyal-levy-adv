@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -6,6 +5,7 @@ import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { useContentManager } from '@/hooks/useContentManager';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const Contact = () => {
   const content = useContentManager();
@@ -41,11 +41,18 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      // כאן תוכלו לשלוח את הנתונים לשרת
-      console.log('Form submitted:', formData);
+      console.log('Submitting form data:', formData);
       
-      // סימולציה של שליחה לשרת
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData,
+      });
+
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
+
+      console.log('Function response:', data);
       
       toast({
         title: "הודעה נשלחה בהצלחה!",
@@ -61,6 +68,7 @@ const Contact = () => {
       });
       
     } catch (error) {
+      console.error('Error submitting form:', error);
       toast({
         title: "שגיאה בשליחת ההודעה",
         description: "אנא נסו שוב או צרו קשר טלפונית",
