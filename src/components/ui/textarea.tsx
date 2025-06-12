@@ -1,3 +1,4 @@
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -15,6 +16,14 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         )}
         ref={ref}
         {...props}
+        style={{
+          ...(className?.includes('lawyer-input') && {
+            backgroundColor: '#000000',
+            color: '#ffffff',
+            borderColor: '#9ca3af'
+          }),
+          ...props.style
+        }}
       />
     )
   }
