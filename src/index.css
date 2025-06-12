@@ -132,10 +132,12 @@
   
   .lawyer-input {
     @apply bg-lawyer-black border border-lawyer-silver rounded-md px-4 py-3 text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold focus:outline-none transition-colors;
+    color: white !important;
   }
   
   .lawyer-input:focus {
     @apply text-lawyer-white;
+    color: white !important;
   }
   
   .lawyer-input::placeholder {
