@@ -170,14 +170,14 @@ const Admin = () => {
           <div className="flex gap-4">
             <Button 
               onClick={saveContent}
-              className="lawyer-button-primary"
+              className="bg-lawyer-gold text-lawyer-black hover:bg-yellow-400 px-6 py-3 font-semibold"
             >
               <Save className="ml-2" size={20} />
               שמירת שינויים
             </Button>
             <Button 
               onClick={() => window.open('/', '_blank')}
-              className="lawyer-button-secondary"
+              className="bg-lawyer-silver text-lawyer-black hover:bg-gray-300 px-6 py-3 font-semibold"
             >
               <Eye className="ml-2" size={20} />
               צפייה באתר
@@ -186,11 +186,11 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="hero" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8">
-            <TabsTrigger value="hero">עמוד ראשי</TabsTrigger>
-            <TabsTrigger value="about">אודות</TabsTrigger>
-            <TabsTrigger value="articles">מאמרים</TabsTrigger>
-            <TabsTrigger value="contact">יצירת קשר</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-lawyer-block border border-lawyer-divider">
+            <TabsTrigger value="hero" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">עמוד ראשי</TabsTrigger>
+            <TabsTrigger value="about" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">אודות</TabsTrigger>
+            <TabsTrigger value="articles" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מאמרים</TabsTrigger>
+            <TabsTrigger value="contact" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">יצירת קשר</TabsTrigger>
           </TabsList>
 
           <TabsContent value="hero">
@@ -198,30 +198,30 @@ const Admin = () => {
               <h2 className="text-2xl font-bold text-lawyer-gold mb-6">עריכת עמוד ראשי</h2>
               <div className="space-y-6">
                 <div>
-                  <Label htmlFor="hero-title" className="text-lawyer-white">כותרת ראשית</Label>
+                  <Label htmlFor="hero-title" className="text-lawyer-white text-base font-medium mb-2 block">כותרת ראשית</Label>
                   <Input
                     id="hero-title"
                     value={content.hero.title}
                     onChange={(e) => updateHero('title', e.target.value)}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="hero-subtitle" className="text-lawyer-white">כותרת משנה</Label>
+                  <Label htmlFor="hero-subtitle" className="text-lawyer-white text-base font-medium mb-2 block">כותרת משנה</Label>
                   <Input
                     id="hero-subtitle"
                     value={content.hero.subtitle}
                     onChange={(e) => updateHero('subtitle', e.target.value)}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="hero-description" className="text-lawyer-white">תיאור</Label>
+                  <Label htmlFor="hero-description" className="text-lawyer-white text-base font-medium mb-2 block">תיאור</Label>
                   <Textarea
                     id="hero-description"
                     value={content.hero.description}
                     onChange={(e) => updateHero('description', e.target.value)}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                     rows={4}
                   />
                 </div>
@@ -234,31 +234,31 @@ const Admin = () => {
               <h2 className="text-2xl font-bold text-lawyer-gold mb-6">עריכת עמוד אודות</h2>
               <div className="space-y-6">
                 <div>
-                  <Label htmlFor="about-title" className="text-lawyer-white">כותרת</Label>
+                  <Label htmlFor="about-title" className="text-lawyer-white text-base font-medium mb-2 block">כותרת</Label>
                   <Input
                     id="about-title"
                     value={content.about.title}
                     onChange={(e) => updateAbout('title', e.target.value)}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="about-desc1" className="text-lawyer-white">פסקה ראשונה</Label>
+                  <Label htmlFor="about-desc1" className="text-lawyer-white text-base font-medium mb-2 block">פסקה ראשונה</Label>
                   <Textarea
                     id="about-desc1"
                     value={content.about.description1}
                     onChange={(e) => updateAbout('description1', e.target.value)}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                     rows={4}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="about-desc2" className="text-lawyer-white">פסקה שנייה</Label>
+                  <Label htmlFor="about-desc2" className="text-lawyer-white text-base font-medium mb-2 block">פסקה שנייה</Label>
                   <Textarea
                     id="about-desc2"
                     value={content.about.description2}
                     onChange={(e) => updateAbout('description2', e.target.value)}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                     rows={4}
                   />
                 </div>
@@ -272,44 +272,44 @@ const Admin = () => {
                 <h2 className="text-2xl font-bold text-lawyer-gold mb-6">הוספת מאמר חדש</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-lawyer-white">כותרת המאמר</Label>
+                    <Label className="text-lawyer-white text-base font-medium mb-2 block">כותרת המאמר</Label>
                     <Input
                       value={newArticle.title}
                       onChange={(e) => setNewArticle(prev => ({ ...prev, title: e.target.value }))}
-                      className="lawyer-input mt-2"
+                      className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                       placeholder="הכניסו כותרת"
                     />
                   </div>
                   <div>
-                    <Label className="text-lawyer-white">קטגוריה</Label>
+                    <Label className="text-lawyer-white text-base font-medium mb-2 block">קטגוריה</Label>
                     <Input
                       value={newArticle.category}
                       onChange={(e) => setNewArticle(prev => ({ ...prev, category: e.target.value }))}
-                      className="lawyer-input mt-2"
+                      className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                       placeholder="דיני עבודה, נדל״ן, וכו׳"
                     />
                   </div>
                   <div>
-                    <Label className="text-lawyer-white">תאריך (אופציונלי)</Label>
+                    <Label className="text-lawyer-white text-base font-medium mb-2 block">תאריך (אופציונלי)</Label>
                     <Input
                       value={newArticle.date}
                       onChange={(e) => setNewArticle(prev => ({ ...prev, date: e.target.value }))}
-                      className="lawyer-input mt-2"
+                      className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                       placeholder="1 במאי 2024"
                     />
                   </div>
                 </div>
                 <div className="mt-4">
-                  <Label className="text-lawyer-white">תקציר המאמר</Label>
+                  <Label className="text-lawyer-white text-base font-medium mb-2 block">תקציר המאמר</Label>
                   <Textarea
                     value={newArticle.excerpt}
                     onChange={(e) => setNewArticle(prev => ({ ...prev, excerpt: e.target.value }))}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                     rows={3}
                     placeholder="תיאור קצר של המאמר"
                   />
                 </div>
-                <Button onClick={addArticle} className="lawyer-button-primary mt-4">
+                <Button onClick={addArticle} className="bg-lawyer-gold text-lawyer-black hover:bg-yellow-400 px-6 py-3 font-semibold mt-4">
                   <ArrowRight className="ml-2" size={16} />
                   הוספת מאמר
                 </Button>
@@ -319,7 +319,7 @@ const Admin = () => {
                 <h2 className="text-2xl font-bold text-lawyer-gold mb-6">מאמרים קיימים</h2>
                 <div className="space-y-4">
                   {content.articles.map((article) => (
-                    <div key={article.id} className="border border-lawyer-divider rounded-lg p-4">
+                    <div key={article.id} className="border border-lawyer-divider rounded-lg p-4 bg-lawyer-black">
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <h3 className="text-lg font-bold text-lawyer-gold">{article.title}</h3>
@@ -330,7 +330,7 @@ const Admin = () => {
                           onClick={() => deleteArticle(article.id)}
                           variant="destructive"
                           size="sm"
-                          className="ml-4"
+                          className="ml-4 bg-red-600 text-white hover:bg-red-700"
                         >
                           מחיקה
                         </Button>
@@ -347,30 +347,30 @@ const Admin = () => {
               <h2 className="text-2xl font-bold text-lawyer-gold mb-6">עריכת פרטי קשר</h2>
               <div className="space-y-6">
                 <div>
-                  <Label htmlFor="contact-phone" className="text-lawyer-white">טלפון</Label>
+                  <Label htmlFor="contact-phone" className="text-lawyer-white text-base font-medium mb-2 block">טלפון</Label>
                   <Input
                     id="contact-phone"
                     value={content.contact.phone}
                     onChange={(e) => updateContact('phone', e.target.value)}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="contact-email" className="text-lawyer-white">אימייל</Label>
+                  <Label htmlFor="contact-email" className="text-lawyer-white text-base font-medium mb-2 block">אימייל</Label>
                   <Input
                     id="contact-email"
                     value={content.contact.email}
                     onChange={(e) => updateContact('email', e.target.value)}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="contact-address" className="text-lawyer-white">כתובת</Label>
+                  <Label htmlFor="contact-address" className="text-lawyer-white text-base font-medium mb-2 block">כתובת</Label>
                   <Input
                     id="contact-address"
                     value={content.contact.address}
                     onChange={(e) => updateContact('address', e.target.value)}
-                    className="lawyer-input mt-2"
+                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                   />
                 </div>
               </div>
