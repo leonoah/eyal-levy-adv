@@ -8,23 +8,12 @@ const Hero = () => {
   return (
     <section id="home" className="section-spacing bg-lawyer-black relative overflow-hidden min-h-screen flex items-center justify-center">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-4xl mx-auto">
-          {/* Logo and Title together */}
-          <div className="flex items-center justify-center mb-8">
-            <img 
-              src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
-              alt="לוגו עו&quot;ד אייל לוי" 
-              className="h-16 w-auto ml-4"
-            />
-            <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold">
-              {content.hero.title}
-            </h2>
-          </div>
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-6xl mx-auto">
           
-          {/* Eyal's image below the name */}
-          <div className="mb-6">
+          {/* Image on the left - increased by 40% */}
+          <div className="lg:order-1 order-2">
             {content.about.image ? (
-              <div className="w-52 h-52 mx-auto rounded-lg border-2 border-lawyer-gold overflow-hidden">
+              <div className="w-72 h-72 rounded-lg border-2 border-lawyer-gold overflow-hidden">
                 <img 
                   src={content.about.image} 
                   alt="עו&quot;ד אייל לוי" 
@@ -32,34 +21,51 @@ const Hero = () => {
                 />
               </div>
             ) : (
-              <div className="w-52 h-52 mx-auto rounded-lg border-2 border-lawyer-gold bg-lawyer-black flex items-center justify-center">
+              <div className="w-72 h-72 rounded-lg border-2 border-lawyer-gold bg-lawyer-black flex items-center justify-center">
                 <div className="text-center">
-                  <div className="w-26 h-26 bg-lawyer-gold rounded-full mx-auto mb-2 flex items-center justify-center">
-                    <span className="text-3xl font-bold text-lawyer-black">א.ל</span>
+                  <div className="w-36 h-36 bg-lawyer-gold rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <span className="text-4xl font-bold text-lawyer-black">א.ל</span>
                   </div>
-                  <p className="text-lawyer-gold font-semibold text-base">עו&quot;ד אייל לוי</p>
+                  <p className="text-lawyer-gold font-semibold text-lg">עו&quot;ד אייל לוי</p>
                 </div>
               </div>
             )}
           </div>
-          
-          {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-lawyer-silver mb-8 animate-fade-in">
-            {content.hero.subtitle}
-          </p>
-          
-          {/* Description */}
-          <p className="text-lg text-lawyer-white mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in">
-            {content.hero.description}
-          </p>
-          
-          {/* CTA Button */}
-          <div className="flex flex-col items-center animate-fade-in">
-            <a href="#contact">
-              <Button className="lawyer-button-primary text-lg px-8 py-4">
-                לתיאום פגישה
-              </Button>
-            </a>
+
+          {/* Text and logo on the right */}
+          <div className="lg:order-2 order-1 text-center lg:text-right flex-1">
+            {/* Title */}
+            <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold mb-6">
+              {content.hero.title}
+            </h2>
+            
+            {/* Logo below the title - doubled in size */}
+            <div className="mb-8 flex justify-center lg:justify-end">
+              <img 
+                src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
+                alt="לוגו עו&quot;ד אייל לוי" 
+                className="h-32 w-auto"
+              />
+            </div>
+            
+            {/* Subtitle */}
+            <p className="text-xl md:text-2xl text-lawyer-silver mb-8 animate-fade-in">
+              {content.hero.subtitle}
+            </p>
+            
+            {/* Description */}
+            <p className="text-lg text-lawyer-white mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-fade-in">
+              {content.hero.description}
+            </p>
+            
+            {/* CTA Button */}
+            <div className="flex flex-col items-center lg:items-end animate-fade-in">
+              <a href="#contact">
+                <Button className="lawyer-button-primary text-lg px-8 py-4">
+                  לתיאום פגישה
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       </div>
