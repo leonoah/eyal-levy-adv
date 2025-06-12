@@ -20,14 +20,24 @@ const About = () => {
           {/* Image side */}
           <div className="lg:order-2">
             <div className="relative">
-              <div className="w-80 h-80 mx-auto rounded-lg border-2 border-lawyer-gold bg-lawyer-black flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 bg-lawyer-gold rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-lawyer-black">א.ל</span>
-                  </div>
-                  <p className="text-lawyer-gold font-semibold">עו"ד אייל לוי</p>
+              {content.about.image ? (
+                <div className="w-80 h-80 mx-auto rounded-lg border-2 border-lawyer-gold overflow-hidden">
+                  <img 
+                    src={content.about.image} 
+                    alt="עו\"ד אייל לוי" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              </div>
+              ) : (
+                <div className="w-80 h-80 mx-auto rounded-lg border-2 border-lawyer-gold bg-lawyer-black flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-32 h-32 bg-lawyer-gold rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <span className="text-4xl font-bold text-lawyer-black">א.ל</span>
+                    </div>
+                    <p className="text-lawyer-gold font-semibold">עו"ד אייל לוי</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -61,7 +71,7 @@ const About = () => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

@@ -11,6 +11,7 @@ export interface SiteContent {
     title: string;
     description1: string;
     description2: string;
+    image?: string;
   };
   contact: {
     phone: string;

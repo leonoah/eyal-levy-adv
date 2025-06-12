@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
-import { Save, Eye, ArrowRight } from 'lucide-react';
+import { Save, Eye, ArrowRight, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface SiteContent {
@@ -19,6 +19,7 @@ interface SiteContent {
     title: string;
     description1: string;
     description2: string;
+    image?: string;
   };
   contact: {
     phone: string;
@@ -121,6 +122,22 @@ const Admin = () => {
       ...prev,
       contact: { ...prev.contact, [field]: value }
     }));
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        updateAbout('image', result);
+        toast({
+          title: "התמונה הועלתה בהצלחה",
+          description: "התמונה נשמרה ותופיע בסקשן האודות"
+        });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const addArticle = () => {
@@ -261,6 +278,28 @@ const Admin = () => {
                     className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
                     rows={4}
                   />
+                </div>
+                <div>
+                  <Label htmlFor="about-image" className="text-lawyer-white text-base font-medium mb-2 block">תמונה</Label>
+                  <div className="space-y-4">
+                    <Input
+                      id="about-image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="bg-lawyer-black border-lawyer-silver text-lawyer-white file:bg-lawyer-gold file:text-lawyer-black file:border-0 file:px-4 file:py-2 file:rounded file:mr-4"
+                    />
+                    {content.about.image && (
+                      <div className="mt-4">
+                        <p className="text-lawyer-silver text-sm mb-2">תצוגה מקדימה:</p>
+                        <img 
+                          src={content.about.image} 
+                          alt="תצוגה מקדימה" 
+                          className="w-32 h-32 object-cover rounded border border-lawyer-gold"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </Card>
