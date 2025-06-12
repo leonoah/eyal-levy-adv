@@ -24,7 +24,7 @@ const About = () => {
                 <div className="w-80 h-80 mx-auto rounded-lg border-2 border-lawyer-gold overflow-hidden">
                   <img 
                     src={content.about.image} 
-                    alt="עו\"ד אייל לוי" 
+                    alt="עו&quot;ד אייל לוי" 
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -34,7 +34,7 @@ const About = () => {
                     <div className="w-32 h-32 bg-lawyer-gold rounded-full mx-auto mb-4 flex items-center justify-center">
                       <span className="text-4xl font-bold text-lawyer-black">א.ל</span>
                     </div>
-                    <p className="text-lawyer-gold font-semibold">עו"ד אייל לוי</p>
+                    <p className="text-lawyer-gold font-semibold">עו&quot;ד אייל לוי</p>
                   </div>
                 </div>
               )}
@@ -71,7 +71,7 @@ const About = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
