@@ -8,63 +8,71 @@ const Hero = () => {
   return (
     <section id="home" className="section-spacing bg-lawyer-black relative overflow-hidden min-h-screen flex items-center justify-center">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-6xl mx-auto">
+        <div className="text-center max-w-6xl mx-auto">
           
-          {/* Image on the left - increased by 40% */}
-          <div className="lg:order-1 order-2">
-            {content.about.image ? (
-              <div className="w-72 h-72 rounded-lg border-2 border-lawyer-gold overflow-hidden">
-                <img 
-                  src={content.about.image} 
-                  alt="עו&quot;ד אייל לוי" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ) : (
-              <div className="w-72 h-72 rounded-lg border-2 border-lawyer-gold bg-lawyer-black flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-36 h-36 bg-lawyer-gold rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-lawyer-black">א.ל</span>
-                  </div>
-                  <p className="text-lawyer-gold font-semibold text-lg">עו&quot;ד אייל לוי</p>
-                </div>
-              </div>
-            )}
+          {/* Logo centered at the top */}
+          <div className="mb-12">
+            <img 
+              src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
+              alt="לוגו עו&quot;ד אייל לוי" 
+              className="h-24 w-auto mx-auto"
+            />
           </div>
 
-          {/* Text and logo on the right */}
-          <div className="lg:order-2 order-1 text-center lg:text-right flex-1">
-            {/* Title */}
-            <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold mb-6">
-              {content.hero.title}
-            </h2>
+          {/* Main content with image on left and text on right */}
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-16">
             
-            {/* Logo below the title - doubled in size */}
-            <div className="mb-8 flex justify-center lg:justify-end">
-              <img 
-                src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
-                alt="לוגו עו&quot;ד אייל לוי" 
-                className="h-32 w-auto"
-              />
+            {/* Image on the left with gold border frame */}
+            <div className="lg:order-1 order-2">
+              {content.about.image ? (
+                <div className="relative">
+                  <div className="w-80 h-96 rounded-lg border-4 border-lawyer-gold overflow-hidden bg-lawyer-charcoal">
+                    <img 
+                      src={content.about.image} 
+                      alt="עו&quot;ד אייל לוי" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="relative">
+                  <div className="w-80 h-96 rounded-lg border-4 border-lawyer-gold bg-lawyer-charcoal flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-40 h-40 bg-lawyer-gold rounded-full mx-auto mb-6 flex items-center justify-center">
+                        <span className="text-5xl font-bold text-lawyer-black">א.ל</span>
+                      </div>
+                      <p className="text-lawyer-gold font-semibold text-xl">עו&quot;ד אייל לוי</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-            
-            {/* Subtitle */}
-            <p className="text-xl md:text-2xl text-lawyer-silver mb-8 animate-fade-in">
-              {content.hero.subtitle}
-            </p>
-            
-            {/* Description */}
-            <p className="text-lg text-lawyer-white mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-fade-in">
-              {content.hero.description}
-            </p>
-            
-            {/* CTA Button */}
-            <div className="flex flex-col items-center lg:items-end animate-fade-in">
-              <a href="#contact">
-                <Button className="lawyer-button-primary text-lg px-8 py-4">
-                  לתיאום פגישה
-                </Button>
-              </a>
+
+            {/* Text content on the right */}
+            <div className="lg:order-2 order-1 text-center lg:text-right flex-1 max-w-2xl">
+              {/* Main title */}
+              <h1 className="text-5xl md:text-6xl font-bold text-lawyer-gold mb-8 leading-tight">
+                {content.hero.title}
+              </h1>
+              
+              {/* Subtitle */}
+              <h2 className="text-2xl md:text-3xl text-lawyer-silver mb-8 font-medium leading-relaxed">
+                {content.hero.subtitle}
+              </h2>
+              
+              {/* Description */}
+              <p className="text-lg md:text-xl text-lawyer-white mb-12 leading-relaxed">
+                {content.hero.description}
+              </p>
+              
+              {/* CTA Button */}
+              <div className="flex justify-center lg:justify-end">
+                <a href="#contact">
+                  <Button className="lawyer-button-primary text-xl px-12 py-4 rounded-lg">
+                    לתיאום פגישה
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         </div>
