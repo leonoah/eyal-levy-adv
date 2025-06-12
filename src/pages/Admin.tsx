@@ -411,7 +411,8 @@ const Admin = () => {
                     id="contact-phone"
                     value={content.contact.phone}
                     onChange={(e) => updateContact('phone', e.target.value)}
-                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
+                    className="w-full bg-lawyer-black border-2 border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold focus:ring-0 focus:outline-none transition-colors text-base py-3 px-4"
+                    placeholder="הכניסו מספר טלפון"
                   />
                 </div>
                 <div>
@@ -420,7 +421,8 @@ const Admin = () => {
                     id="contact-email"
                     value={content.contact.email}
                     onChange={(e) => updateContact('email', e.target.value)}
-                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
+                    className="w-full bg-lawyer-black border-2 border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold focus:ring-0 focus:outline-none transition-colors text-base py-3 px-4"
+                    placeholder="הכניסו כתובת אימייל"
                   />
                 </div>
                 <div>
@@ -429,7 +431,8 @@ const Admin = () => {
                     id="contact-address"
                     value={content.contact.address}
                     onChange={(e) => updateContact('address', e.target.value)}
-                    className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
+                    className="w-full bg-lawyer-black border-2 border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold focus:ring-0 focus:outline-none transition-colors text-base py-3 px-4"
+                    placeholder="הכניסו כתובת"
                   />
                 </div>
               </div>
