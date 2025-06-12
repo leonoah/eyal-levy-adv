@@ -21,7 +21,7 @@ const Header = () => {
           <div className="flex-shrink-0 flex items-center space-x-3 space-x-reverse">
             <img 
               src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
-              alt="לוגו עו\"ד אייל לוי" 
+              alt="לוגו עו&quot;ד אייל לוי" 
               className="h-10 w-auto"
             />
             <h1 className="text-2xl font-bold text-lawyer-gold">עו"ד אייל לוי</h1>
