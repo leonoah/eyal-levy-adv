@@ -7,14 +7,10 @@ import Articles from '@/components/Articles';
 import Testimonials from '@/components/Testimonials';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
-import ThemeToggle from '@/components/ThemeToggle';
-import LanguageToggle from '@/components/LanguageToggle';
 
 const Index = () => {
   return (
     <div className="min-h-screen">
-      <ThemeToggle />
-      <LanguageToggle />
       <Header />
       <Hero />
       <About />
