@@ -7,7 +7,7 @@ const Hero = () => {
 
   return (
    <section className="bg-[#121212] min-h-screen flex items-center justify-center px-4 py-16">
-  <div className="max-w-6xl mx-auto w-full">
+  <div className="w-full max-w-5xl mx-auto flex flex-col items-center">
     
     {/* Logo at the top */}
     <div className="mb-8 text-center">
@@ -18,8 +18,8 @@ const Hero = () => {
       />
     </div>
 
-    {/* Main content - Image and Text side by side */}
-    <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 mb-8">
+    {/* Main content - Image and Text side by side, centered */}
+    <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 mb-8 w-full">
       
       {/* Image */}
       <div className="flex-shrink-0">
@@ -33,7 +33,7 @@ const Hero = () => {
       </div>
 
       {/* Text content */}
-      <div className="flex-1 text-center lg:text-right">
+      <div className="flex-1 max-w-lg text-center lg:text-right">
         {/* Main title */}
         <h1 className="text-4xl md:text-5xl font-bold text-[#c5a56d] mb-4 leading-tight">
           עו"ד אייל לוי
