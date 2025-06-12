@@ -134,6 +134,14 @@
     @apply bg-lawyer-black border border-lawyer-silver rounded-md px-4 py-3 text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold focus:outline-none transition-colors;
   }
   
+  .lawyer-input:focus {
+    @apply text-lawyer-white;
+  }
+  
+  .lawyer-input::placeholder {
+    @apply text-lawyer-silver opacity-70;
+  }
+  
   .section-spacing {
     @apply py-16 md:py-24;
   }
