@@ -42,9 +42,9 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
-    if (!SENDGRID_API_KEY) {
-      console.error('SENDGRID_API_KEY not found in environment variables');
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+    if (!RESEND_API_KEY) {
+      console.error('RESEND_API_KEY not found in environment variables');
       return new Response(
         JSON.stringify({ error: 'שגיאה בהגדרת השרת - חסר מפתח API' }),
         {
@@ -54,59 +54,50 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log('SendGrid API key found, preparing email...');
+    console.log('Resend API key found, preparing email...');
 
-    // Prepare email data for SendGrid using the default sender
+    // Prepare email data for Resend
     const emailData = {
-      personalizations: [
-        {
-          to: [{ email: 'leon.noah@gmail.com' }],
-          subject: `הודעה חדשה מאתר עורך הדין - ${name}`
-        }
-      ],
-      from: { email: 'onboarding@resend.dev', name: 'מאתר עורך הדין' },
-      content: [
-        {
-          type: 'text/html',
-          value: `
-            <div dir="rtl" style="font-family: Arial, sans-serif;">
-              <h2>הודעה חדשה מטופס יצירת הקשר</h2>
-              <p><strong>שם:</strong> ${name}</p>
-              <p><strong>טלפון:</strong> ${phone}</p>
-              <p><strong>אימייל:</strong> ${email}</p>
-              <p><strong>הודעה:</strong></p>
-              <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${message}</p>
-              <hr>
-              <p style="color: #666; font-size: 12px;">הודעה זו נשלחה מאתר עורך הדין</p>
-            </div>
-          `
-        }
-      ]
+      from: 'מאתר עורך הדין <onboarding@resend.dev>',
+      to: ['leon.noah@gmail.com'],
+      subject: `הודעה חדשה מאתר עורך הדין - ${name}`,
+      html: `
+        <div dir="rtl" style="font-family: Arial, sans-serif;">
+          <h2>הודעה חדשה מטופס יצירת הקשר</h2>
+          <p><strong>שם:</strong> ${name}</p>
+          <p><strong>טלפון:</strong> ${phone}</p>
+          <p><strong>אימייל:</strong> ${email}</p>
+          <p><strong>הודעה:</strong></p>
+          <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${message}</p>
+          <hr>
+          <p style="color: #666; font-size: 12px;">הודעה זו נשלחה מאתר עורך הדין</p>
+        </div>
+      `
     };
 
-    console.log('Sending email via SendGrid...');
+    console.log('Sending email via Resend...');
 
-    // Send email via SendGrid
-    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+    // Send email via Resend
+    const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SENDGRID_API_KEY}`,
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(emailData),
     });
 
-    console.log('SendGrid response status:', response.status);
+    console.log('Resend response status:', response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('SendGrid error:', response.status, errorText);
+      console.error('Resend error:', response.status, errorText);
       
       return new Response(
         JSON.stringify({ 
           error: 'שגיאה בשליחת האימייל',
-          details: `SendGrid error: ${response.status}`,
-          sendgridError: errorText
+          details: `Resend error: ${response.status}`,
+          resendError: errorText
         }),
         {
           status: 500,
@@ -115,7 +106,8 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log('Email sent successfully via SendGrid');
+    const responseData = await response.json();
+    console.log('Email sent successfully via Resend:', responseData);
 
     return new Response(
       JSON.stringify({ 
