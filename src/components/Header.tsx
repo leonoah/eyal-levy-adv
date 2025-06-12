@@ -17,28 +17,9 @@ const Header = () => {
     <header className="bg-lawyer-black border-b border-lawyer-divider sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+          {/* Logo - simplified for header */}
           <div className="flex-shrink-0 flex items-center space-x-3 space-x-reverse">
-            <img 
-              src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
-              alt="לוגו עו&quot;ד אייל לוי" 
-              className="h-10 w-auto border-2 border-red-500"
-              style={{ 
-                minWidth: '40px', 
-                display: 'block',
-                backgroundColor: 'rgba(255, 0, 0, 0.1)'
-              }}
-              onLoad={() => {
-                console.log('Logo loaded successfully!');
-                console.log('Logo dimensions:', document.querySelector('img')?.naturalWidth, 'x', document.querySelector('img')?.naturalHeight);
-              }}
-              onError={(e) => {
-                console.log('Logo failed to load from:', e.currentTarget.src);
-                console.log('Error details:', e);
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-            <h1 className="text-2xl font-bold text-lawyer-gold">עו"ד אייל לוי</h1>
+            <h1 className="text-xl font-bold text-lawyer-gold">עו"ד אייל לוי</h1>
           </div>
 
           {/* Desktop Navigation */}

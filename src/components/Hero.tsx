@@ -6,13 +6,25 @@ const Hero = () => {
   const content = useContentManager();
 
   return (
-    <section id="home" className="section-spacing bg-lawyer-black relative overflow-hidden">
+    <section id="home" className="section-spacing bg-lawyer-black relative overflow-hidden min-h-screen flex items-center justify-center">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-4xl mx-auto">
+          {/* Logo and Title in center */}
+          <div className="flex flex-col items-center justify-center mb-8">
+            <img 
+              src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
+              alt="לוגו עו&quot;ד אייל לוי" 
+              className="h-20 w-auto mb-4"
+            />
+            <h1 className="text-4xl md:text-6xl font-bold text-lawyer-gold mb-4">
+              עו"ד אייל לוי
+            </h1>
+          </div>
+          
           {/* Main title */}
-          <h1 className="text-5xl md:text-7xl font-bold text-lawyer-gold mb-6 animate-fade-in">
+          <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold mb-6 animate-fade-in">
             {content.hero.title}
-          </h1>
+          </h2>
           
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-lawyer-silver mb-8 animate-fade-in">
