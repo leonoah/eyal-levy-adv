@@ -18,7 +18,12 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 flex items-center space-x-3 space-x-reverse">
+            <img 
+              src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
+              alt="לוגו עו\"ד אייל לוי" 
+              className="h-10 w-auto"
+            />
             <h1 className="text-2xl font-bold text-lawyer-gold">עו"ד אייל לוי</h1>
           </div>
 
