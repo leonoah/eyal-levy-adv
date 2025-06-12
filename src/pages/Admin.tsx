@@ -280,23 +280,43 @@ const Admin = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="about-image" className="text-lawyer-white text-base font-medium mb-2 block">תמונה</Label>
+                  <Label className="text-lawyer-white text-base font-medium mb-2 block">תמונה אישית</Label>
                   <div className="space-y-4">
-                    <Input
-                      id="about-image"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="bg-lawyer-black border-lawyer-silver text-lawyer-white file:bg-lawyer-gold file:text-lawyer-black file:border-0 file:px-4 file:py-2 file:rounded file:mr-4"
-                    />
+                    <div className="flex items-center gap-4">
+                      <Button 
+                        onClick={() => document.getElementById('image-upload')?.click()}
+                        className="bg-lawyer-gold text-lawyer-black hover:bg-yellow-400 px-6 py-3 font-semibold"
+                      >
+                        <Upload className="ml-2" size={20} />
+                        העלאת תמונה
+                      </Button>
+                      <input
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                      {content.about.image && (
+                        <span className="text-lawyer-silver text-sm">תמונה הועלתה בהצלחה</span>
+                      )}
+                    </div>
                     {content.about.image && (
-                      <div className="mt-4">
+                      <div>
                         <p className="text-lawyer-silver text-sm mb-2">תצוגה מקדימה:</p>
                         <img 
                           src={content.about.image} 
                           alt="תצוגה מקדימה" 
                           className="w-32 h-32 object-cover rounded border border-lawyer-gold"
                         />
+                        <Button 
+                          onClick={() => updateAbout('image', '')}
+                          variant="destructive"
+                          size="sm"
+                          className="mt-2"
+                        >
+                          הסרת תמונה
+                        </Button>
                       </div>
                     )}
                   </div>
