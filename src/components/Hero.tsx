@@ -16,9 +16,7 @@ const Hero = () => {
               alt="לוגו עו&quot;ד אייל לוי" 
               className="h-16 w-auto ml-4"
             />
-            <h1 className="text-4xl md:text-6xl font-bold text-lawyer-gold">
-              עו"ד אייל לוי
-            </h1>
+         
           </div>
           
           {/* Main title */}
