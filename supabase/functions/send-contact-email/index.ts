@@ -44,9 +44,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
     if (!SENDGRID_API_KEY) {
-      console.error('SENDGRID_API_KEY not found');
+      console.error('SENDGRID_API_KEY not found in environment variables');
+      console.log('Available env keys:', Object.keys(Deno.env.toObject()));
       return new Response(
-        JSON.stringify({ error: 'שגיאה בהגדרת השרת' }),
+        JSON.stringify({ error: 'שגיאה בהגדרת השרת - חסר מפתח API' }),
         {
           status: 500,
           headers: { 'Content-Type': 'application/json', ...corsHeaders },
@@ -54,15 +55,17 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Prepare email data
+    console.log('SendGrid API key found, preparing email...');
+
+    // Prepare email data for SendGrid
     const emailData = {
       personalizations: [
         {
-          to: [{ email: 'office@lawyer-example.com' }], // Replace with your actual email
+          to: [{ email: 'leon.noah@gmail.com' }], // Replace with your actual email
           subject: `הודעה חדשה מאתר עורך הדין - ${name}`
         }
       ],
-      from: { email: 'noreply@lawyer-example.com' }, // Replace with your verified SendGrid sender
+      from: { email: 'noreply@lovableproject.com' }, // Using a generic sender
       content: [
         {
           type: 'text/html',
@@ -82,6 +85,8 @@ const handler = async (req: Request): Promise<Response> => {
       ]
     };
 
+    console.log('Sending email via SendGrid...');
+
     // Send email via SendGrid
     const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
@@ -92,12 +97,18 @@ const handler = async (req: Request): Promise<Response> => {
       body: JSON.stringify(emailData),
     });
 
+    console.log('SendGrid response status:', response.status);
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('SendGrid error:', response.status, errorText);
       
       return new Response(
-        JSON.stringify({ error: 'שגיאה בשליחת האימייל' }),
+        JSON.stringify({ 
+          error: 'שגיאה בשליחת האימייל',
+          details: `SendGrid error: ${response.status}`,
+          sendgridError: errorText
+        }),
         {
           status: 500,
           headers: { 'Content-Type': 'application/json', ...corsHeaders },
@@ -108,7 +119,11 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('Email sent successfully via SendGrid');
 
     return new Response(
-      JSON.stringify({ success: true, message: 'האימייל נשלח בהצלחה' }),
+      JSON.stringify({ 
+        success: true, 
+        message: 'האימייל נשלח בהצלחה',
+        timestamp: new Date().toISOString()
+      }),
       {
         status: 200,
         headers: { 'Content-Type': 'application/json', ...corsHeaders },
@@ -118,7 +133,10 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error) {
     console.error('Error in send-contact-email function:', error);
     return new Response(
-      JSON.stringify({ error: 'שגיאה בשליחת האימייל' }),
+      JSON.stringify({ 
+        error: 'שגיאה בשליחת האימייל',
+        details: error.message
+      }),
       {
         status: 500,
         headers: { 'Content-Type': 'application/json', ...corsHeaders },
