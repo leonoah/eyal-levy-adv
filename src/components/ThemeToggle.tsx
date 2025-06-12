@@ -35,7 +35,7 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-4 left-4 z-50 p-3 rounded-full transition-all duration-300 hover:scale-110"
+      className="fixed top-4 right-20 z-[100] p-3 rounded-full transition-all duration-300 hover:scale-110"
       style={{
         background: isDark 
           ? 'linear-gradient(135deg, var(--lawyer-gold), var(--lawyer-soft-gold))'

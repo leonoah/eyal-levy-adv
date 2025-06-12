@@ -24,7 +24,7 @@ const LanguageToggle = () => {
   return (
     <button
       onClick={toggleLanguage}
-      className="fixed top-4 left-20 z-[100] p-3 rounded-full transition-all duration-300 hover:scale-110 flex items-center space-x-2 space-x-reverse"
+      className="fixed top-4 right-4 z-[100] p-3 rounded-full transition-all duration-300 hover:scale-110 flex items-center space-x-2 space-x-reverse"
       style={{
         background: 'linear-gradient(135deg, var(--lawyer-gold), var(--lawyer-soft-gold))',
         boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)'
