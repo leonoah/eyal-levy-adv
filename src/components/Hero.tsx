@@ -24,7 +24,7 @@ const Hero = () => {
           {/* Eyal's image below the name */}
           <div className="mb-6">
             {content.about.image ? (
-              <div className="w-40 h-40 mx-auto rounded-lg border-2 border-lawyer-gold overflow-hidden">
+              <div className="w-52 h-52 mx-auto rounded-lg border-2 border-lawyer-gold overflow-hidden">
                 <img 
                   src={content.about.image} 
                   alt="עו&quot;ד אייל לוי" 
@@ -32,12 +32,12 @@ const Hero = () => {
                 />
               </div>
             ) : (
-              <div className="w-40 h-40 mx-auto rounded-lg border-2 border-lawyer-gold bg-lawyer-black flex items-center justify-center">
+              <div className="w-52 h-52 mx-auto rounded-lg border-2 border-lawyer-gold bg-lawyer-black flex items-center justify-center">
                 <div className="text-center">
-                  <div className="w-20 h-20 bg-lawyer-gold rounded-full mx-auto mb-2 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-lawyer-black">א.ל</span>
+                  <div className="w-26 h-26 bg-lawyer-gold rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <span className="text-3xl font-bold text-lawyer-black">א.ל</span>
                   </div>
-                  <p className="text-lawyer-gold font-semibold text-sm">עו&quot;ד אייל לוי</p>
+                  <p className="text-lawyer-gold font-semibold text-base">עו&quot;ד אייל לוי</p>
                 </div>
               </div>
             )}
