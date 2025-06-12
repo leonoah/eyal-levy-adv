@@ -7,10 +7,10 @@ const Hero = () => {
 
   return (
    <section className="bg-[#121212] min-h-screen flex items-center justify-center px-4 py-16">
-  <div className="max-w-4xl mx-auto w-full flex flex-col items-center text-center gap-8">
+  <div className="max-w-4xl mx-auto w-full flex flex-col items-center text-center gap-8 lg:gap-12">
     
     {/* Logo at the top */}
-    <div className="mb-4">
+    <div className="mb-2">
       <img 
         src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
         alt="לוגו עו''ד אייל לוי" 
@@ -19,8 +19,8 @@ const Hero = () => {
     </div>
 
     {/* Image */}
-    <div className="mb-6">
-      <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden w-80 h-96 bg-[#1e1e1e]">
+    <div className="mb-2">
+      <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden w-80 h-96 bg-[#1e1e1e] mx-auto">
         <img 
           src={content.about.image} 
           alt="עו''ד אייל לוי" 
@@ -30,7 +30,7 @@ const Hero = () => {
     </div>
 
     {/* Text content */}
-    <div className="max-w-2xl">
+    <div className="max-w-2xl mb-2">
       {/* Main title */}
       <h1 className="text-4xl md:text-5xl font-bold text-[#c5a56d] mb-4 leading-tight">
         עו"ד אייל לוי
@@ -42,7 +42,7 @@ const Hero = () => {
       </h2>
 
       {/* Description */}
-      <p className="text-[#e0e0e0] text-lg leading-relaxed mb-10">
+      <p className="text-[#e0e0e0] text-lg leading-relaxed mb-6">
         ייעוץ משפטי מקצועי ומסור עם ניסיון רב בתחומי הדין השונים.<br />
         אנו מתמחים במתן פתרונות משפטיים יעילים ומותאמים אישית לכל לקוח.
       </p>
