@@ -9,13 +9,8 @@ const Hero = () => {
     <section id="home" className="section-spacing bg-lawyer-black relative overflow-hidden min-h-screen flex items-center justify-center">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-4xl mx-auto">
-          {/* Logo and Title in center */}
+          {/* Title in center */}
           <div className="flex flex-col items-center justify-center mb-8">
-            <img 
-              src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
-              alt="לוגו עו&quot;ד אייל לוי" 
-              className="h-20 w-auto mb-4"
-            />
             <h1 className="text-4xl md:text-6xl font-bold text-lawyer-gold mb-4">
               עו"ד אייל לוי
             </h1>
@@ -36,8 +31,14 @@ const Hero = () => {
             {content.hero.description}
           </p>
           
-          {/* CTA Button */}
-          <div className="animate-fade-in">
+          {/* Logo above CTA Button */}
+          <div className="flex flex-col items-center animate-fade-in">
+            <img 
+              src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
+              alt="לוגו עו&quot;ד אייל לוי" 
+              className="h-20 w-auto mb-6"
+            />
+            {/* CTA Button */}
             <a href="#contact">
               <Button className="lawyer-button-primary text-lg px-8 py-4">
                 לתיאום פגישה
