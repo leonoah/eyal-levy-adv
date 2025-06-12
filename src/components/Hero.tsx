@@ -23,7 +23,7 @@ const Hero = () => {
           <div className="flex flex-col lg:flex-row items-center justify-center gap-16">
             
             {/* Image on the left with gold border frame */}
-            <div className="lg:order-1 order-2">
+            <div className="lg:order-1 order-1">
               {content.about.image ? (
                 <div className="relative">
                   <div className="w-80 h-96 rounded-lg border-4 border-lawyer-gold overflow-hidden bg-lawyer-charcoal">
@@ -49,7 +49,7 @@ const Hero = () => {
             </div>
 
             {/* Text content on the right */}
-            <div className="lg:order-2 order-1 text-center lg:text-right flex-1 max-w-2xl">
+            <div className="lg:order-2 order-2 text-center lg:text-right flex-1 max-w-2xl">
               {/* Main title */}
               <h1 className="text-5xl md:text-6xl font-bold text-lawyer-gold mb-8 leading-tight">
                 {content.hero.title}
