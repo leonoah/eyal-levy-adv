@@ -1,18 +1,22 @@
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { useContentManager } from '@/hooks/useContentManager';
+import { useToast } from '@/hooks/use-toast';
 
 const Contact = () => {
   const content = useContentManager();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -22,10 +26,49 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission here
+    
+    if (!formData.name || !formData.phone || !formData.email || !formData.message) {
+      toast({
+        title: "שגיאה",
+        description: "אנא מלאו את כל השדות הנדרשים",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // כאן תוכלו לשלוח את הנתונים לשרת
+      console.log('Form submitted:', formData);
+      
+      // סימולציה של שליחה לשרת
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: "הודעה נשלחה בהצלחה!",
+        description: "תודה שפניתם אלינו. נחזור אליכם בהקדם האפשרי.",
+      });
+      
+      // איפוס הטופס
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        message: ''
+      });
+      
+    } catch (error) {
+      toast({
+        title: "שגיאה בשליחת ההודעה",
+        description: "אנא נסו שוב או צרו קשר טלפונית",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -122,8 +165,12 @@ const Contact = () => {
                 </p>
               </div>
 
-              <Button type="submit" className="lawyer-button-primary w-full">
-                שליחת הודעה
+              <Button 
+                type="submit" 
+                className="lawyer-button-primary w-full"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "שולח..." : "שליחת הודעה"}
               </Button>
             </form>
           </div>
