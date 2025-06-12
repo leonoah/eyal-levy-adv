@@ -1,7 +1,10 @@
 
 import { Phone, Mail, MapPin, Facebook, Linkedin, Instagram } from 'lucide-react';
+import { useContentManager } from '@/hooks/useContentManager';
 
 const Footer = () => {
+  const content = useContentManager();
+
   const quickLinks = [
     { href: '#home', label: 'דף הבית' },
     { href: '#about', label: 'אודות' },
@@ -40,15 +43,15 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 space-x-reverse">
                 <Phone size={18} className="text-lawyer-gold" />
-                <span className="text-lawyer-white">03-1234567</span>
+                <span className="text-lawyer-white">{content.contact.phone}</span>
               </div>
               <div className="flex items-center space-x-3 space-x-reverse">
                 <Mail size={18} className="text-lawyer-gold" />
-                <span className="text-lawyer-white">eyal@lawyer.co.il</span>
+                <span className="text-lawyer-white">{content.contact.email}</span>
               </div>
               <div className="flex items-center space-x-3 space-x-reverse">
                 <MapPin size={18} className="text-lawyer-gold" />
-                <span className="text-lawyer-white">תל אביב, ישראל</span>
+                <span className="text-lawyer-white">{content.contact.address}</span>
               </div>
             </div>
           </div>

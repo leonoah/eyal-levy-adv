@@ -1,11 +1,12 @@
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useState } from 'react';
+import { useContentManager } from '@/hooks/useContentManager';
 
 const Contact = () => {
+  const content = useContentManager();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -28,9 +29,9 @@ const Contact = () => {
   };
 
   const contactInfo = [
-    { icon: Phone, text: '03-1234567', label: 'טלפון' },
-    { icon: Mail, text: 'eyal@lawyer.co.il', label: 'אימייל' },
-    { icon: MapPin, text: 'תל אביב, ישראל', label: 'כתובת' },
+    { icon: Phone, text: content.contact.phone, label: 'טלפון' },
+    { icon: Mail, text: content.contact.email, label: 'אימייל' },
+    { icon: MapPin, text: content.contact.address, label: 'כתובת' },
     { icon: Clock, text: 'א-ה: 9:00-18:00', label: 'שעות פעילות' }
   ];
 
@@ -156,7 +157,7 @@ const Contact = () => {
                 הפגישה הראשונה כוללת ייעוץ ראשוני והערכת המקרה ללא עלות נוספת
               </p>
               <p className="text-lawyer-white font-semibold">
-                התקשרו עכשיו לקביעת תור: 03-1234567
+                התקשרו עכשיו לקביעת תור: {content.contact.phone}
               </p>
             </div>
           </div>

@@ -1,25 +1,27 @@
 
 import { Button } from '@/components/ui/button';
+import { useContentManager } from '@/hooks/useContentManager';
 
 const Hero = () => {
+  const content = useContentManager();
+
   return (
     <section id="home" className="section-spacing bg-lawyer-black relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-4xl mx-auto">
           {/* Main title */}
           <h1 className="text-5xl md:text-7xl font-bold text-lawyer-gold mb-6 animate-fade-in">
-            עו"ד אייל לוי
+            {content.hero.title}
           </h1>
           
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-lawyer-silver mb-8 animate-fade-in">
-            משרד עורכי דין – דיני עבודה, נדל"ן, ליטיגציה
+            {content.hero.subtitle}
           </p>
           
           {/* Description */}
           <p className="text-lg text-lawyer-white mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in">
-            ייעוץ משפטי מקצועי ומסור עם ניסיון רב בתחומי הדין השונים. 
-            אנו מתמחים במתן פתרונות משפטיים יעילים ומותאמים אישית לכל לקוח.
+            {content.hero.description}
           </p>
           
           {/* CTA Button */}

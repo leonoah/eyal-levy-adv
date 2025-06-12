@@ -1,8 +1,11 @@
 
 import { Button } from '@/components/ui/button';
 import { Award, Clock, Users, CheckCircle } from 'lucide-react';
+import { useContentManager } from '@/hooks/useContentManager';
 
 const About = () => {
+  const content = useContentManager();
+
   const achievements = [
     { icon: Award, text: 'יותר מ-15 שנות ניסיון' },
     { icon: Users, text: 'מאות לקוחות מרוצים' },
@@ -31,17 +34,15 @@ const About = () => {
           {/* Content side */}
           <div className="lg:order-1">
             <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold mb-6">
-              אודות עו"ד אייל לוי
+              {content.about.title}
             </h2>
             
             <p className="text-lg text-lawyer-white mb-6 leading-relaxed">
-              עו"ד אייל לוי הוא עורך דין מנוסה עם ניסיון רב שנים בתחומי הדין השונים. 
-              הוא מתמחה במתן ייעוץ משפטי מקצועי ומסור, תוך הקפדה על שירות אישי ומותאם לכל לקוח.
+              {content.about.description1}
             </p>
             
             <p className="text-lg text-lawyer-silver mb-8 leading-relaxed">
-              המשרד מתמחה בדיני עבודה, נדל"ן, ליטיגציה ודיני משפחה. אנו גאים בשירות המקצועי 
-              והאמין שאנו מעניקים ללקוחותינו ובשיעור ההצלחה הגבוה שלנו בתיקים השונים.
+              {content.about.description2}
             </p>
 
             {/* Achievements */}

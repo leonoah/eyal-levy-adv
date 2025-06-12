@@ -1,5 +1,5 @@
 
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Settings } from 'lucide-react';
 import { useState } from 'react';
 
 const Header = () => {
@@ -23,7 +23,7 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8 space-x-reverse">
+          <nav className="hidden md:flex space-x-8 space-x-reverse items-center">
             {menuItems.map((item) => (
               <a
                 key={item.href}
@@ -33,10 +33,24 @@ const Header = () => {
                 {item.label}
               </a>
             ))}
+            <a
+              href="/admin"
+              className="text-lawyer-silver hover:text-lawyer-gold transition-colors duration-300 ml-4"
+              title="ניהול תוכן"
+            >
+              <Settings size={20} />
+            </a>
           </nav>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2 space-x-reverse">
+            <a
+              href="/admin"
+              className="text-lawyer-silver hover:text-lawyer-gold transition-colors"
+              title="ניהול תוכן"
+            >
+              <Settings size={20} />
+            </a>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-lawyer-white hover:text-lawyer-gold transition-colors"
@@ -60,6 +74,13 @@ const Header = () => {
                   {item.label}
                 </a>
               ))}
+              <a
+                href="/admin"
+                className="block px-3 py-2 text-lawyer-silver hover:text-lawyer-gold transition-colors duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                ניהול תוכן
+              </a>
             </div>
           </div>
         )}

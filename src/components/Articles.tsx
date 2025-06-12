@@ -1,27 +1,9 @@
 
 import { Calendar, ArrowLeft } from 'lucide-react';
+import { useContentManager } from '@/hooks/useContentManager';
 
 const Articles = () => {
-  const articles = [
-    {
-      title: 'זכויות עובדים בישראל - מדריך מקיף',
-      excerpt: 'הכירו את זכויותיכם כעובדים והבינו איך להגן עליהן. מדריך מפורט לזכויות עובדים בחוק העבודה הישראלי.',
-      date: '15 במאי 2024',
-      category: 'דיני עבודה'
-    },
-    {
-      title: 'קניית דירה - מה חשוב לדעת לפני החתימה',
-      excerpt: 'טיפים חשובים לקונים מתחילים ומנוסים. הכירו את החוזים, הבדיקות הנדרשות והמלכודות הנפוצות.',
-      date: '8 במאי 2024',
-      category: 'דיני נדל"ן'
-    },
-    {
-      title: 'הליכי גירושין - מדריך שלב אחר שלב',
-      excerpt: 'המדריך המלא להליכי גירושין בישראל. הכל על חלוקת רכוש, מזונות, משמורת ילדים והליכים משפטיים.',
-      date: '1 במאי 2024',
-      category: 'דיני משפחה'
-    }
-  ];
+  const content = useContentManager();
 
   return (
     <section id="articles" className="section-spacing bg-lawyer-black">
@@ -38,8 +20,8 @@ const Articles = () => {
 
         {/* Articles grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles.map((article, index) => (
-            <article key={index} className="lawyer-card group">
+          {content.articles.map((article, index) => (
+            <article key={article.id} className="lawyer-card group">
               {/* Category badge */}
               <div className="mb-4">
                 <span className="inline-block bg-lawyer-gold text-lawyer-black px-3 py-1 rounded-full text-sm font-semibold">
