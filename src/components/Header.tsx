@@ -1,3 +1,4 @@
+
 import { Menu, X, Settings } from 'lucide-react';
 import { useState } from 'react';
 
@@ -21,9 +22,15 @@ const Header = () => {
             <img 
               src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
               alt="לוגו עו&quot;ד אייל לוי" 
-              className="h-10 w-auto"
+              className="h-10 w-auto border-2 border-red-500"
+              style={{ 
+                minWidth: '40px', 
+                display: 'block',
+                backgroundColor: 'rgba(255, 0, 0, 0.1)'
+              }}
               onLoad={() => {
                 console.log('Logo loaded successfully!');
+                console.log('Logo dimensions:', document.querySelector('img')?.naturalWidth, 'x', document.querySelector('img')?.naturalHeight);
               }}
               onError={(e) => {
                 console.log('Logo failed to load from:', e.currentTarget.src);
