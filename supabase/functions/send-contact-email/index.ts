@@ -45,7 +45,6 @@ const handler = async (req: Request): Promise<Response> => {
     const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
     if (!SENDGRID_API_KEY) {
       console.error('SENDGRID_API_KEY not found in environment variables');
-      console.log('Available env keys:', Object.keys(Deno.env.toObject()));
       return new Response(
         JSON.stringify({ error: 'שגיאה בהגדרת השרת - חסר מפתח API' }),
         {
@@ -57,15 +56,15 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('SendGrid API key found, preparing email...');
 
-    // Prepare email data for SendGrid
+    // Prepare email data for SendGrid using the default sender
     const emailData = {
       personalizations: [
         {
-          to: [{ email: 'leon.noah@gmail.com' }], // Replace with your actual email
+          to: [{ email: 'leon.noah@gmail.com' }],
           subject: `הודעה חדשה מאתר עורך הדין - ${name}`
         }
       ],
-      from: { email: 'noreply@lovableproject.com' }, // Using a generic sender
+      from: { email: 'onboarding@resend.dev', name: 'מאתר עורך הדין' },
       content: [
         {
           type: 'text/html',
