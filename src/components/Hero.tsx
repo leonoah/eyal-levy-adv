@@ -16,13 +16,32 @@ const Hero = () => {
               alt="לוגו עו&quot;ד אייל לוי" 
               className="h-16 w-auto ml-4"
             />
-         
+            <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold">
+              {content.hero.title}
+            </h2>
           </div>
           
-          {/* Main title */}
-          <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold mb-6 animate-fade-in">
-            {content.hero.title}
-          </h2>
+          {/* Eyal's image below the name */}
+          <div className="mb-6">
+            {content.about.image ? (
+              <div className="w-40 h-40 mx-auto rounded-lg border-2 border-lawyer-gold overflow-hidden">
+                <img 
+                  src={content.about.image} 
+                  alt="עו&quot;ד אייל לוי" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="w-40 h-40 mx-auto rounded-lg border-2 border-lawyer-gold bg-lawyer-black flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-lawyer-gold rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-lawyer-black">א.ל</span>
+                  </div>
+                  <p className="text-lawyer-gold font-semibold text-sm">עו&quot;ד אייל לוי</p>
+                </div>
+              </div>
+            )}
+          </div>
           
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-lawyer-silver mb-8 animate-fade-in">
@@ -34,14 +53,8 @@ const Hero = () => {
             {content.hero.description}
           </p>
           
-          {/* Image above CTA Button */}
+          {/* CTA Button */}
           <div className="flex flex-col items-center animate-fade-in">
-            <img 
-              src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
-              alt="עו&quot;ד אייל לוי" 
-              className="h-32 w-auto mb-6 rounded-lg"
-            />
-            {/* CTA Button */}
             <a href="#contact">
               <Button className="lawyer-button-primary text-lg px-8 py-4">
                 לתיאום פגישה
