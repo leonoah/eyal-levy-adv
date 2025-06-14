@@ -1,7 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, Eye } from 'lucide-react';
+import { Save, Eye, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAdminContent } from '@/hooks/useAdminContent';
 import { useSocialLinks } from '@/hooks/useSocialLinks';
@@ -17,6 +17,7 @@ const Admin = () => {
   const { toast } = useToast();
   const {
     content,
+    isLoading,
     saveContent,
     updateHero,
     updateAbout,
@@ -33,13 +34,32 @@ const Admin = () => {
     updateSocialLink
   } = useSocialLinks();
 
-  const handleSaveContent = () => {
-    saveContent();
-    toast({
-      title: "התוכן נשמר בהצלחה",
-      description: "השינויים יופיעו באתר אחרי רענון העמוד",
-    });
+  const handleSaveContent = async () => {
+    try {
+      await saveContent();
+      toast({
+        title: "התוכן נשמר בהצלחה",
+        description: "השינויים נשמרו במסד הנתונים ויופיעו באתר",
+      });
+    } catch (error) {
+      toast({
+        title: "שגיאה בשמירת התוכן",
+        description: "אנא נסה שוב",
+        variant: "destructive"
+      });
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-lawyer-black text-lawyer-white flex items-center justify-center">
+        <div className="flex items-center gap-2">
+          <Loader2 className="animate-spin" />
+          <span>טוען...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-lawyer-black text-lawyer-white">

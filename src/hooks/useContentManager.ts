@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface SiteContent {
   hero: {
@@ -45,7 +46,8 @@ const defaultContent: SiteContent = {
   about: {
     title: 'אודות עו"ד אייל לוי',
     description1: 'עו"ד אייל לוי הוא עורך דין מנוסה עם ניסיון רב שנים בתחומי הדין השונים. הוא מתמחה במתן ייעוץ משפטי מקצועי ומסור, תוך הקפדה על שירות אישי ומותאם לכל לקוח.',
-    description2: 'המשרד מתמחה בדיני עבודה, נדל"ן, ליטיגציה ודיני משפחה. אנו גאים בשירות המקצועי והאמין שאנו מעניקים ללקוחותינו ובשיעור ההצלחה הגבוה שלנו בתיקים השונים.'
+    description2: 'המשרד מתמחה בדיני עבודה, נדל"ן, ליטיגציה ודיני משפחה. אנו גאים בשירות המקצועי והאמין שאנו מעניקים ללקוחותינו ובשיעור ההצלחה הגבוה שלנו בתיקים השונים.',
+    image: '/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png'
   },
   contact: {
     phone: '03-1234567',
@@ -91,38 +93,58 @@ const defaultContent: SiteContent = {
 
 export const useContentManager = () => {
   const [content, setContent] = useState<SiteContent>(defaultContent);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const savedContent = localStorage.getItem('siteContent');
-    if (savedContent) {
-      try {
-        const parsedContent = JSON.parse(savedContent);
-        // וודא ש-achievements קיים ומוגדר כראוי
-        if (!parsedContent.achievements || !Array.isArray(parsedContent.achievements)) {
-          parsedContent.achievements = defaultContent.achievements;
-        }
-        // וודא ש-services קיים ומוגדר כראוי
-        if (!parsedContent.services || !Array.isArray(parsedContent.services)) {
-          parsedContent.services = defaultContent.services;
-        }
-        setContent(parsedContent);
-      } catch (error) {
-        console.error('Error parsing saved content:', error);
+    fetchContentFromDB();
+  }, []);
+
+  const fetchContentFromDB = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('section_name, content');
+
+      if (error) {
+        console.error('Error fetching content:', error);
+        setContent(defaultContent);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const contentData: any = {};
+        
+        data.forEach((section) => {
+          contentData[section.section_name] = section.content;
+        });
+
+        // וודא שכל המפתחות הנדרשים קיימים
+        const mergedContent = {
+          hero: contentData.hero || defaultContent.hero,
+          about: contentData.about || defaultContent.about,
+          contact: contentData.contact || defaultContent.contact,
+          achievements: contentData.achievements || defaultContent.achievements,
+          services: contentData.services || defaultContent.services,
+          articles: contentData.articles || defaultContent.articles
+        };
+
+        setContent(mergedContent);
+      } else {
         setContent(defaultContent);
       }
+    } catch (error) {
+      console.error('Error fetching content:', error);
+      setContent(defaultContent);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
+  // האזנה לשינויים בזמן אמת
+  useEffect(() => {
     const handleContentUpdate = (event: CustomEvent) => {
-      const updatedContent = event.detail;
-      // וודא ש-achievements קיים גם בעדכון
-      if (!updatedContent.achievements || !Array.isArray(updatedContent.achievements)) {
-        updatedContent.achievements = defaultContent.achievements;
-      }
-      // וודא ש-services קיים גם בעדכון
-      if (!updatedContent.services || !Array.isArray(updatedContent.services)) {
-        updatedContent.services = defaultContent.services;
-      }
-      setContent(updatedContent);
+      fetchContentFromDB();
     };
 
     window.addEventListener('contentUpdated', handleContentUpdate as EventListener);
@@ -131,6 +153,10 @@ export const useContentManager = () => {
       window.removeEventListener('contentUpdated', handleContentUpdate as EventListener);
     };
   }, []);
+
+  if (isLoading) {
+    return defaultContent;
+  }
 
   return content;
 };
