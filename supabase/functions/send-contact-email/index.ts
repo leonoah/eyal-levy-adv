@@ -14,6 +14,12 @@ interface ContactFormData {
   message: string;
 }
 
+// Function to validate email format
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -58,8 +64,13 @@ const handler = async (req: Request): Promise<Response> => {
     let adminEmail = 'leon.noah@gmail.com'; // fallback
     
     if (!contactError && contactData?.content?.email) {
-      adminEmail = contactData.content.email;
-      console.log('Using admin email from database:', adminEmail);
+      const dbEmail = contactData.content.email;
+      if (isValidEmail(dbEmail)) {
+        adminEmail = dbEmail;
+        console.log('Using admin email from database:', adminEmail);
+      } else {
+        console.log('Invalid email in database:', dbEmail, 'using fallback:', adminEmail);
+      }
     } else {
       console.log('Could not fetch admin email, using fallback:', adminEmail);
     }
