@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Save, Eye } from 'lucide-react';
@@ -10,6 +11,7 @@ import { ArticlesSection } from '@/components/admin/ArticlesSection';
 import { ContactSection } from '@/components/admin/ContactSection';
 import { SocialMediaSection } from '@/components/admin/SocialMediaSection';
 import { AchievementsSection } from '@/components/admin/AchievementsSection';
+import { ServicesSection } from '@/components/admin/ServicesSection';
 
 const Admin = () => {
   const { toast } = useToast();
@@ -20,6 +22,7 @@ const Admin = () => {
     updateAbout,
     updateContact,
     updateAchievements,
+    updateServices,
     addArticle,
     deleteArticle
   } = useAdminContent();
@@ -62,10 +65,11 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="hero" className="w-full">
-          <TabsList className="grid w-full grid-cols-6 mb-8 bg-lawyer-block border border-lawyer-divider">
+          <TabsList className="grid w-full grid-cols-7 mb-8 bg-lawyer-block border border-lawyer-divider">
             <TabsTrigger value="hero" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">עמוד ראשי</TabsTrigger>
             <TabsTrigger value="about" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">אודות</TabsTrigger>
             <TabsTrigger value="achievements" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">הישגים</TabsTrigger>
+            <TabsTrigger value="services" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">תחומי התמחות</TabsTrigger>
             <TabsTrigger value="articles" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מאמרים</TabsTrigger>
             <TabsTrigger value="contact" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">יצירת קשר</TabsTrigger>
             <TabsTrigger value="social" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מדיה חברתית</TabsTrigger>
@@ -81,6 +85,10 @@ const Admin = () => {
 
           <TabsContent value="achievements">
             <AchievementsSection content={content} updateAchievements={updateAchievements} />
+          </TabsContent>
+
+          <TabsContent value="services">
+            <ServicesSection content={content} updateServices={updateServices} />
           </TabsContent>
 
           <TabsContent value="articles">

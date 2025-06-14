@@ -1,3 +1,4 @@
+
 export interface SocialLink {
   id: string;
   platform: string;
@@ -25,6 +26,11 @@ export interface SiteContent {
   achievements: Array<{
     icon: string;
     text: string;
+  }>;
+  services: Array<{
+    icon: string;
+    title: string;
+    description: string;
   }>;
   articles: Array<{
     id: string;
@@ -56,6 +62,12 @@ export const defaultContent: SiteContent = {
     { icon: 'Users', text: 'מאות לקוחות מרוצים' },
     { icon: 'CheckCircle', text: 'שיעור הצלחה גבוה' },
     { icon: 'Clock', text: 'זמינות 24/7' }
+  ],
+  services: [
+    { icon: 'Scale', title: 'דיני עבודה', description: 'ייצוג עובדים ומעסיקים, הסכמי עבודה, פיטורים ותביעות עבודה' },
+    { icon: 'Home', title: 'דיני נדל"ן', description: 'עסקאות קנייה ומכירה, חוזי שכירות, יעוץ במקרקעין והסכמי בנייה' },
+    { icon: 'FileText', title: 'ליטיגציה', description: 'ייצוג בבתי משפט, הגשת תביעות אזרחיות וטיפול בסכסוכים משפטיים' },
+    { icon: 'Users', title: 'דיני משפחה', description: 'גירושין, הסכמי מזונות, משמורת ילדים וחלוקת רכוש משותף' }
   ],
   articles: [
     {

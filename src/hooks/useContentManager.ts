@@ -22,6 +22,11 @@ export interface SiteContent {
     icon: string;
     text: string;
   }>;
+  services: Array<{
+    icon: string;
+    title: string;
+    description: string;
+  }>;
   articles: Array<{
     id: string;
     title: string;
@@ -52,6 +57,12 @@ const defaultContent: SiteContent = {
     { icon: 'Users', text: 'מאות לקוחות מרוצים' },
     { icon: 'CheckCircle', text: 'שיעור הצלחה גבוה' },
     { icon: 'Clock', text: 'זמינות 24/7' }
+  ],
+  services: [
+    { icon: 'Scale', title: 'דיני עבודה', description: 'ייצוג עובדים ומעסיקים, הסכמי עבודה, פיטורים ותביעות עבודה' },
+    { icon: 'Home', title: 'דיני נדל"ן', description: 'עסקאות קנייה ומכירה, חוזי שכירות, יעוץ במקרקעין והסכמי בנייה' },
+    { icon: 'FileText', title: 'ליטיגציה', description: 'ייצוג בבתי משפט, הגשת תביעות אזרחיות וטיפול בסכסוכים משפטיים' },
+    { icon: 'Users', title: 'דיני משפחה', description: 'גירושין, הסכמי מזונות, משמורת ילדים וחלוקת רכוש משותף' }
   ],
   articles: [
     {
@@ -90,6 +101,10 @@ export const useContentManager = () => {
         if (!parsedContent.achievements || !Array.isArray(parsedContent.achievements)) {
           parsedContent.achievements = defaultContent.achievements;
         }
+        // וודא ש-services קיים ומוגדר כראוי
+        if (!parsedContent.services || !Array.isArray(parsedContent.services)) {
+          parsedContent.services = defaultContent.services;
+        }
         setContent(parsedContent);
       } catch (error) {
         console.error('Error parsing saved content:', error);
@@ -102,6 +117,10 @@ export const useContentManager = () => {
       // וודא ש-achievements קיים גם בעדכון
       if (!updatedContent.achievements || !Array.isArray(updatedContent.achievements)) {
         updatedContent.achievements = defaultContent.achievements;
+      }
+      // וודא ש-services קיים גם בעדכון
+      if (!updatedContent.services || !Array.isArray(updatedContent.services)) {
+        updatedContent.services = defaultContent.services;
       }
       setContent(updatedContent);
     };

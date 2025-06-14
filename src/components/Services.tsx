@@ -1,29 +1,19 @@
 
-import { Scale, Home, FileText, Users } from 'lucide-react';
+import { Scale, Home, FileText, Users, Briefcase, Shield, Building } from 'lucide-react';
+import { useContentManager } from '@/hooks/useContentManager';
 
 const Services = () => {
-  const services = [
-    {
-      icon: Scale,
-      title: 'דיני עבודה',
-      description: 'ייצוג עובדים ומעסיקים, הסכמי עבודה, פיטורים ותביעות עבודה'
-    },
-    {
-      icon: Home,
-      title: 'דיני נדל"ן',
-      description: 'עסקאות קנייה ומכירה, חוזי שכירות, יעוץ במקרקעין והסכמי בנייה'
-    },
-    {
-      icon: FileText,
-      title: 'ליטיגציה',
-      description: 'ייצוג בבתי משפט, הגשת תביעות אזרחיות וטיפול בסכסוכים משפטיים'
-    },
-    {
-      icon: Users,
-      title: 'דיני משפחה',
-      description: 'גירושין, הסכמי מזונות, משמורת ילדים וחלוקת רכוש משותף'
-    }
-  ];
+  const content = useContentManager();
+
+  const iconMap = {
+    Scale,
+    Home,
+    FileText,
+    Users,
+    Briefcase,
+    Shield,
+    Building
+  };
 
   return (
     <section id="services" className="section-spacing bg-lawyer-black">
@@ -40,24 +30,27 @@ const Services = () => {
 
         {/* Services grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {services.map((service, index) => (
-            <div key={index} className="lawyer-card text-center group">
-              <div className="mb-6">
-                <service.icon 
-                  size={48} 
-                  className="text-lawyer-gold mx-auto group-hover:scale-110 transition-transform duration-300" 
-                />
+          {content.services && content.services.length > 0 ? content.services.map((service, index) => {
+            const IconComponent = iconMap[service.icon as keyof typeof iconMap] || Scale;
+            return (
+              <div key={`service-${index}`} className="lawyer-card text-center group">
+                <div className="mb-6">
+                  <IconComponent 
+                    size={48} 
+                    className="text-lawyer-gold mx-auto group-hover:scale-110 transition-transform duration-300" 
+                  />
+                </div>
+                
+                <h3 className="text-xl font-bold text-lawyer-gold mb-4">
+                  {service.title}
+                </h3>
+                
+                <p className="text-lawyer-silver leading-relaxed">
+                  {service.description}
+                </p>
               </div>
-              
-              <h3 className="text-xl font-bold text-lawyer-gold mb-4">
-                {service.title}
-              </h3>
-              
-              <p className="text-lawyer-silver leading-relaxed">
-                {service.description}
-              </p>
-            </div>
-          ))}
+            );
+          }) : null}
         </div>
       </div>
     </section>

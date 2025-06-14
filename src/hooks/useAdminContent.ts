@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { SiteContent, defaultContent } from '@/types/admin';
 
@@ -7,7 +8,15 @@ export const useAdminContent = () => {
   useEffect(() => {
     const savedContent = localStorage.getItem('siteContent');
     if (savedContent) {
-      setContent(JSON.parse(savedContent));
+      const parsedContent = JSON.parse(savedContent);
+      // וודא שכל המערכים קיימים
+      if (!parsedContent.achievements || !Array.isArray(parsedContent.achievements)) {
+        parsedContent.achievements = defaultContent.achievements;
+      }
+      if (!parsedContent.services || !Array.isArray(parsedContent.services)) {
+        parsedContent.services = defaultContent.services;
+      }
+      setContent(parsedContent);
     }
   }, []);
 
@@ -44,6 +53,13 @@ export const useAdminContent = () => {
     }));
   };
 
+  const updateServices = (services: SiteContent['services']) => {
+    setContent(prev => ({
+      ...prev,
+      services
+    }));
+  };
+
   const addArticle = (newArticle: { title: string; excerpt: string; date: string; category: string }) => {
     const article = {
       ...newArticle,
@@ -71,6 +87,7 @@ export const useAdminContent = () => {
     updateAbout,
     updateContact,
     updateAchievements,
+    updateServices,
     addArticle,
     deleteArticle
   };
