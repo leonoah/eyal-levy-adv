@@ -332,6 +332,33 @@ export type Database = {
         }
         Relationships: []
       }
+      theme_settings: {
+        Row: {
+          background_color: string
+          button_color: string
+          created_at: string
+          id: string
+          text_color: string
+          updated_at: string
+        }
+        Insert: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          text_color?: string
+          updated_at?: string
+        }
+        Update: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          text_color?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

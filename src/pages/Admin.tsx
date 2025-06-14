@@ -12,6 +12,7 @@ import { ContactSection } from '@/components/admin/ContactSection';
 import { SocialMediaSection } from '@/components/admin/SocialMediaSection';
 import { AchievementsSection } from '@/components/admin/AchievementsSection';
 import { ServicesSection } from '@/components/admin/ServicesSection';
+import ThemeSettingsSection from '@/components/admin/ThemeSettingsSection';
 
 const Admin = () => {
   const { toast } = useToast();
@@ -85,7 +86,7 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="hero" className="w-full">
-          <TabsList className="grid w-full grid-cols-7 mb-8 bg-lawyer-block border border-lawyer-divider">
+          <TabsList className="grid w-full grid-cols-8 mb-8 bg-lawyer-block border border-lawyer-divider">
             <TabsTrigger value="hero" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">עמוד ראשי</TabsTrigger>
             <TabsTrigger value="about" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">אודות</TabsTrigger>
             <TabsTrigger value="achievements" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">הישגים</TabsTrigger>
@@ -93,6 +94,7 @@ const Admin = () => {
             <TabsTrigger value="articles" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מאמרים</TabsTrigger>
             <TabsTrigger value="contact" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">יצירת קשר</TabsTrigger>
             <TabsTrigger value="social" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מדיה חברתית</TabsTrigger>
+            <TabsTrigger value="theme" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">עיצוב</TabsTrigger>
           </TabsList>
 
           <TabsContent value="hero">
@@ -129,6 +131,10 @@ const Admin = () => {
               setSocialLinks={setSocialLinks} 
               updateSocialLink={updateSocialLink} 
             />
+          </TabsContent>
+
+          <TabsContent value="theme">
+            <ThemeSettingsSection />
           </TabsContent>
         </Tabs>
       </div>

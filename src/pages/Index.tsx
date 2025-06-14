@@ -7,8 +7,16 @@ import Articles from '@/components/Articles';
 import Testimonials from '@/components/Testimonials';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
+import { useThemeSettings } from '@/hooks/useThemeSettings';
+import { useEffect } from 'react';
 
 const Index = () => {
+  const { fetchThemeSettings } = useThemeSettings();
+
+  useEffect(() => {
+    fetchThemeSettings();
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Header />
