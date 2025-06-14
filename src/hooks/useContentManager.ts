@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 
 export interface SiteContent {
@@ -84,14 +85,25 @@ export const useContentManager = () => {
     const savedContent = localStorage.getItem('siteContent');
     if (savedContent) {
       try {
-        setContent(JSON.parse(savedContent));
+        const parsedContent = JSON.parse(savedContent);
+        // וודא ש-achievements קיים ומוגדר כראוי
+        if (!parsedContent.achievements || !Array.isArray(parsedContent.achievements)) {
+          parsedContent.achievements = defaultContent.achievements;
+        }
+        setContent(parsedContent);
       } catch (error) {
         console.error('Error parsing saved content:', error);
+        setContent(defaultContent);
       }
     }
 
     const handleContentUpdate = (event: CustomEvent) => {
-      setContent(event.detail);
+      const updatedContent = event.detail;
+      // וודא ש-achievements קיים גם בעדכון
+      if (!updatedContent.achievements || !Array.isArray(updatedContent.achievements)) {
+        updatedContent.achievements = defaultContent.achievements;
+      }
+      setContent(updatedContent);
     };
 
     window.addEventListener('contentUpdated', handleContentUpdate as EventListener);

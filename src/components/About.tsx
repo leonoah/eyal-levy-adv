@@ -31,15 +31,15 @@ const About = () => {
 
           {/* Achievements */}
           <div className="grid grid-cols-2 gap-4 mb-8 max-w-2xl mx-auto">
-            {content.achievements?.map((achievement, index) => {
+            {content.achievements && content.achievements.length > 0 ? content.achievements.map((achievement, index) => {
               const IconComponent = iconMap[achievement.icon as keyof typeof iconMap] || Award;
               return (
-                <div key={index} className="flex items-center space-x-3 space-x-reverse justify-center">
+                <div key={`achievement-${index}`} className="flex items-center space-x-3 space-x-reverse justify-center">
                   <IconComponent size={20} className="text-lawyer-gold flex-shrink-0" />
                   <span className="text-lawyer-silver text-sm">{achievement.text}</span>
                 </div>
               );
-            })}
+            }) : null}
           </div>
 
           <Button className="lawyer-button-secondary">
