@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 export interface SiteContent {
@@ -18,6 +17,10 @@ export interface SiteContent {
     email: string;
     address: string;
   };
+  achievements: Array<{
+    icon: string;
+    text: string;
+  }>;
   articles: Array<{
     id: string;
     title: string;
@@ -43,6 +46,12 @@ const defaultContent: SiteContent = {
     email: 'eyal@lawyer.co.il',
     address: 'תל אביב, ישראל'
   },
+  achievements: [
+    { icon: 'Award', text: 'יותר מ-15 שנות ניסיון' },
+    { icon: 'Users', text: 'מאות לקוחות מרוצים' },
+    { icon: 'CheckCircle', text: 'שיעור הצלחה גבוה' },
+    { icon: 'Clock', text: 'זמינות 24/7' }
+  ],
   articles: [
     {
       id: '1',

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { SiteContent, defaultContent } from '@/types/admin';
 
@@ -38,6 +37,13 @@ export const useAdminContent = () => {
     }));
   };
 
+  const updateAchievements = (achievements: SiteContent['achievements']) => {
+    setContent(prev => ({
+      ...prev,
+      achievements
+    }));
+  };
+
   const addArticle = (newArticle: { title: string; excerpt: string; date: string; category: string }) => {
     const article = {
       ...newArticle,
@@ -64,6 +70,7 @@ export const useAdminContent = () => {
     updateHero,
     updateAbout,
     updateContact,
+    updateAchievements,
     addArticle,
     deleteArticle
   };

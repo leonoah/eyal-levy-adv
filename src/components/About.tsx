@@ -6,12 +6,12 @@ import { useContentManager } from '@/hooks/useContentManager';
 const About = () => {
   const content = useContentManager();
 
-  const achievements = [
-    { icon: Award, text: 'יותר מ-15 שנות ניסיון' },
-    { icon: Users, text: 'מאות לקוחות מרוצים' },
-    { icon: CheckCircle, text: 'שיעור הצלחה גבוה' },
-    { icon: Clock, text: 'זמינות 24/7' }
-  ];
+  const iconMap = {
+    Award,
+    Clock, 
+    Users,
+    CheckCircle
+  };
 
   return (
     <section id="about" className="section-spacing bg-lawyer-block">
@@ -31,12 +31,15 @@ const About = () => {
 
           {/* Achievements */}
           <div className="grid grid-cols-2 gap-4 mb-8 max-w-2xl mx-auto">
-            {achievements.map((achievement, index) => (
-              <div key={index} className="flex items-center space-x-3 space-x-reverse justify-center">
-                <achievement.icon size={20} className="text-lawyer-gold flex-shrink-0" />
-                <span className="text-lawyer-silver text-sm">{achievement.text}</span>
-              </div>
-            ))}
+            {content.achievements?.map((achievement, index) => {
+              const IconComponent = iconMap[achievement.icon as keyof typeof iconMap] || Award;
+              return (
+                <div key={index} className="flex items-center space-x-3 space-x-reverse justify-center">
+                  <IconComponent size={20} className="text-lawyer-gold flex-shrink-0" />
+                  <span className="text-lawyer-silver text-sm">{achievement.text}</span>
+                </div>
+              );
+            })}
           </div>
 
           <Button className="lawyer-button-secondary">
