@@ -14,12 +14,6 @@ interface ContactFormData {
   message: string;
 }
 
-// Function to validate email format
-const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -49,31 +43,9 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Get admin email from site_content
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
-
-    const { data: contactData, error: contactError } = await supabase
-      .from('site_content')
-      .select('content')
-      .eq('section_name', 'contact')
-      .single();
-
-    let adminEmail = 'leon.noah@gmail.com'; // fallback
-    
-    if (!contactError && contactData?.content?.email) {
-      const dbEmail = contactData.content.email;
-      if (isValidEmail(dbEmail)) {
-        adminEmail = dbEmail;
-        console.log('Using admin email from database:', adminEmail);
-      } else {
-        console.log('Invalid email in database:', dbEmail, 'using fallback:', adminEmail);
-      }
-    } else {
-      console.log('Could not fetch admin email, using fallback:', adminEmail);
-    }
+    // Fixed admin email - always send to this address
+    const adminEmail = 'eyal@miloen.co.il';
+    console.log('Sending email to fixed admin address:', adminEmail);
 
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
     if (!RESEND_API_KEY) {
