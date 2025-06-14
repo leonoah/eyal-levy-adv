@@ -1,5 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -42,6 +43,27 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // Get admin email from site_content
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    const { data: contactData, error: contactError } = await supabase
+      .from('site_content')
+      .select('content')
+      .eq('section_name', 'contact')
+      .single();
+
+    let adminEmail = 'leon.noah@gmail.com'; // fallback
+    
+    if (!contactError && contactData?.content?.email) {
+      adminEmail = contactData.content.email;
+      console.log('Using admin email from database:', adminEmail);
+    } else {
+      console.log('Could not fetch admin email, using fallback:', adminEmail);
+    }
+
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
     if (!RESEND_API_KEY) {
       console.error('RESEND_API_KEY not found in environment variables');
@@ -59,7 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Prepare email data for Resend
     const emailData = {
       from: 'מאתר עורך הדין <onboarding@resend.dev>',
-      to: ['leon.noah@gmail.com'],
+      to: [adminEmail],
       subject: `הודעה חדשה מאתר עורך הדין - ${name}`,
       html: `
         <div dir="rtl" style="font-family: Arial, sans-serif;">
@@ -75,7 +97,7 @@ const handler = async (req: Request): Promise<Response> => {
       `
     };
 
-    console.log('Sending email via Resend...');
+    console.log('Sending email via Resend to:', adminEmail);
 
     // Send email via Resend
     const response = await fetch('https://api.resend.com/emails', {
@@ -113,7 +135,8 @@ const handler = async (req: Request): Promise<Response> => {
       JSON.stringify({ 
         success: true, 
         message: 'האימייל נשלח בהצלחה',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        sentTo: adminEmail
       }),
       {
         status: 200,
