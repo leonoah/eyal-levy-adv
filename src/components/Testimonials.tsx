@@ -1,27 +1,17 @@
 
 import { Star, Shield, Award, Users } from 'lucide-react';
+import { useTestimonials } from '@/hooks/useTestimonials';
+import { useEffect, useState } from 'react';
 
 const Testimonials = () => {
-  const testimonials = [
-    {
-      name: "דב כהן",
-      role: "מנהל חברה",
-      content: "עורך דין מקצועי ומסור. הצליח לפתור את הבעיה המשפטית שלנו בצורה מהירה ויעילה. ממליץ בחום!",
-      rating: 5
-    },
-    {
-      name: "רחל לוי",
-      role: "יזמת",
-      content: "שירות מעולה וייעוץ משפטי ברמה הגבוהה ביותר. תמיד זמין לענות על שאלות ולסייע.",
-      rating: 5
-    },
-    {
-      name: "משה אברהם",
-      role: "בעל עסק",
-      content: "התמחות מרשימה בדיני עבודה. הצליח להגן על הזכויות שלי במקרה מורכב.",
-      rating: 5
+  const { testimonials, isLoading } = useTestimonials();
+  const [activeTestimonials, setActiveTestimonials] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (testimonials.length > 0) {
+      setActiveTestimonials(testimonials.filter(t => t.is_active));
     }
-  ];
+  }, [testimonials]);
 
   const trustBadges = [
     { icon: Shield, text: "לשכת עורכי הדין" },
@@ -29,6 +19,23 @@ const Testimonials = () => {
     { icon: Users, text: "500+ לקוחות מרוצים" },
     { icon: Star, text: "דירוג 5 כוכבים" }
   ];
+
+  if (isLoading) {
+    return (
+      <section className="section-spacing bg-lawyer-charcoal">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold mb-6">
+              המלצות לקוחות
+            </h2>
+            <p className="text-xl text-lawyer-silver max-w-2xl mx-auto elegant-text">
+              טוען המלצות...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="section-spacing bg-lawyer-charcoal">
@@ -45,8 +52,8 @@ const Testimonials = () => {
 
         {/* Testimonials Grid */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="testimonial-card">
+          {activeTestimonials.map((testimonial, index) => (
+            <div key={testimonial.id} className="testimonial-card">
               <div className="flex items-center mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
                   <Star key={i} size={20} className="text-lawyer-gold fill-current" />
@@ -54,12 +61,18 @@ const Testimonials = () => {
               </div>
               
               <p className="text-lawyer-white mb-6 elegant-text leading-relaxed">
-                "{testimonial.content}"
+                "{testimonial.text}"
               </p>
               
               <div className="border-t border-lawyer-divider pt-4">
                 <p className="font-semibold text-lawyer-white">{testimonial.name}</p>
-                <p className="text-lawyer-silver text-sm">{testimonial.role}</p>
+                {testimonial.image_url && (
+                  <img 
+                    src={testimonial.image_url} 
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full mt-2"
+                  />
+                )}
               </div>
             </div>
           ))}
