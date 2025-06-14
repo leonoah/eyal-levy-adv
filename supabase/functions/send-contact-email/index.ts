@@ -43,9 +43,16 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Fixed admin email - always send to this address
-    const adminEmail = 'eyal@miloen.co.il';
-    console.log('Sending email to fixed admin address:', adminEmail);
+    // Target email - this is where we want emails to go
+    const targetEmail = 'eyal@miloen.co.il';
+    // Development email - for testing (your Resend account email)
+    const devEmail = 'leon.noah@gmail.com';
+    
+    // In development, Resend only allows sending to your own email
+    // So we'll send to dev email but include target email in the message
+    const recipientEmail = devEmail;
+    
+    console.log('Sending email to:', recipientEmail, 'for target:', targetEmail);
 
     const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
     if (!RESEND_API_KEY) {
@@ -64,11 +71,14 @@ const handler = async (req: Request): Promise<Response> => {
     // Prepare email data for Resend
     const emailData = {
       from: 'מאתר עורך הדין <onboarding@resend.dev>',
-      to: [adminEmail],
+      to: [recipientEmail],
       subject: `הודעה חדשה מאתר עורך הדין - ${name}`,
       html: `
         <div dir="rtl" style="font-family: Arial, sans-serif;">
           <h2>הודעה חדשה מטופס יצירת הקשר</h2>
+          <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px;">
+            <strong>שים לב:</strong> בסביבת פיתוח, האימייל הזה נשלח אליך אבל הוא מיועד ל: <strong>${targetEmail}</strong>
+          </div>
           <p><strong>שם:</strong> ${name}</p>
           <p><strong>טלפון:</strong> ${phone}</p>
           <p><strong>אימייל:</strong> ${email}</p>
@@ -80,7 +90,7 @@ const handler = async (req: Request): Promise<Response> => {
       `
     };
 
-    console.log('Sending email via Resend to:', adminEmail);
+    console.log('Sending email via Resend to:', recipientEmail);
 
     // Send email via Resend
     const response = await fetch('https://api.resend.com/emails', {
@@ -119,7 +129,8 @@ const handler = async (req: Request): Promise<Response> => {
         success: true, 
         message: 'האימייל נשלח בהצלחה',
         timestamp: new Date().toISOString(),
-        sentTo: adminEmail
+        sentTo: recipientEmail,
+        targetEmail: targetEmail
       }),
       {
         status: 200,
