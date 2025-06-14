@@ -1,8 +1,7 @@
-
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Save, Palette } from 'lucide-react';
+import { Save, Palette, RotateCcw } from 'lucide-react';
 import { useThemeSettings } from '@/hooks/useThemeSettings';
 import { useToast } from '@/hooks/use-toast';
 
@@ -26,6 +25,26 @@ const ThemeSettingsSection = () => {
     }
   };
 
+  const resetToDefaults = async () => {
+    try {
+      await updateThemeSettings({
+        background_color: '#121212',
+        button_color: '#D4AF37',
+        text_color: '#FFFFFF'
+      });
+      toast({
+        title: "הצבעים אופסו בהצלחה",
+        description: "הצבעים חזרו לברירת המחדל",
+      });
+    } catch (error) {
+      toast({
+        title: "שגיאה באיפוס הצבעים",
+        description: "אנא נסה שוב",
+        variant: "destructive"
+      });
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -39,9 +58,19 @@ const ThemeSettingsSection = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2 mb-6">
-        <Palette className="text-lawyer-gold" size={24} />
-        <h2 className="text-2xl font-bold text-lawyer-gold">הגדרות עיצוב</h2>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <Palette className="text-lawyer-gold" size={24} />
+          <h2 className="text-2xl font-bold text-lawyer-gold">הגדרות עיצוב</h2>
+        </div>
+        <Button
+          onClick={resetToDefaults}
+          variant="outline"
+          className="border-lawyer-divider text-lawyer-silver hover:bg-lawyer-block hover:text-lawyer-white"
+        >
+          <RotateCcw className="ml-2" size={16} />
+          איפוס לברירת מחדל
+        </Button>
       </div>
 
       <Card className="bg-lawyer-block border-lawyer-divider">
@@ -52,6 +81,7 @@ const ThemeSettingsSection = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Background Color */}
             <div className="space-y-3">
