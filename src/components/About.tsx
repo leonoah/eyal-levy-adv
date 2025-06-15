@@ -1,6 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { Award, Clock, Users, CheckCircle } from 'lucide-react';
+import { Award, Clock, Users, CheckCircle, Star, TrendingUp, Shield, Heart } from 'lucide-react';
 import { useContentManager } from '@/hooks/useContentManager';
 
 const About = () => {
@@ -10,7 +10,11 @@ const About = () => {
     Award,
     Clock, 
     Users,
-    CheckCircle
+    CheckCircle,
+    Star,
+    TrendingUp,
+    Shield,
+    Heart
   };
 
   return (
