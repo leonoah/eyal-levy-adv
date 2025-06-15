@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -5,7 +6,6 @@ import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { useContentManager } from '@/hooks/useContentManager';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 const Contact = () => {
   const content = useContentManager();
@@ -41,31 +41,40 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      console.log('Submitting form data:', formData);
+      console.log('Submitting form data to Formspree:', formData);
       
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData,
+      // Replace 'YOUR_FORM_ID' with your actual Formspree form ID
+      const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          message: formData.message,
+        }),
       });
 
-      if (error) {
-        console.error('Supabase function error:', error);
-        throw error;
+      if (response.ok) {
+        console.log('Form submitted successfully to Formspree');
+        
+        toast({
+          title: "הודעה נשלחה בהצלחה!",
+          description: "תודה שפניתם אלינו. נחזור אליכם בהקדם האפשרי.",
+        });
+        
+        // איפוס הטופס
+        setFormData({
+          name: '',
+          phone: '',
+          email: '',
+          message: ''
+        });
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      console.log('Function response:', data);
-      
-      toast({
-        title: "הודעה נשלחה בהצלחה!",
-        description: "תודה שפניתם אלינו. נחזור אליכם בהקדם האפשרי.",
-      });
-      
-      // איפוס הטופס
-      setFormData({
-        name: '',
-        phone: '',
-        email: '',
-        message: ''
-      });
       
     } catch (error) {
       console.error('Error submitting form:', error);
