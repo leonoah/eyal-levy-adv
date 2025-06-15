@@ -1,6 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -43,6 +44,33 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // Create Supabase client to fetch admin contact email
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Get contact email from admin settings
+    console.log('Fetching admin contact email from database...');
+    const { data: contactData, error: contactError } = await supabase
+      .from('site_content')
+      .select('content')
+      .eq('section_name', 'contact')
+      .single();
+
+    if (contactError) {
+      console.error('Error fetching contact data:', contactError);
+      return new Response(
+        JSON.stringify({ error: 'שגיאה בטעינת הגדרות המערכת' }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        }
+      );
+    }
+
+    const targetEmail = contactData?.content?.email || 'eyal@miloen.co.il';
+    console.log('Target email from admin settings:', targetEmail);
+
     // Gmail configuration
     const GMAIL_USER = Deno.env.get('GMAIL_USER');
     const GMAIL_APP_PASSWORD = Deno.env.get('GMAIL_APP_PASSWORD');
@@ -59,9 +87,6 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     console.log('Gmail credentials found, preparing email...');
-
-    // Target email - where we want to send emails
-    const targetEmail = 'eyal@miloen.co.il';
     console.log('Sending email to:', targetEmail);
 
     // Create SMTP client
@@ -102,7 +127,7 @@ const handler = async (req: Request): Promise<Response> => {
       html: emailContent,
     });
 
-    console.log('Email sent successfully via Gmail SMTP');
+    console.log('Email sent successfully via Gmail SMTP to:', targetEmail);
 
     // Close the connection
     await client.close();
