@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AdminLoginProps {
   onLogin: (success: boolean) => void;
@@ -24,26 +25,19 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
     try {
       console.log('Attempting login with:', { username, password: '***' });
       
-      const response = await fetch('/api/admin-login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
+      const { data, error } = await supabase.functions.invoke('admin-login', {
+        body: { username, password },
       });
 
-      console.log('Response status:', response.status);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Response error:', errorText);
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      console.log('Response data:', data);
+      console.log('Response error:', error);
+
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(error.message || 'שגיאה בהתחברות');
       }
 
-      const data = await response.json();
-      console.log('Response data:', data);
-
-      if (data.success) {
+      if (data && data.success) {
         localStorage.setItem('adminAuth', 'true');
         localStorage.setItem('adminUsername', username);
         onLogin(true);
@@ -54,7 +48,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
       } else {
         toast({
           title: "שגיאה בהתחברות",
-          description: data.error || "שם משתמש או סיסמה שגויים",
+          description: data?.error || "שם משתמש או סיסמה שגויים",
           variant: "destructive"
         });
       }
@@ -89,6 +83,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="lawyer-input bg-lawyer-black text-lawyer-white border-lawyer-divider"
+                autoComplete="username"
                 required
                 disabled={isLoading}
               />
@@ -101,6 +96,7 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="lawyer-input bg-lawyer-black text-lawyer-white border-lawyer-divider"
+                autoComplete="current-password"
                 required
                 disabled={isLoading}
               />
