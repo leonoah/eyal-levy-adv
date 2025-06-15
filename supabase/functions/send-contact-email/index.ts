@@ -1,6 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -43,22 +43,14 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Target email - this is where we want emails to go
-    const targetEmail = 'eyal@miloen.co.il';
-    // Development email - for testing (your Resend account email)
-    const devEmail = 'leon.noah@gmail.com';
+    // Gmail configuration
+    const GMAIL_USER = Deno.env.get('GMAIL_USER');
+    const GMAIL_APP_PASSWORD = Deno.env.get('GMAIL_APP_PASSWORD');
     
-    // In development, Resend only allows sending to your own email
-    // So we'll send to dev email but include target email in the message
-    const recipientEmail = devEmail;
-    
-    console.log('Sending email to:', recipientEmail, 'for target:', targetEmail);
-
-    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
-    if (!RESEND_API_KEY) {
-      console.error('RESEND_API_KEY not found in environment variables');
+    if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
+      console.error('Gmail credentials not found in environment variables');
       return new Response(
-        JSON.stringify({ error: 'שגיאה בהגדרת השרת - חסר מפתח API' }),
+        JSON.stringify({ error: 'שגיאה בהגדרת השרת - חסרים פרטי Gmail' }),
         {
           status: 500,
           headers: { 'Content-Type': 'application/json', ...corsHeaders },
@@ -66,71 +58,61 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log('Resend API key found, preparing email...');
+    console.log('Gmail credentials found, preparing email...');
 
-    // Prepare email data for Resend
-    const emailData = {
-      from: 'מאתר עורך הדין <onboarding@resend.dev>',
-      to: [recipientEmail],
-      subject: `הודעה חדשה מאתר עורך הדין - ${name}`,
-      html: `
-        <div dir="rtl" style="font-family: Arial, sans-serif;">
-          <h2>הודעה חדשה מטופס יצירת הקשר</h2>
-          <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px;">
-            <strong>שים לב:</strong> בסביבת פיתוח, האימייל הזה נשלח אליך אבל הוא מיועד ל: <strong>${targetEmail}</strong>
-          </div>
-          <p><strong>שם:</strong> ${name}</p>
-          <p><strong>טלפון:</strong> ${phone}</p>
-          <p><strong>אימייל:</strong> ${email}</p>
-          <p><strong>הודעה:</strong></p>
-          <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${message}</p>
-          <hr>
-          <p style="color: #666; font-size: 12px;">הודעה זו נשלחה מאתר עורך הדין</p>
-        </div>
-      `
-    };
+    // Target email - where we want to send emails
+    const targetEmail = 'eyal@miloen.co.il';
+    console.log('Sending email to:', targetEmail);
 
-    console.log('Sending email via Resend to:', recipientEmail);
-
-    // Send email via Resend
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
+    // Create SMTP client
+    const client = new SMTPClient({
+      connection: {
+        hostname: "smtp.gmail.com",
+        port: 587,
+        tls: true,
+        auth: {
+          username: GMAIL_USER,
+          password: GMAIL_APP_PASSWORD,
+        },
       },
-      body: JSON.stringify(emailData),
     });
 
-    console.log('Resend response status:', response.status);
+    // Prepare email content
+    const emailContent = `
+      <div dir="rtl" style="font-family: Arial, sans-serif;">
+        <h2>הודעה חדשה מטופס יצירת הקשר</h2>
+        <p><strong>שם:</strong> ${name}</p>
+        <p><strong>טלפון:</strong> ${phone}</p>
+        <p><strong>אימייל:</strong> ${email}</p>
+        <p><strong>הודעה:</strong></p>
+        <p style="background: #f5f5f5; padding: 15px; border-radius: 5px;">${message}</p>
+        <hr>
+        <p style="color: #666; font-size: 12px;">הודעה זו נשלחה מאתר עורך הדין</p>
+      </div>
+    `;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Resend error:', response.status, errorText);
-      
-      return new Response(
-        JSON.stringify({ 
-          error: 'שגיאה בשליחת האימייל',
-          details: `Resend error: ${response.status}`,
-          resendError: errorText
-        }),
-        {
-          status: 500,
-          headers: { 'Content-Type': 'application/json', ...corsHeaders },
-        }
-      );
-    }
+    console.log('Connecting to Gmail SMTP...');
 
-    const responseData = await response.json();
-    console.log('Email sent successfully via Resend:', responseData);
+    // Send email
+    await client.send({
+      from: GMAIL_USER,
+      to: targetEmail,
+      subject: `הודעה חדשה מאתר עורך הדין - ${name}`,
+      content: emailContent,
+      html: emailContent,
+    });
+
+    console.log('Email sent successfully via Gmail SMTP');
+
+    // Close the connection
+    await client.close();
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'האימייל נשלח בהצלחה',
         timestamp: new Date().toISOString(),
-        sentTo: recipientEmail,
-        targetEmail: targetEmail
+        sentTo: targetEmail
       }),
       {
         status: 200,
