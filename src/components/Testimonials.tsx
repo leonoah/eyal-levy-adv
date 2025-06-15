@@ -1,10 +1,12 @@
 
 import { Star, Shield, Award, Users } from 'lucide-react';
 import { useTestimonials } from '@/hooks/useTestimonials';
+import { useContentManager } from '@/hooks/useContentManager';
 import { useEffect, useState } from 'react';
 
 const Testimonials = () => {
   const { testimonials, isLoading } = useTestimonials();
+  const content = useContentManager();
   const [activeTestimonials, setActiveTestimonials] = useState<any[]>([]);
 
   useEffect(() => {
@@ -13,12 +15,16 @@ const Testimonials = () => {
     }
   }, [testimonials]);
 
-  const trustBadges = [
-    { icon: Shield, text: "לשכת עורכי הדין" },
-    { icon: Award, text: "15+ שנות ניסיון" },
-    { icon: Users, text: "500+ לקוחות מרוצים" },
-    { icon: Star, text: "דירוג 5 כוכבים" }
-  ];
+  const iconMap = {
+    Award,
+    Clock: Award, // fallback
+    Users,
+    CheckCircle: Award, // fallback
+    Star,
+    TrendingUp: Award, // fallback
+    Shield,
+    Heart: Award // fallback
+  };
 
   if (isLoading) {
     return (
@@ -78,14 +84,17 @@ const Testimonials = () => {
           ))}
         </div>
 
-        {/* Trust Badges */}
+        {/* Trust Badges - now using achievements from content manager */}
         <div className="flex flex-wrap justify-center gap-6">
-          {trustBadges.map((badge, index) => (
-            <div key={index} className="trust-badge">
-              <badge.icon size={20} className="legal-icon" />
-              <span>{badge.text}</span>
-            </div>
-          ))}
+          {content.achievements && content.achievements.length > 0 ? content.achievements.map((achievement, index) => {
+            const IconComponent = iconMap[achievement.icon as keyof typeof iconMap] || Award;
+            return (
+              <div key={`trust-badge-${index}`} className="trust-badge">
+                <IconComponent size={20} className="legal-icon" />
+                <span>{achievement.text}</span>
+              </div>
+            );
+          }) : null}
         </div>
       </div>
     </section>
