@@ -29,12 +29,15 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log('Starting send-contact-email function');
+    
     const { name, phone, email, message }: ContactFormData = await req.json();
 
-    console.log('Received contact form:', { name, email, phone });
+    console.log('Received contact form data:', { name, email, phone });
 
     // Validate required fields
     if (!name || !phone || !email || !message) {
+      console.log('Missing required fields');
       return new Response(
         JSON.stringify({ error: 'כל השדות נדרשים' }),
         {
@@ -45,22 +48,13 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Create Supabase client to fetch admin contact email
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-    // Get contact email from admin settings
-    console.log('Fetching admin contact email from database...');
-    const { data: contactData, error: contactError } = await supabase
-      .from('site_content')
-      .select('content')
-      .eq('section_name', 'contact')
-      .single();
-
-    if (contactError) {
-      console.error('Error fetching contact data:', contactError);
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing Supabase environment variables');
       return new Response(
-        JSON.stringify({ error: 'שגיאה בטעינת הגדרות המערכת' }),
+        JSON.stringify({ error: 'שגיאה בהגדרת השרת' }),
         {
           status: 500,
           headers: { 'Content-Type': 'application/json', ...corsHeaders },
@@ -68,8 +62,28 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const targetEmail = contactData?.content?.email || 'eyal@miloen.co.il';
-    console.log('Target email from admin settings:', targetEmail);
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Get contact email from admin settings
+    console.log('Fetching admin contact email from database...');
+    let targetEmail = 'eyal@miloen.co.il'; // Default fallback
+    
+    try {
+      const { data: contactData, error: contactError } = await supabase
+        .from('site_content')
+        .select('content')
+        .eq('section_name', 'contact')
+        .single();
+
+      if (!contactError && contactData?.content?.email) {
+        targetEmail = contactData.content.email;
+        console.log('Using admin email from database:', targetEmail);
+      } else {
+        console.log('Using fallback email:', targetEmail);
+      }
+    } catch (dbError) {
+      console.log('Error fetching contact data, using fallback email:', dbError);
+    }
 
     // Gmail configuration
     const GMAIL_USER = Deno.env.get('GMAIL_USER');
@@ -89,19 +103,6 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('Gmail credentials found, preparing email...');
     console.log('Sending email to:', targetEmail);
 
-    // Create SMTP client
-    const client = new SMTPClient({
-      connection: {
-        hostname: "smtp.gmail.com",
-        port: 587,
-        tls: true,
-        auth: {
-          username: GMAIL_USER,
-          password: GMAIL_APP_PASSWORD,
-        },
-      },
-    });
-
     // Prepare email content
     const emailContent = `
       <div dir="rtl" style="font-family: Arial, sans-serif;">
@@ -118,32 +119,60 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('Connecting to Gmail SMTP...');
 
-    // Send email
-    await client.send({
-      from: GMAIL_USER,
-      to: targetEmail,
-      subject: `הודעה חדשה מאתר עורך הדין - ${name}`,
-      content: emailContent,
-      html: emailContent,
+    // Create SMTP client
+    const client = new SMTPClient({
+      connection: {
+        hostname: "smtp.gmail.com",
+        port: 587,
+        tls: true,
+        auth: {
+          username: GMAIL_USER,
+          password: GMAIL_APP_PASSWORD,
+        },
+      },
     });
 
-    console.log('Email sent successfully via Gmail SMTP to:', targetEmail);
+    // Send email
+    try {
+      await client.send({
+        from: GMAIL_USER,
+        to: targetEmail,
+        subject: `הודעה חדשה מאתר עורך הדין - ${name}`,
+        content: emailContent,
+        html: emailContent,
+      });
 
-    // Close the connection
-    await client.close();
+      console.log('Email sent successfully via Gmail SMTP to:', targetEmail);
 
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: 'האימייל נשלח בהצלחה',
-        timestamp: new Date().toISOString(),
-        sentTo: targetEmail
-      }),
-      {
-        status: 200,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      }
-    );
+      // Close the connection
+      await client.close();
+
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: 'האימייל נשלח בהצלחה',
+          timestamp: new Date().toISOString(),
+          sentTo: targetEmail
+        }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        }
+      );
+      
+    } catch (emailError) {
+      console.error('Error sending email:', emailError);
+      return new Response(
+        JSON.stringify({ 
+          error: 'שגיאה בשליחת האימייל',
+          details: emailError.message
+        }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        }
+      );
+    }
 
   } catch (error) {
     console.error('Error in send-contact-email function:', error);
