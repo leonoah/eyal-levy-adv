@@ -22,6 +22,8 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
     setIsLoading(true);
 
     try {
+      console.log('Attempting login with:', { username, password: '***' });
+      
       const response = await fetch('/api/admin-login', {
         method: 'POST',
         headers: {
@@ -30,9 +32,18 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await response.json();
+      console.log('Response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Response error:', errorText);
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
 
-      if (response.ok && data.success) {
+      const data = await response.json();
+      console.log('Response data:', data);
+
+      if (data.success) {
         localStorage.setItem('adminAuth', 'true');
         localStorage.setItem('adminUsername', username);
         onLogin(true);
@@ -48,9 +59,10 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
         });
       }
     } catch (error) {
+      console.error('Login error:', error);
       toast({
         title: "שגיאה בהתחברות",
-        description: "אנא נסה שוב מאוחר יותר",
+        description: error instanceof Error ? error.message : "אנא נסה שוב מאוחר יותר",
         variant: "destructive"
       });
     } finally {
