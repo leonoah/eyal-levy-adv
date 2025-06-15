@@ -26,7 +26,47 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { username, password }: LoginRequest = await req.json();
+    // Check if request has content
+    const contentType = req.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      return new Response(
+        JSON.stringify({ error: 'Content-Type must be application/json' }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        }
+      );
+    }
+
+    // Read the request body with error handling
+    let requestData: LoginRequest;
+    try {
+      const text = await req.text();
+      console.log('Received request body:', text);
+      
+      if (!text || text.trim() === '') {
+        return new Response(
+          JSON.stringify({ error: 'Request body is empty' }),
+          {
+            status: 400,
+            headers: { 'Content-Type': 'application/json', ...corsHeaders },
+          }
+        );
+      }
+      
+      requestData = JSON.parse(text);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON in request body' }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        }
+      );
+    }
+
+    const { username, password } = requestData;
 
     if (!username || !password) {
       return new Response(
