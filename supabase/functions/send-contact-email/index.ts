@@ -1,6 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+import { Resend } from "npm:resend@2.0.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -85,14 +85,13 @@ const handler = async (req: Request): Promise<Response> => {
       console.log('Error fetching contact data, using fallback email:', dbError);
     }
 
-    // Gmail configuration
-    const GMAIL_USER = Deno.env.get('GMAIL_USER');
-    const GMAIL_APP_PASSWORD = Deno.env.get('GMAIL_APP_PASSWORD');
+    // Check for Resend API key
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
     
-    if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
-      console.error('Gmail credentials not found in environment variables');
+    if (!resendApiKey) {
+      console.error('Resend API key not found in environment variables');
       return new Response(
-        JSON.stringify({ error: 'שגיאה בהגדרת השרת - חסרים פרטי Gmail' }),
+        JSON.stringify({ error: 'שגיאה בהגדרת השרת - חסר מפתח Resend' }),
         {
           status: 500,
           headers: { 'Content-Type': 'application/json', ...corsHeaders },
@@ -100,8 +99,11 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log('Gmail credentials found, preparing email...');
+    console.log('Resend API key found, preparing email...');
     console.log('Sending email to:', targetEmail);
+
+    // Initialize Resend
+    const resend = new Resend(resendApiKey);
 
     // Prepare email content
     const emailContent = `
@@ -117,42 +119,24 @@ const handler = async (req: Request): Promise<Response> => {
       </div>
     `;
 
-    console.log('Connecting to Gmail SMTP...');
-
-    // Create SMTP client
-    const client = new SMTPClient({
-      connection: {
-        hostname: "smtp.gmail.com",
-        port: 587,
-        tls: true,
-        auth: {
-          username: GMAIL_USER,
-          password: GMAIL_APP_PASSWORD,
-        },
-      },
-    });
-
-    // Send email
+    // Send email using Resend
     try {
-      await client.send({
-        from: GMAIL_USER,
-        to: targetEmail,
+      const emailResponse = await resend.emails.send({
+        from: 'Lawyer Website <onboarding@resend.dev>',
+        to: [targetEmail],
         subject: `הודעה חדשה מאתר עורך הדין - ${name}`,
-        content: emailContent,
         html: emailContent,
       });
 
-      console.log('Email sent successfully via Gmail SMTP to:', targetEmail);
-
-      // Close the connection
-      await client.close();
+      console.log('Email sent successfully via Resend:', emailResponse);
 
       return new Response(
         JSON.stringify({ 
           success: true, 
           message: 'האימייל נשלח בהצלחה',
           timestamp: new Date().toISOString(),
-          sentTo: targetEmail
+          sentTo: targetEmail,
+          emailId: emailResponse.data?.id
         }),
         {
           status: 200,
@@ -161,7 +145,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
       
     } catch (emailError) {
-      console.error('Error sending email:', emailError);
+      console.error('Error sending email via Resend:', emailError);
       return new Response(
         JSON.stringify({ 
           error: 'שגיאה בשליחת האימייל',
