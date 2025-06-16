@@ -33,13 +33,22 @@ const Hero = () => {
           
           {/* Right Column - Image (now first in order for RTL) */}
           <div className="flex justify-center order-2 lg:order-1">
-            <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden bg-[#1e1e1e]" 
+            <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden bg-[#121212]" 
                  style={{ width: '544px', height: '653px' }}>
-              <img 
-                src={content.about.image} 
-                alt="עו''ד אייל לוי" 
-                className="w-full h-full object-cover"
-              />
+              {content.about.image ? (
+                <img 
+                  src={content.about.image} 
+                  alt="עו''ד אייל לוי" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // במקרה של שגיאה בטעינת התמונה, הסתר אותה
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              ) : (
+                // אם אין תמונה, הצג רקע שחור בלבד
+                <div className="w-full h-full bg-[#121212]"></div>
+              )}
             </div>
           </div>
 
@@ -52,6 +61,10 @@ const Hero = () => {
                 src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
                 alt="לוגו עו''ד אייל לוי" 
                 className="h-20"
+                onError={(e) => {
+                  // במקרה של שגיאה בטעינת הלוגו, הסתר אותו
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             </div>
 
