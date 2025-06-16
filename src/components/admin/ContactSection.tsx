@@ -24,16 +24,7 @@ export const ContactSection = ({ content, updateContact }: ContactSectionProps) 
             placeholder="הכניסו מספר טלפון"
           />
         </div>
-        <div>
-          <Label htmlFor="contact-whatsapp" className="text-lawyer-white text-base font-medium mb-2 block">וואטסאפ</Label>
-          <Input
-            id="contact-whatsapp"
-            value={content.contact.whatsapp || ''}
-            onChange={(e) => updateContact('whatsapp', e.target.value)}
-            className="w-full bg-lawyer-black border-2 border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold focus:ring-0 focus:outline-none transition-colors text-base py-3 px-4"
-            placeholder="מספר וואטסאפ (לדוגמה: 972501234567)"
-          />
-        </div>
+         
         <div>
           <Label htmlFor="contact-email" className="text-lawyer-white text-base font-medium mb-2 block">אימייל</Label>
           <Input
