@@ -37,12 +37,8 @@ export const ContactInfo = () => {
     const link = createWhatsAppLink(content.contact.phone);
     console.log('Opening WhatsApp link:', link);
     
-    // יצירת קישור ישיר ופשוט ל-WhatsApp
-    const whatsappLink = document.createElement('a');
-    whatsappLink.href = link;
-    whatsappLink.target = '_blank';
-    whatsappLink.rel = 'noopener noreferrer';
-    whatsappLink.click();
+    // פתיחה פשוטה של הקישור ללא ניסיון לטעון manifest
+    window.open(link, '_blank', 'noopener,noreferrer');
   };
 
   const contactInfo = [
