@@ -28,9 +28,14 @@ export const ContactInfo = () => {
 
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    console.log('WhatsApp button clicked');
+    
     const link = createWhatsAppLink(content.contact.phone);
-    console.log('WhatsApp link:', link);
-    window.open(link, '_blank', 'noopener,noreferrer');
+    console.log('Opening WhatsApp link:', link);
+    
+    // פתיחה ישירה של WhatsApp
+    window.location.href = link;
   };
 
   const contactInfo = [
@@ -74,6 +79,7 @@ export const ContactInfo = () => {
         
         {/* כפתור WhatsApp מתוקן */}
         <button
+          type="button"
           onClick={handleWhatsAppClick}
           className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
         >
