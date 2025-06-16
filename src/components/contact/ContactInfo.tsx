@@ -1,3 +1,4 @@
+
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useAdminContent } from '@/hooks/useAdminContent';
 
@@ -8,14 +9,22 @@ export const ContactInfo = () => {
 const createWhatsAppLink = (phoneNumber: string, messageText?: string) => {
   // ניקוי המספר מכל תווים שאינם ספרות
   const cleanNumber = phoneNumber.replace(/[^\d]/g, '');
+  console.log('Original phone number:', phoneNumber);
+  console.log('Cleaned phone number:', cleanNumber);
 
   // פורמט המספר עם קידומת בינלאומית
   let formattedNumber = cleanNumber;
+  
+  // אם המספר מתחיל ב-0 (מספר ישראלי מקומי), נחליף ל-972
   if (cleanNumber.startsWith('0')) {
     formattedNumber = '972' + cleanNumber.substring(1);
-  } else if (!cleanNumber.startsWith('972')) {
+  } 
+  // אם המספר לא מתחיל ב-972 ולא ב-0, נוסיף 972
+  else if (!cleanNumber.startsWith('972')) {
     formattedNumber = '972' + cleanNumber;
   }
+
+  console.log('Formatted phone number:', formattedNumber);
 
   // הודעה ברירת מחדל או הודעה מותאמת
   const message = encodeURIComponent(
@@ -23,7 +32,10 @@ const createWhatsAppLink = (phoneNumber: string, messageText?: string) => {
   );
 
   // קישור תקני
-  return `https://wa.me/${formattedNumber}?text=${message}`;
+  const whatsappLink = `https://wa.me/${formattedNumber}?text=${message}`;
+  console.log('WhatsApp link:', whatsappLink);
+  
+  return whatsappLink;
 };
 
 // אירוע לחיצה על כפתור וואטסאפ
