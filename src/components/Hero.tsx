@@ -35,20 +35,8 @@ const Hero = () => {
           <div className="flex justify-center order-2 lg:order-1">
             <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden bg-[#121212]" 
                  style={{ width: '544px', height: '653px' }}>
-              {content.about.image ? (
-                <img 
-                  src={content.about.image} 
-                  alt="עו''ד אייל לוי" 
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    // במקרה של שגיאה בטעינת התמונה, הסתר אותה
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              ) : (
-                // אם אין תמונה, הצג רקע שחור בלבד
-                <div className="w-full h-full bg-[#121212]"></div>
-              )}
+              {/* תמיד הצג רקע שחור - הסר את התמונה כרגע */}
+              <div className="w-full h-full bg-[#121212]"></div>
             </div>
           </div>
 
