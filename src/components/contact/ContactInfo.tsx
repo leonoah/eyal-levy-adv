@@ -25,7 +25,7 @@ export const ContactInfo = () => {
     // הודעה מוכנה מראש
     const message = encodeURIComponent('שלום, אני מעוניין/ת לקבל ייעוץ משפטי');
     
-    // יצירת קישור WhatsApp נכון
+    // יצירת קישור WhatsApp פשוט ונכון
     return `https://wa.me/${formattedNumber}?text=${message}`;
   };
 
@@ -37,8 +37,12 @@ export const ContactInfo = () => {
     const link = createWhatsAppLink(content.contact.phone);
     console.log('Opening WhatsApp link:', link);
     
-    // שימוש ב-location.href במקום window.open כדי למנוע בעיות ברזולוציה
-    window.location.href = link;
+    // יצירת קישור ישיר ופשוט ל-WhatsApp
+    const whatsappLink = document.createElement('a');
+    whatsappLink.href = link;
+    whatsappLink.target = '_blank';
+    whatsappLink.rel = 'noopener noreferrer';
+    whatsappLink.click();
   };
 
   const contactInfo = [
