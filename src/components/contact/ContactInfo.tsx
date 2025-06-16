@@ -1,4 +1,3 @@
-
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useAdminContent } from '@/hooks/useAdminContent';
 
@@ -23,6 +22,7 @@ export const ContactInfo = () => {
     // הודעה מוכנה מראש
     const message = encodeURIComponent('שלום, אני מעוניין/ת לקבל ייעוץ משפטי');
     
+    // יצירת קישור WhatsApp נכון
     return `https://wa.me/${formattedNumber}?text=${message}`;
   };
 
@@ -35,7 +35,7 @@ export const ContactInfo = () => {
     console.log('Opening WhatsApp link:', link);
     
     // פתיחה ישירה של WhatsApp
-    window.location.href = link;
+    window.open(link, '_blank', 'noopener,noreferrer');
   };
 
   const contactInfo = [
