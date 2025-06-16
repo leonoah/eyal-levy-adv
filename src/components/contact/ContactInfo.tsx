@@ -1,9 +1,9 @@
 
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
-import { useContentManager } from '@/hooks/useContentManager';
+import { useAdminContent } from '@/hooks/useAdminContent';
 
 export const ContactInfo = () => {
-  const content = useContentManager();
+  const { content } = useAdminContent();
 
   const contactInfo = [
     { icon: Phone, text: content.contact.phone, label: 'טלפון' },
