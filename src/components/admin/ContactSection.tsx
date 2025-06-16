@@ -60,7 +60,7 @@ export const ContactSection = ({ content, updateContact }: ContactSectionProps) 
             onChange={(e) => updateContact('whatsappMessage', e.target.value)}
             className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
             rows={3}
-            placeholder="שלום, אני מעוניין לקבל ייעוץ משפטי מעו"ד אייל לוי"
+            placeholder="שלום, אני מעוניין לקבל ייעוץ משפטי מעו&quot;ד אייל לוי"
           />
           <p className="text-sm text-lawyer-silver mt-2">
             הודעה זו תישלח אוטומטית כשמישהו לוחץ על כפתור הוואטסאפ באתר
