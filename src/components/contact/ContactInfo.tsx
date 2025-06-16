@@ -8,19 +8,22 @@ export const ContactInfo = () => {
   // פונקציה ליצירת קישור WhatsApp נכון
   const createWhatsAppLink = (phoneNumber: string) => {
     // ניקוי מספר הטלפון - הסרת רווחים ותווים מיוחדים
-    const cleanNumber = phoneNumber.replace(/[^\d+]/g, '');
+    const cleanNumber = phoneNumber.replace(/[^\d]/g, '');
     
     // אם המספר מתחיל ב-0, נחליף ל-972
     let formattedNumber = cleanNumber;
     if (cleanNumber.startsWith('0')) {
       formattedNumber = '972' + cleanNumber.substring(1);
     }
-    // אם המספר לא מתחיל ב-+ או ב-972, נוסיף 972
-    else if (!cleanNumber.startsWith('+') && !cleanNumber.startsWith('972')) {
+    // אם המספר לא מתחיל ב-972, נוסיף 972
+    else if (!cleanNumber.startsWith('972')) {
       formattedNumber = '972' + cleanNumber;
     }
     
-    return `https://wa.me/${formattedNumber}`;
+    // הודעה מוכנה מראש
+    const message = encodeURIComponent('שלום, אני מעוניין/ת לקבל ייעוץ משפטי');
+    
+    return `https://wa.me/${formattedNumber}?text=${message}`;
   };
 
   const contactInfo = [
