@@ -1,3 +1,4 @@
+
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useAdminContent } from '@/hooks/useAdminContent';
 
@@ -6,16 +7,19 @@ export const ContactInfo = () => {
 
   // פונקציה ליצירת קישור WhatsApp נכון
   const createWhatsAppLink = (phoneNumber: string) => {
-    // ניקוי מספר הטלפון - הסרת רווחים ותווים מיוחדים
+    // ניקוי מספר הטלפון - הסרת רווחים, מקפים ותווים מיוחדים
     const cleanNumber = phoneNumber.replace(/[^\d]/g, '');
     
-    // אם המספר מתחיל ב-0, נחליף ל-972
+    // טיפול במספרים ישראליים
     let formattedNumber = cleanNumber;
-    if (cleanNumber.startsWith('0')) {
+    if (cleanNumber.startsWith('052') || cleanNumber.startsWith('053') || cleanNumber.startsWith('054') || cleanNumber.startsWith('050') || cleanNumber.startsWith('055') || cleanNumber.startsWith('058') || cleanNumber.startsWith('059')) {
+      // מספר נייד ישראלי - נוסיף 972 ונסיר את ה-0
       formattedNumber = '972' + cleanNumber.substring(1);
-    }
-    // אם המספר לא מתחיל ב-972, נוסיף 972
-    else if (!cleanNumber.startsWith('972')) {
+    } else if (cleanNumber.startsWith('0')) {
+      // מספר קווי ישראלי - נחליף את ה-0 ב-972
+      formattedNumber = '972' + cleanNumber.substring(1);
+    } else if (!cleanNumber.startsWith('972')) {
+      // אם לא מתחיל ב-972, נוסיף 972
       formattedNumber = '972' + cleanNumber;
     }
     
