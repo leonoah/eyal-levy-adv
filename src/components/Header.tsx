@@ -17,13 +17,13 @@ const Header = () => {
     <header className="bg-lawyer-black border-b border-lawyer-divider sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo - moved to the left */}
-          <div className="flex-shrink-0 flex items-center">
+          {/* Logo - positioned on the left */}
+          <div className="order-1 flex-shrink-0 flex items-center">
             <h1 className="text-xl font-bold text-lawyer-gold">עו"ד אייל לוי</h1>
           </div>
 
-          {/* Desktop Navigation - moved to the right */}
-          <nav className="hidden md:flex items-center space-x-8 space-x-reverse">
+          {/* Desktop Navigation - positioned on the right */}
+          <nav className="order-2 hidden md:flex items-center space-x-8 space-x-reverse">
             {menuItems.map((item) => (
               <a
                 key={item.href}
@@ -42,8 +42,8 @@ const Header = () => {
             </a>
           </nav>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center space-x-2 space-x-reverse">
+          {/* Mobile menu button - positioned on the right */}
+          <div className="order-2 md:hidden flex items-center space-x-2 space-x-reverse">
             <a
               href="/admin"
               className="text-lawyer-silver hover:text-lawyer-gold transition-colors"
