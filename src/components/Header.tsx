@@ -36,8 +36,8 @@ const Header = () => {
 
     console.log('Header - Formatted phone number:', formattedNumber);
 
-    // הודעה ברירת מחדל או הודעה מותאמת
-    const message = messageText || `שלום, אני מעוניין לקבל ייעוץ משפטי מעו"ד ${content.hero.title.replace('עו"ד ', '')}`;
+    // השתמש בהודעה המותאמת אישית או ברירת מחדל
+    const message = messageText || content.contact.whatsappMessage || `שלום, אני מעוניין לקבל ייעוץ משפטי מעו"ד ${content.hero.title.replace('עו"ד ', '')}`;
     console.log('Header - Message text:', message);
     
     const encodedMessage = encodeURIComponent(message);

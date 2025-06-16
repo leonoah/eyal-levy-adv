@@ -27,8 +27,8 @@ const createWhatsAppLink = (phoneNumber: string, messageText?: string) => {
 
   console.log('Formatted phone number:', formattedNumber);
 
-  // הודעה ברירת מחדל או הודעה מותאמת
-  const message = messageText || 'שלום, אשמח לקבל פרטים נוספים 🙏';
+  // השתמש בהודעה המותאמת אישית או ברירת מחדל
+  const message = messageText || content.contact.whatsappMessage || 'שלום, אשמח לקבל פרטים נוספים 🙏';
   console.log('Original message text:', message);
   
   const encodedMessage = encodeURIComponent(message);

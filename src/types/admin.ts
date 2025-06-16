@@ -23,6 +23,7 @@ export interface SiteContent {
     email: string;
     address: string;
     whatsapp?: string;
+    whatsappMessage?: string;
   };
   achievements: Array<{
     icon: string;
@@ -57,7 +58,8 @@ export const defaultContent: SiteContent = {
     phone: '03-1234567',
     email: 'eyal@lawyer.co.il',
     address: 'תל אביב, ישראל',
-    whatsapp: '972501234567'
+    whatsapp: '972501234567',
+    whatsappMessage: 'שלום, אני מעוניין לקבל ייעוץ משפטי מעו"ד אייל לוי'
   },
   achievements: [
     { icon: 'Award', text: 'יותר מ-15 שנות ניסיון' },
