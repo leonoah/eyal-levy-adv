@@ -1,10 +1,10 @@
 
 import { Button } from '@/components/ui/button';
-import { useContentManager } from '@/hooks/useContentManager';
+import { useAdminContent } from '@/hooks/useAdminContent';
 import { Award, Users, TrendingUp, Clock, CheckCircle, Star, Shield, Heart, MessageCircle } from 'lucide-react';
 
 const Hero = () => {
-  const content = useContentManager();
+  const { content } = useAdminContent();
 
   const iconMap = {
     Award,
