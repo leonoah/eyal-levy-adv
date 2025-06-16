@@ -61,7 +61,7 @@ const Hero = () => {
             {/* New Section: About */}
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-[#c5a56d] mb-4">
-                אודות עו"ד אייל לוי
+                אודות
               </h3>
               <p className="text-[#e0e0e0] text-base leading-relaxed mb-4">
                 עו"ד אייל לוי הוא עורך דין מנוסה עם ניסיון רב שנים בתחומי הדין השונים. הוא מתמחה במתן ייעוץ משפטי מקצועי ומסור, תוך הקפדה על שירות אישי ומותאם לכל לקוח.
