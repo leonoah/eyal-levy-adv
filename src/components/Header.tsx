@@ -16,14 +16,9 @@ const Header = () => {
   return (
     <header className="bg-lawyer-black border-b border-lawyer-divider sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="flex items-center h-16">
-          {/* Logo - fixed to the left */}
-          <div className="flex-shrink-0 flex items-center ml-auto">
-            <h1 className="text-xl font-bold text-lawyer-gold">עו"ד אייל לוי</h1>
-          </div>
-
-          {/* Desktop Navigation - fixed to the right */}
-          <nav className="hidden md:flex items-center space-x-8 space-x-reverse mr-auto">
+        <div className="flex items-center justify-between h-16">
+          {/* Desktop Navigation - positioned first (will appear on right in RTL) */}
+          <nav className="hidden md:flex items-center space-x-8 space-x-reverse">
             {menuItems.map((item) => (
               <a
                 key={item.href}
@@ -42,8 +37,8 @@ const Header = () => {
             </a>
           </nav>
 
-          {/* Mobile menu button - fixed to the right */}
-          <div className="md:hidden flex items-center space-x-2 space-x-reverse mr-auto">
+          {/* Mobile menu button - positioned first (will appear on right in RTL) */}
+          <div className="md:hidden flex items-center space-x-2 space-x-reverse">
             <a
               href="/admin"
               className="text-lawyer-silver hover:text-lawyer-gold transition-colors"
@@ -57,6 +52,11 @@ const Header = () => {
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
+          </div>
+
+          {/* Logo - positioned second (will appear on left in RTL) */}
+          <div className="flex-shrink-0 flex items-center">
+            <h1 className="text-xl font-bold text-lawyer-gold">עו"ד אייל לוי</h1>
           </div>
         </div>
 
