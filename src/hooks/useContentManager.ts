@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 
-export interface SiteContent {
+// Define the content structure to match what's used in the components
+interface ContentManager {
   hero: {
     title: string;
     subtitle: string;
@@ -18,6 +18,7 @@ export interface SiteContent {
     phone: string;
     email: string;
     address: string;
+    whatsapp?: string;
   };
   achievements: Array<{
     icon: string;
@@ -37,7 +38,7 @@ export interface SiteContent {
   }>;
 }
 
-const defaultContent: SiteContent = {
+const defaultContent: ContentManager = {
   hero: {
     title: 'עו"ד אייל לוי',
     subtitle: 'משרד עורכי דין – דיני עבודה, נדל"ן, ליטיגציה',
@@ -46,13 +47,14 @@ const defaultContent: SiteContent = {
   about: {
     title: 'אודות עו"ד אייל לוי',
     description1: 'עו"ד אייל לוי הוא עורך דין מנוסה עם ניסיון רב שנים בתחומי הדין השונים. הוא מתמחה במתן ייעוץ משפטי מקצועי ומסור, תוך הקפדה על שירות אישי ומותאם לכל לקוח.',
-    description2: 'המשרד מתמחה בדיני עבודה, נדל"ן, ליטיגציה ודיני משפחה. אנו גאים בשירות המקצועי והאמין שאנו מעניקים ללקוחותינו ובשיעור ההצלחה הגבוה שלנו בתיקים השונים.',
+    description2: 'המשרד מתמחה בדיני עבודה, נדל"ן, ליטיגציה ודיני משפחה. אנו גאים בשירות המקצועי והאמין שאנו מעניקים ללקוחותינו ובשיעור ההצלחה הגבوה שלנו בתיקים השונים.',
     image: '/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png'
   },
   contact: {
     phone: '03-1234567',
     email: 'eyal@lawyer.co.il',
-    address: 'תל אביב, ישראל'
+    address: 'תל אביב, ישראל',
+    whatsapp: '972501234567'
   },
   achievements: [
     { icon: 'Award', text: 'יותר מ-15 שנות ניסיון' },
@@ -91,60 +93,14 @@ const defaultContent: SiteContent = {
   ]
 };
 
-export const useContentManager = () => {
-  const [content, setContent] = useState<SiteContent>(defaultContent);
-  const [isLoading, setIsLoading] = useState(true);
+export const useContentManager = (): ContentManager => {
+  const [content, setContent] = useState<ContentManager>(defaultContent);
 
   useEffect(() => {
-    fetchContentFromDB();
-  }, []);
-
-  const fetchContentFromDB = async () => {
-    try {
-      setIsLoading(true);
-      const { data, error } = await supabase
-        .from('site_content')
-        .select('section_name, content');
-
-      if (error) {
-        console.error('Error fetching content:', error);
-        setContent(defaultContent);
-        return;
-      }
-
-      if (data && data.length > 0) {
-        const contentData: any = {};
-        
-        data.forEach((section) => {
-          contentData[section.section_name] = section.content;
-        });
-
-        // וודא שכל המפתחות הנדרשים קיימים
-        const mergedContent = {
-          hero: contentData.hero || defaultContent.hero,
-          about: contentData.about || defaultContent.about,
-          contact: contentData.contact || defaultContent.contact,
-          achievements: contentData.achievements || defaultContent.achievements,
-          services: contentData.services || defaultContent.services,
-          articles: contentData.articles || defaultContent.articles
-        };
-
-        setContent(mergedContent);
-      } else {
-        setContent(defaultContent);
-      }
-    } catch (error) {
-      console.error('Error fetching content:', error);
-      setContent(defaultContent);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // האזנה לשינויים בזמן אמת
-  useEffect(() => {
+    // Listen for content updates from admin
     const handleContentUpdate = (event: CustomEvent) => {
-      fetchContentFromDB();
+      console.log('Content updated:', event.detail);
+      setContent(event.detail);
     };
 
     window.addEventListener('contentUpdated', handleContentUpdate as EventListener);
@@ -153,10 +109,6 @@ export const useContentManager = () => {
       window.removeEventListener('contentUpdated', handleContentUpdate as EventListener);
     };
   }, []);
-
-  if (isLoading) {
-    return defaultContent;
-  }
 
   return content;
 };
