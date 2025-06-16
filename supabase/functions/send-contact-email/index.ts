@@ -24,11 +24,28 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log('Starting send-contact-email function');
+    
     const { name, phone, email, message }: ContactEmailRequest = await req.json();
 
-    console.log('Received contact form submission:', { name, phone, email });
+    console.log('Received contact form data:', { name, email, phone });
 
-    // Send email to you (the lawyer)
+    // Check if RESEND_API_KEY is available
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (!resendApiKey) {
+      console.error('RESEND_API_KEY not found in environment variables');
+      return new Response(
+        JSON.stringify({ error: "שגיאה בהגדרת השרת - חסר מפתח Resend" }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    console.log('Sending email via Resend...');
+
+    // Send email to the lawyer
     const emailResponse = await resend.emails.send({
       from: "טופס יצירת קשר <onboarding@resend.dev>",
       to: ["eyal@miloen.co.il"],
@@ -69,8 +86,20 @@ const handler = async (req: Request): Promise<Response> => {
     });
   } catch (error: any) {
     console.error("Error in send-contact-email function:", error);
+    
+    // Handle specific Resend errors
+    if (error.message?.includes('API key')) {
+      return new Response(
+        JSON.stringify({ error: "שגיאה בהגדרת השרת - בעיה במפתח ה-API" }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+    
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "שגיאה בשליחת האימייל. אנא נסו שוב מאוחר יותר." }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
