@@ -18,7 +18,7 @@ const Hero = () => {
   };
 
   const handleWhatsAppClick = () => {
-    const phoneNumber = content.contact.whatsapp || content.contact.phone;
+    const phoneNumber = content.contact.phone;
     const message = encodeURIComponent(`שלום, אני מעוניין לקבל ייעוץ משפטי מעו"ד ${content.hero.title.replace('עו"ד ', '')}`);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
