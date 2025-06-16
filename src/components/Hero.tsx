@@ -58,6 +58,35 @@ const Hero = () => {
               </p>
             </div>
 
+            {/* New Section: About */}
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-[#c5a56d] mb-4">
+                אודות עו"ד אייל לוי
+              </h3>
+              <p className="text-[#e0e0e0] text-base leading-relaxed mb-4">
+                עו"ד אייל לוי הוא עורך דין מנוסה עם ניסיון רב שנים בתחומי הדין השונים. הוא מתמחה במתן ייעוץ משפטי מקצועי ומסור, תוך הקפדה על שירות אישי ומותאם לכל לקוח.
+              </p>
+              <p className="text-[#e0e0e0] text-base leading-relaxed mb-6">
+                המשרד מתמחה בדיני עבודה, נדל"ן, ליטיגציה ייפוי כוח וצוואות. אנו גאים בשירות המקצועי והאמין שאנו מעניקים ללקוחותינו ובשיעור ההצלחה הגבוה שלנו בתיקים השונים.
+              </p>
+              
+              {/* Achievement badges */}
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="text-[#c5a56d] font-semibold">
+                  ניסיון עשיר +15 שנים
+                </div>
+                <div className="text-[#c5a56d] font-semibold">
+                  לקוחות מרוצים
+                </div>
+                <div className="text-[#c5a56d] font-semibold">
+                  שיעור הצלחה גבוה
+                </div>
+                <div className="text-[#c5a56d] font-semibold">
+                  זמינות 24/7
+                </div>
+              </div>
+            </div>
+
             {/* Row 5: CTA Button */}
             <div className="mt-auto flex justify-center">
               <a href="#contact">
