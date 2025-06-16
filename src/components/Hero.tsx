@@ -1,6 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useContentManager } from '@/hooks/useContentManager';
+import { Award, Users, TrendingUp, Clock } from 'lucide-react';
 
 const Hero = () => {
   const content = useContentManager();
@@ -12,19 +13,7 @@ const Hero = () => {
         {/* Two-column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           
-          {/* Left Column - Image (70% larger) */}
-          <div className="flex justify-center">
-            <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden bg-[#1e1e1e]" 
-                 style={{ width: '544px', height: '653px' }}>
-              <img 
-                src={content.about.image} 
-                alt="עו''ד אייל לוי" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-
-          {/* Right Column - Content */}
+          {/* Left Column - Content */}
           <div className="flex flex-col h-full justify-between text-center">
             
             {/* Row 1: Logo */}
@@ -61,7 +50,7 @@ const Hero = () => {
             {/* New Section: About */}
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-[#c5a56d] mb-4">
-                אודות
+                אודות עו"ד אייל לוי
               </h3>
               <p className="text-[#e0e0e0] text-base leading-relaxed mb-4">
                 עו"ד אייל לוי הוא עורך דין מנוסה עם ניסיון רב שנים בתחומי הדין השונים. הוא מתמחה במתן ייעוץ משפטי מקצועי ומסור, תוך הקפדה על שירות אישי ומותאם לכל לקוח.
@@ -70,19 +59,23 @@ const Hero = () => {
                 המשרד מתמחה בדיני עבודה, נדל"ן, ליטיגציה ייפוי כוח וצוואות. אנו גאים בשירות המקצועי והאמין שאנו מעניקים ללקוחותינו ובשיעור ההצלחה הגבוה שלנו בתיקים השונים.
               </p>
               
-              {/* Achievement badges */}
+              {/* Achievement badges with icons */}
               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="text-[#c5a56d] font-semibold">
-                  ניסיון עשיר +15 שנים
+                <div className="flex items-center justify-center gap-2 text-[#c5a56d] font-semibold">
+                  <Award size={16} />
+                  <span>ניסיון עשיר +15 שנים</span>
                 </div>
-                <div className="text-[#c5a56d] font-semibold">
-                  לקוחות מרוצים
+                <div className="flex items-center justify-center gap-2 text-[#c5a56d] font-semibold">
+                  <Users size={16} />
+                  <span>לקוחות מרוצים</span>
                 </div>
-                <div className="text-[#c5a56d] font-semibold">
-                  שיעור הצלחה גבוה
+                <div className="flex items-center justify-center gap-2 text-[#c5a56d] font-semibold">
+                  <TrendingUp size={16} />
+                  <span>שיעור הצלחה גבוה</span>
                 </div>
-                <div className="text-[#c5a56d] font-semibold">
-                  זמינות 24/7
+                <div className="flex items-center justify-center gap-2 text-[#c5a56d] font-semibold">
+                  <Clock size={16} />
+                  <span>זמינות 24/7</span>
                 </div>
               </div>
             </div>
@@ -94,6 +87,18 @@ const Hero = () => {
                   לתיאום פגישה
                 </button>
               </a>
+            </div>
+          </div>
+
+          {/* Right Column - Image (70% larger) */}
+          <div className="flex justify-center">
+            <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden bg-[#1e1e1e]" 
+                 style={{ width: '544px', height: '653px' }}>
+              <img 
+                src={content.about.image} 
+                alt="עו''ד אייל לוי" 
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>
