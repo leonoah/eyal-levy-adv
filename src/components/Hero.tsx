@@ -12,11 +12,23 @@ const Hero = () => {
         {/* Two-column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           
-          {/* Left Column - Content */}
-          <div className="flex flex-col h-full justify-between">
+          {/* Left Column - Image (70% larger) */}
+          <div className="flex justify-center lg:justify-start">
+            <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden bg-[#1e1e1e]" 
+                 style={{ width: '544px', height: '653px' }}>
+              <img 
+                src={content.about.image} 
+                alt="עו''ד אייל לוי" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Right Column - Content */}
+          <div className="flex flex-col h-full justify-between text-center lg:text-right">
             
             {/* Row 1: Logo */}
-            <div className="mb-6">
+            <div className="mb-6 flex justify-center lg:justify-end">
               <img 
                 src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
                 alt="לוגו עו''ד אייל לוי" 
@@ -41,30 +53,18 @@ const Hero = () => {
             {/* Row 4: Description */}
             <div className="mb-8 flex-grow">
               <p className="text-[#e0e0e0] text-lg leading-relaxed">
-                ייעוץ משפטי מקצועי ומסור עם ניסיון רב בתחומי הדין השונים.<br />
+                ייעוץ משפטי מקצועי ומסור עם ניסיון רב בתחומי הדין השونים.<br />
                 אנו מתמחים במתן פתרונות משפטיים יעילים ומותאמים אישית לכל לקוח.
               </p>
             </div>
 
             {/* Row 5: CTA Button */}
-            <div className="mt-auto">
+            <div className="mt-auto flex justify-center lg:justify-end">
               <a href="#contact">
                 <button className="bg-[#c5a56d] text-[#121212] text-lg font-semibold px-8 py-3 rounded-lg hover:bg-[#b89250] transition">
                   לתיאום פגישה
                 </button>
               </a>
-            </div>
-          </div>
-
-          {/* Right Column - Image (70% larger) */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden bg-[#1e1e1e]" 
-                 style={{ width: '544px', height: '653px' }}>
-              <img 
-                src={content.about.image} 
-                alt="עו''ד אייל לוי" 
-                className="w-full h-full object-cover"
-              />
             </div>
           </div>
         </div>
