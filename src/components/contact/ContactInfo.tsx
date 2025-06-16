@@ -4,42 +4,39 @@ import { useAdminContent } from '@/hooks/useAdminContent';
 export const ContactInfo = () => {
   const { content } = useAdminContent();
 
-  // פונקציה ליצירת קישור WhatsApp נכון
-  const createWhatsAppLink = (phoneNumber: string) => {
-    // ניקוי מספר הטלפון - הסרת רווחים, מקפים ותווים מיוחדים
-    const cleanNumber = phoneNumber.replace(/[^\d]/g, '');
-    
-    // טיפול במספרים ישראליים
-    let formattedNumber = cleanNumber;
-    if (cleanNumber.startsWith('052') || cleanNumber.startsWith('053') || cleanNumber.startsWith('054') || cleanNumber.startsWith('050') || cleanNumber.startsWith('055') || cleanNumber.startsWith('058') || cleanNumber.startsWith('059')) {
-      // מספר נייד ישראלי - נוסיף 972 ונסיר את ה-0
-      formattedNumber = '972' + cleanNumber.substring(1);
-    } else if (cleanNumber.startsWith('0')) {
-      // מספר קווי ישראלי - נחליף את ה-0 ב-972
-      formattedNumber = '972' + cleanNumber.substring(1);
-    } else if (!cleanNumber.startsWith('972')) {
-      // אם לא מתחיל ב-972, נוסיף 972
-      formattedNumber = '972' + cleanNumber;
-    }
-    
-    // הודעה מוכנה מראש
-    const message = encodeURIComponent('שלום, אני מעוניין/ת לקבל ייעוץ משפטי');
-    
-    // יצירת קישור WhatsApp פשוט ונכון
-    return `https://wa.me/${formattedNumber}?text=${message}`;
-  };
+ // פונקציה ליצירת קישור WhatsApp תקני
+const createWhatsAppLink = (phoneNumber: string, messageText?: string) => {
+  // ניקוי המספר מכל תווים שאינם ספרות
+  const cleanNumber = phoneNumber.replace(/[^\d]/g, '');
 
-  const handleWhatsAppClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('WhatsApp button clicked');
-    
-    const link = createWhatsAppLink(content.contact.phone);
-    console.log('Opening WhatsApp link:', link);
-    
-    // פתיחה פשוטה של הקישור ללא ניסיון לטעון manifest
-    window.open(link, '_blank', 'noopener,noreferrer');
-  };
+  // פורמט המספר עם קידומת בינלאומית
+  let formattedNumber = cleanNumber;
+  if (cleanNumber.startsWith('0')) {
+    formattedNumber = '972' + cleanNumber.substring(1);
+  } else if (!cleanNumber.startsWith('972')) {
+    formattedNumber = '972' + cleanNumber;
+  }
+
+  // הודעה ברירת מחדל או הודעה מותאמת
+  const message = encodeURIComponent(
+    messageText || 'שלום, אשמח לקבל פרטים נוספים 🙏'
+  );
+
+  // קישור תקני
+  return `https://wa.me/${formattedNumber}?text=${message}`;
+};
+
+// אירוע לחיצה על כפתור וואטסאפ
+const handleWhatsAppClick = (e: React.MouseEvent) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const link = createWhatsAppLink(content.contact.phone);
+  console.log('פותח קישור וואטסאפ:', link);
+
+  // פתיחה בלשונית חדשה בלי טעינת manifest
+  window.open(link, '_blank', 'noopener,noreferrer');
+};
 
   const contactInfo = [
     { icon: Phone, text: content.contact.phone, label: 'טלפון' },
