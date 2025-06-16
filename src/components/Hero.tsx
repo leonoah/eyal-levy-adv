@@ -17,11 +17,44 @@ const Hero = () => {
     Heart
   };
 
+  // פונקציה ליצירת קישור WhatsApp תקני
+  const createWhatsAppLink = (phoneNumber: string, messageText?: string) => {
+    // ניקוי המספר מכל תווים שאינם ספרות
+    const cleanNumber = phoneNumber.replace(/[^\d]/g, '');
+    console.log('Hero - Original phone number:', phoneNumber);
+    console.log('Hero - Cleaned phone number:', cleanNumber);
+
+    // פורמט המספר עם קידומת בינלאומית
+    let formattedNumber = cleanNumber;
+    
+    // אם המספר מתחיל ב-0 (מספר ישראלי מקומי), נחליף ל-972
+    if (cleanNumber.startsWith('0')) {
+      formattedNumber = '972' + cleanNumber.substring(1);
+    } 
+    // אם המספר לא מתחיל ב-972 ולא ב-0, נוסיף 972
+    else if (!cleanNumber.startsWith('972')) {
+      formattedNumber = '972' + cleanNumber;
+    }
+
+    console.log('Hero - Formatted phone number:', formattedNumber);
+
+    // הודעה ברירת מחדל או הודעה מותאמת
+    const message = messageText || `שלום, אני מעוניין לקבל ייעוץ משפטי מעו"ד ${content.hero.title.replace('עו"ד ', '')}`;
+    console.log('Hero - Message text:', message);
+    
+    const encodedMessage = encodeURIComponent(message);
+    console.log('Hero - Encoded message:', encodedMessage);
+
+    // קישור תקני
+    const whatsappLink = `https://wa.me/${formattedNumber}?text=${encodedMessage}`;
+    console.log('Hero - Final WhatsApp link:', whatsappLink);
+    
+    return whatsappLink;
+  };
+
   const handleWhatsAppClick = () => {
-    const phoneNumber = content.contact.phone;
-    const message = encodeURIComponent(`שלום, אני מעוניין לקבל ייעוץ משפטי מעו"ד ${content.hero.title.replace('עו"ד ', '')}`);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    const link = createWhatsAppLink(content.contact.phone);
+    window.open(link, '_blank');
   };
 
   return (
@@ -140,8 +173,6 @@ const Hero = () => {
 
             {/* Row 5: CTA Buttons */}
             <div className="mt-auto flex justify-center gap-4">
-
-              
               <button 
                 onClick={handleWhatsAppClick}
                 className="bg-[#25d366] text-white text-lg font-semibold px-8 py-3 rounded-lg hover:bg-[#20c55a] transition flex items-center gap-2"
