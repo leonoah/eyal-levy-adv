@@ -1,5 +1,3 @@
-
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -7,6 +5,7 @@ import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { useContentManager } from '@/hooks/useContentManager';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const Contact = () => {
   const content = useContentManager();
@@ -42,39 +41,35 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      console.log('Submitting form data to Formspree:', formData);
+      console.log('Submitting form data via Resend:', formData);
       
-      const response = await fetch('https://formspree.io/f/xvgrrbag', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
           name: formData.name,
           phone: formData.phone,
           email: formData.email,
           message: formData.message,
-        }),
+        },
       });
 
-      if (response.ok) {
-        console.log('Form submitted successfully to Formspree');
-        
-        toast({
-          title: "הודעה נשלחה בהצלחה!",
-          description: "תודה שפניתם אלינו. נחזור אליכם בהקדם האפשרי.",
-        });
-        
-        // איפוס הטופס
-        setFormData({
-          name: '',
-          phone: '',
-          email: '',
-          message: ''
-        });
-      } else {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (error) {
+        throw error;
       }
+
+      console.log('Form submitted successfully via Resend:', data);
+      
+      toast({
+        title: "הודעה נשלחה בהצלחה!",
+        description: "תודה שפניתם אלינו. נחזור אליכם בהקדם האפשרי.",
+      });
+      
+      // איפוס הטופס
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        message: ''
+      });
       
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -232,4 +227,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
