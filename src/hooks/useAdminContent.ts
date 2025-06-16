@@ -35,7 +35,10 @@ export const useAdminContent = () => {
         const mergedContent: SiteContent = {
           hero: contentData.hero || defaultContent.hero,
           about: contentData.about || defaultContent.about,
-          contact: contentData.contact || defaultContent.contact,
+          contact: {
+            ...defaultContent.contact,
+            ...contentData.contact
+          },
           achievements: contentData.achievements || defaultContent.achievements,
           services: contentData.services || defaultContent.services,
           articles: contentData.articles || defaultContent.articles

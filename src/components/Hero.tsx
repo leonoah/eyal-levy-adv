@@ -1,7 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useContentManager } from '@/hooks/useContentManager';
-import { Award, Users, TrendingUp, Clock, CheckCircle, Star, Shield, Heart } from 'lucide-react';
+import { Award, Users, TrendingUp, Clock, CheckCircle, Star, Shield, Heart, MessageCircle } from 'lucide-react';
 
 const Hero = () => {
   const content = useContentManager();
@@ -15,6 +15,13 @@ const Hero = () => {
     Star,
     Shield,
     Heart
+  };
+
+  const handleWhatsAppClick = () => {
+    const phoneNumber = content.contact.whatsapp || content.contact.phone;
+    const message = encodeURIComponent(`שלום, אני מעוניין לקבל ייעוץ משפטי מעו"ד ${content.hero.title.replace('עו"ד ', '')}`);
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -115,13 +122,21 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Row 5: CTA Button */}
-            <div className="mt-auto flex justify-center">
+            {/* Row 5: CTA Buttons */}
+            <div className="mt-auto flex justify-center gap-4">
               <a href="#contact">
                 <button className="bg-[#c5a56d] text-[#121212] text-lg font-semibold px-8 py-3 rounded-lg hover:bg-[#b89250] transition">
                   לתיאום פגישה
                 </button>
               </a>
+              
+              <button 
+                onClick={handleWhatsAppClick}
+                className="bg-[#25d366] text-white text-lg font-semibold px-8 py-3 rounded-lg hover:bg-[#20c55a] transition flex items-center gap-2"
+              >
+                <MessageCircle size={20} />
+                צור קשר
+              </button>
             </div>
           </div>
         </div>
