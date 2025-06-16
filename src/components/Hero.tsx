@@ -140,11 +140,7 @@ const Hero = () => {
 
             {/* Row 5: CTA Buttons */}
             <div className="mt-auto flex justify-center gap-4">
-              <a href="#contact">
-                <button className="bg-[#c5a56d] text-[#121212] text-lg font-semibold px-8 py-3 rounded-lg hover:bg-[#b89250] transition">
-                  לתיאום פגישה
-                </button>
-              </a>
+
               
               <button 
                 onClick={handleWhatsAppClick}
