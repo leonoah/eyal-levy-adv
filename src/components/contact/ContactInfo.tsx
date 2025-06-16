@@ -1,4 +1,3 @@
-
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useAdminContent } from '@/hooks/useAdminContent';
 
@@ -38,8 +37,8 @@ export const ContactInfo = () => {
     const link = createWhatsAppLink(content.contact.phone);
     console.log('Opening WhatsApp link:', link);
     
-    // פתיחה ישירה של WhatsApp
-    window.open(link, '_blank', 'noopener,noreferrer');
+    // שימוש ב-location.href במקום window.open כדי למנוע בעיות ברזולוציה
+    window.location.href = link;
   };
 
   const contactInfo = [
