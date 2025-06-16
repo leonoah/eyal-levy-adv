@@ -1,4 +1,5 @@
 
+
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { useAdminContent } from '@/hooks/useAdminContent';
 
@@ -27,13 +28,15 @@ const createWhatsAppLink = (phoneNumber: string, messageText?: string) => {
   console.log('Formatted phone number:', formattedNumber);
 
   // הודעה ברירת מחדל או הודעה מותאמת
-  const message = encodeURIComponent(
-    messageText || 'שלום, אשמח לקבל פרטים נוספים 🙏'
-  );
+  const message = messageText || 'שלום, אשמח לקבל פרטים נוספים 🙏';
+  console.log('Original message text:', message);
+  
+  const encodedMessage = encodeURIComponent(message);
+  console.log('Encoded message text:', encodedMessage);
 
   // קישור תקני
-  const whatsappLink = `https://wa.me/${formattedNumber}?text=${message}`;
-  console.log('WhatsApp link:', whatsappLink);
+  const whatsappLink = `https://wa.me/${formattedNumber}?text=${encodedMessage}`;
+  console.log('Final WhatsApp link:', whatsappLink);
   
   return whatsappLink;
 };
@@ -104,3 +107,4 @@ const handleWhatsAppClick = (e: React.MouseEvent) => {
     </div>
   );
 };
+
