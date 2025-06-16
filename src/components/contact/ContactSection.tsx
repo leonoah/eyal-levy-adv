@@ -17,8 +17,8 @@ export const ContactSection = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <ContactForm />
+          {/* Contact Form 
+          <ContactForm />*/}
 
           {/* Contact Info */}
           <ContactInfo />
