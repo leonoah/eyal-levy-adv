@@ -45,10 +45,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('Sending email via Resend...');
 
-    // Send email to the lawyer
+    // Send email to verified email address (temporary fix for testing)
     const emailResponse = await resend.emails.send({
       from: "טופס יצירת קשר <onboarding@resend.dev>",
-      to: ["eyal@miloen.co.il"],
+      to: ["leon.noah@gmail.com"], // Changed to your verified email for testing
       subject: `הודעה חדשה מאתר מילון - מאת ${name}`,
       html: `
         <div dir="rtl" style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -70,6 +70,7 @@ const handler = async (req: Request): Promise<Response> => {
           
           <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
             <p>הודעה זו נשלחה מאתר משרד עורכי הדין מילון</p>
+            <p><strong>הודעה זו נשלחה ל-${email} במקום ל-eyal@miloen.co.il לצורכי בדיקה</strong></p>
           </div>
         </div>
       `,
