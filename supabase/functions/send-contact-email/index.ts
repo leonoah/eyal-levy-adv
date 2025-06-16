@@ -45,13 +45,19 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('Sending email via Resend...');
 
-    // Send email to verified email address (temporary fix for testing)
+    // For production, change this to eyal@miloen.co.il after verifying a domain
+    // Currently sending to verified email for testing
     const emailResponse = await resend.emails.send({
       from: "טופס יצירת קשר <onboarding@resend.dev>",
-      to: ["leon.noah@gmail.com"], // Changed to your verified email for testing
-      subject: `הודעה חדשה מאתר מילון - מאת ${name}`,
+      to: ["leon.noah@gmail.com"], // CHANGE TO: ["eyal@miloen.co.il"] after domain verification
+      subject: `🚨 [TESTING MODE] הודעה חדשה מאתר מילון - מאת ${name}`,
       html: `
         <div dir="rtl" style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #ff6b6b; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <h3 style="margin: 0; color: white;">⚠️ מצב בדיקה - האימייל הזה צריך להגיע לעיאל ⚠️</h3>
+            <p style="margin: 5px 0; color: white;">כדי לתקן: יש לוודא דומיין ב-Resend ולשנות את הכתובת בקוד</p>
+          </div>
+          
           <h2 style="color: #D4AF37; border-bottom: 2px solid #D4AF37; padding-bottom: 10px;">
             הודעה חדשה מטופס יצירת קשר
           </h2>
@@ -68,9 +74,19 @@ const handler = async (req: Request): Promise<Response> => {
             <p style="line-height: 1.6; white-space: pre-wrap;">${message}</p>
           </div>
           
+          <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <h4 style="color: #856404; margin-top: 0;">מה צריך לעשות לייצור:</h4>
+            <ol style="color: #856404; margin: 0;">
+              <li>לכו ל-<a href="https://resend.com/domains" style="color: #856404;">resend.com/domains</a></li>
+              <li>וודאו את הדומיין של עיאל (miloen.co.il)</li>
+              <li>שנו את ה-from address ל: noreply@miloen.co.il</li>
+              <li>שנו את ה-to address ל: eyal@miloen.co.il</li>
+            </ol>
+          </div>
+          
           <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
             <p>הודעה זו נשלחה מאתר משרד עורכי הדין מילון</p>
-            <p><strong>הודעה זו נשלחה ל-${email} במקום ל-eyal@miloen.co.il לצורכי בדיקה</strong></p>
+            <p><strong style="color: #ff6b6b;">האימייל הזה אמור להגיע ל-eyal@miloen.co.il אבל נשלח לכאן לבדיקה</strong></p>
           </div>
         </div>
       `,
