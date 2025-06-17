@@ -299,30 +299,31 @@ const BackupSection = () => {
         }
       });
 
-      console.log('Backup restoration completed, forcing immediate refresh...');
+      console.log('Backup restoration completed, forcing immediate admin content refresh...');
       
-      // כפיית רענון מיידי של כל הנתונים
-      const forceRefresh = () => {
-        // שליחת אירועים
-        window.dispatchEvent(new CustomEvent('contentUpdated'));
-        window.dispatchEvent(new CustomEvent('socialLinksUpdated'));
-        window.dispatchEvent(new CustomEvent('testimonialsUpdated'));
-        window.dispatchEvent(new CustomEvent('themeUpdated'));
-        window.dispatchEvent(new Event('storage'));
-        window.dispatchEvent(new CustomEvent('refreshAll'));
+      // כפיית רענון מיידי של כל הנתונים במערכת האדמין
+      const forceAdminRefresh = () => {
+        // שליחת אירועים ספציפיים לעדכון האדמין
+        window.dispatchEvent(new CustomEvent('contentUpdated', { detail: { forceRefresh: true } }));
+        window.dispatchEvent(new CustomEvent('socialLinksUpdated', { detail: { forceRefresh: true } }));
+        window.dispatchEvent(new CustomEvent('testimonialsUpdated', { detail: { forceRefresh: true } }));
+        window.dispatchEvent(new CustomEvent('themeUpdated', { detail: { forceRefresh: true } }));
+        window.dispatchEvent(new CustomEvent('refreshAll', { detail: { forceRefresh: true } }));
         
-        // כפיית רענון של כל הקומפוננטים המנוהלים על ידי React
+        // אירועים נוספים כדי לוודא שכל האזנות מתעדכנות
+        window.dispatchEvent(new Event('storage'));
         window.dispatchEvent(new Event('resize'));
         window.dispatchEvent(new Event('popstate'));
+        
+        console.log('Admin refresh events dispatched');
       };
 
-      // רענון מיידי
-      forceRefresh();
-      
-      // רענונים נוספים
-      setTimeout(forceRefresh, 100);
-      setTimeout(forceRefresh, 300);
-      setTimeout(forceRefresh, 500);
+      // רענון מיידי ומרובה
+      forceAdminRefresh();
+      setTimeout(forceAdminRefresh, 50);
+      setTimeout(forceAdminRefresh, 150);
+      setTimeout(forceAdminRefresh, 300);
+      setTimeout(forceAdminRefresh, 500);
 
       if (hasErrors) {
         toast({
@@ -333,16 +334,11 @@ const BackupSection = () => {
       } else {
         toast({
           title: "השחזור הושלם בהצלחה",
-          description: `האתר שוחזר לגיבוי "${backup.backup_name}". הדף יתרענן תוך שנייה...`,
+          description: `האתר שוחזר לגיבוי "${backup.backup_name}". התוכן יתעדכן כעת...`,
         });
       }
 
-      console.log('Backup restoration events dispatched, reloading page...');
-      
-      // רענון העמוד אחרי 2 שניות
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      console.log('Backup restoration events dispatched');
       
     } catch (error) {
       console.error('Error restoring backup:', error);

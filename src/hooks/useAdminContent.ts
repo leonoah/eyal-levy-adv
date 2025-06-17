@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { SiteContent, defaultContent } from '@/types/admin';
 import { supabase } from '@/integrations/supabase/client';
@@ -61,24 +60,35 @@ export const useAdminContent = () => {
   useEffect(() => {
     fetchContentFromDB();
 
-    // מאזין לאירועי עדכון תוכן
+    // מאזין לאירועי עדכון תוכן עם רענון מיידי ומאולץ
     const handleContentUpdate = (event: any) => {
       console.log('useAdminContent: Content update event received:', event.type);
-      // כפיית רענון מיידי
+      // כפיית רענון מיידי ללא השהיה
+      fetchContentFromDB();
+      
+      // רענונים נוספים עם השהיות קטנות כדי לוודא עדכון
       setTimeout(() => {
         fetchContentFromDB();
-      }, 50);
+      }, 100);
+      
+      setTimeout(() => {
+        fetchContentFromDB();
+      }, 500);
     };
 
     // האזנה לאירועים שונים שעלולים להדליק על עדכון
     window.addEventListener('contentUpdated', handleContentUpdate);
     window.addEventListener('refreshAll', handleContentUpdate);
     window.addEventListener('storage', handleContentUpdate);
+    window.addEventListener('popstate', handleContentUpdate);
+    window.addEventListener('resize', handleContentUpdate);
 
     return () => {
       window.removeEventListener('contentUpdated', handleContentUpdate);
       window.removeEventListener('refreshAll', handleContentUpdate);
       window.removeEventListener('storage', handleContentUpdate);
+      window.removeEventListener('popstate', handleContentUpdate);
+      window.removeEventListener('resize', handleContentUpdate);
     };
   }, []);
 
