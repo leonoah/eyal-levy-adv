@@ -6,16 +6,19 @@ import Footer from '@/components/Footer';
 const PrivacyPolicy = () => {
   const { content } = useAdminContent();
 
-  // Parse the content to convert line breaks and structure to HTML
+  // Parse the content to convert line breaks and structure to proper display
   const parseContent = (text: string) => {
-    // Split by double line breaks to create paragraphs
+    // Split by double line breaks to create sections
     const sections = text.split('\n\n');
     
     return sections.map((section, index) => {
       const lines = section.split('\n');
-      const firstLine = lines[0];
+      const firstLine = lines[0].trim();
       
-      // Check if this is a title (contains "מדיניות פרטיות")
+      // Skip empty sections
+      if (!firstLine) return null;
+      
+      // Check if this is a main title (contains "מדיניות פרטיות")
       if (firstLine.includes('מדיניות פרטיות')) {
         return (
           <h2 key={index} className="text-2xl font-bold text-lawyer-gold mb-6">
@@ -26,23 +29,36 @@ const PrivacyPolicy = () => {
       
       // Check if this is a section header (ends with colon)
       if (firstLine.endsWith(':')) {
+        const headerText = firstLine.replace(':', '');
+        const remainingLines = lines.slice(1).filter(line => line.trim());
+        
         return (
           <div key={index} className="mb-6">
             <h3 className="text-xl font-semibold text-lawyer-gold mb-3">
-              {firstLine.replace(':', '')}
+              {headerText}
             </h3>
-            {lines.slice(1).length > 0 && (
+            {remainingLines.length > 0 && (
               <div className="space-y-2">
-                {lines.slice(1).map((line, lineIndex) => {
-                  if (line.startsWith('• ') || line.startsWith('- ')) {
+                {remainingLines.map((line, lineIndex) => {
+                  const trimmedLine = line.trim();
+                  if (!trimmedLine) return null;
+                  
+                  // Check if it's a bullet point
+                  if (trimmedLine.startsWith('• ') || trimmedLine.startsWith('- ')) {
                     return (
                       <div key={lineIndex} className="flex items-start space-x-2 space-x-reverse">
                         <span className="text-lawyer-gold mt-1">•</span>
-                        <span>{line.replace(/^[•-]\s*/, '')}</span>
+                        <span>{trimmedLine.replace(/^[•-]\s*/, '')}</span>
                       </div>
                     );
                   }
-                  return line ? <p key={lineIndex}>{line}</p> : null;
+                  
+                  // Regular line under a header
+                  return (
+                    <p key={lineIndex} className="mb-2">
+                      {trimmedLine}
+                    </p>
+                  );
                 })}
               </div>
             )}
@@ -50,16 +66,30 @@ const PrivacyPolicy = () => {
         );
       }
       
-      // Regular paragraph
-      if (section.trim()) {
+      // Check if this is a single line that should be a paragraph
+      if (lines.length === 1) {
         return (
           <p key={index} className="mb-4 leading-relaxed">
-            {section}
+            {firstLine}
           </p>
         );
       }
       
-      return null;
+      // Multiple lines - treat as a paragraph with line breaks
+      return (
+        <div key={index} className="mb-4">
+          {lines.map((line, lineIndex) => {
+            const trimmedLine = line.trim();
+            if (!trimmedLine) return null;
+            
+            return (
+              <p key={lineIndex} className="mb-2 leading-relaxed">
+                {trimmedLine}
+              </p>
+            );
+          })}
+        </div>
+      );
     }).filter(Boolean);
   };
 
