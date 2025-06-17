@@ -299,26 +299,30 @@ const BackupSection = () => {
         }
       });
 
-      console.log('Backup restoration completed, dispatching events...');
+      console.log('Backup restoration completed, forcing immediate refresh...');
       
-      // שליחת אירועים מרובים כדי לוודא שכל הרכיבים מתעדכנים
-      const dispatchEvents = () => {
+      // כפיית רענון מיידי של כל הנתונים
+      const forceRefresh = () => {
+        // שליחת אירועים
         window.dispatchEvent(new CustomEvent('contentUpdated'));
         window.dispatchEvent(new CustomEvent('socialLinksUpdated'));
         window.dispatchEvent(new CustomEvent('testimonialsUpdated'));
         window.dispatchEvent(new CustomEvent('themeUpdated'));
         window.dispatchEvent(new Event('storage'));
         window.dispatchEvent(new CustomEvent('refreshAll'));
+        
+        // כפיית רענון של כל הקומפוננטים המנוהלים על ידי React
+        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new Event('popstate'));
       };
 
-      // שליחת אירועים מיידית
-      dispatchEvents();
+      // רענון מיידי
+      forceRefresh();
       
-      // שליחת אירועים נוספת אחרי 100ms
-      setTimeout(dispatchEvents, 100);
-      
-      // שליחת אירועים נוספת אחרי 500ms
-      setTimeout(dispatchEvents, 500);
+      // רענונים נוספים
+      setTimeout(forceRefresh, 100);
+      setTimeout(forceRefresh, 300);
+      setTimeout(forceRefresh, 500);
 
       if (hasErrors) {
         toast({
@@ -329,16 +333,16 @@ const BackupSection = () => {
       } else {
         toast({
           title: "השחזור הושלם בהצלחה",
-          description: `האתר שוחזר לגיבוי "${backup.backup_name}". הדף יתרענן תוך רגע...`,
+          description: `האתר שוחזר לגיבוי "${backup.backup_name}". הדף יתרענן תוך שנייה...`,
         });
       }
 
       console.log('Backup restoration events dispatched, reloading page...');
       
-      // רענון העמוד כדי להציג את הנתונים המשוחזרים
+      // רענון העמוד אחרי 2 שניות
       setTimeout(() => {
         window.location.reload();
-      }, 1500);
+      }, 2000);
       
     } catch (error) {
       console.error('Error restoring backup:', error);

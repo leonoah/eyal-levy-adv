@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { SiteContent, defaultContent } from '@/types/admin';
 import { supabase } from '@/integrations/supabase/client';
@@ -63,7 +64,10 @@ export const useAdminContent = () => {
     // מאזין לאירועי עדכון תוכן
     const handleContentUpdate = (event: any) => {
       console.log('useAdminContent: Content update event received:', event.type);
-      fetchContentFromDB();
+      // כפיית רענון מיידי
+      setTimeout(() => {
+        fetchContentFromDB();
+      }, 50);
     };
 
     // האזנה לאירועים שונים שעלולים להדליק על עדכון
