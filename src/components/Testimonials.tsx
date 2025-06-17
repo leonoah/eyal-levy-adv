@@ -1,8 +1,9 @@
 
-import { Star, Shield, Award, Users } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { useTestimonials } from '@/hooks/useTestimonials';
 import { useContentManager } from '@/hooks/useContentManager';
 import { useEffect, useState } from 'react';
+import AchievementsDisplay from '@/components/shared/AchievementsDisplay';
 
 const Testimonials = () => {
   const { testimonials, isLoading } = useTestimonials();
@@ -14,17 +15,6 @@ const Testimonials = () => {
       setActiveTestimonials(testimonials.filter(t => t.is_active));
     }
   }, [testimonials]);
-
-  const iconMap = {
-    Award,
-    Clock: Award, // fallback
-    Users,
-    CheckCircle: Award, // fallback
-    Star,
-    TrendingUp: Award, // fallback
-    Shield,
-    Heart: Award // fallback
-  };
 
   if (isLoading) {
     return (
@@ -84,18 +74,8 @@ const Testimonials = () => {
           ))}
         </div>
 
-        {/* Trust Badges - now using achievements from content manager */}
-        <div className="flex flex-wrap justify-center gap-6">
-          {content.achievements && content.achievements.length > 0 ? content.achievements.map((achievement, index) => {
-            const IconComponent = iconMap[achievement.icon as keyof typeof iconMap] || Award;
-            return (
-              <div key={`trust-badge-${index}`} className="trust-badge">
-                <IconComponent size={20} className="legal-icon" />
-                <span>{achievement.text}</span>
-              </div>
-            );
-          }) : null}
-        </div>
+        {/* Trust Badges - now using achievements from content manager with shared component */}
+        <AchievementsDisplay achievements={content.achievements} variant="testimonials" />
       </div>
     </section>
   );

@@ -1,21 +1,10 @@
-
 import { Button } from '@/components/ui/button';
 import { useAdminContent } from '@/hooks/useAdminContent';
-import { Award, Users, TrendingUp, Clock, CheckCircle, Star, Shield, Heart, MessageCircle } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
+import AchievementsDisplay from '@/components/shared/AchievementsDisplay';
 
 const Hero = () => {
   const { content } = useAdminContent();
-
-  const iconMap = {
-    Award,
-    Users,
-    TrendingUp,
-    Clock,
-    CheckCircle,
-    Star,
-    Shield,
-    Heart
-  };
 
   // פונקציה ליצירת קישור WhatsApp תקני
   const createWhatsAppLink = (phoneNumber: string, messageText?: string) => {
@@ -137,38 +126,8 @@ const Hero = () => {
                 {content.about.description2}
               </p>
               
-              {/* Achievement badges with icons from admin */}
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                {content.achievements && content.achievements.length > 0 ? content.achievements.map((achievement, index) => {
-                  const IconComponent = iconMap[achievement.icon as keyof typeof iconMap] || Award;
-                  return (
-                    <div key={`achievement-${index}`} className="flex items-center justify-center gap-2 text-[#c5a56d] font-semibold">
-                      <IconComponent size={16} />
-                      <span>{achievement.text}</span>
-                    </div>
-                  );
-                }) : (
-                  // Fallback if no achievements are set
-                  <>
-                    <div className="flex items-center justify-center gap-2 text-[#c5a56d] font-semibold">
-                      <Award size={16} />
-                      <span>ניסיון עשיר +15 שנים</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 text-[#c5a56d] font-semibold">
-                      <Users size={16} />
-                      <span>לקוחות מרוצים</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 text-[#c5a56d] font-semibold">
-                      <TrendingUp size={16} />
-                      <span>שיעור הצלחה גבוה</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2 text-[#c5a56d] font-semibold">
-                      <Clock size={16} />
-                      <span>זמינות 24/7</span>
-                    </div>
-                  </>
-                )}
-              </div>
+              {/* Achievement badges using shared component */}
+              <AchievementsDisplay achievements={content.achievements} variant="hero" />
             </div>
 
             {/* Row 5: CTA Buttons */}
