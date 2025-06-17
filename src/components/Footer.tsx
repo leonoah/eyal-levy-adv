@@ -56,9 +56,9 @@ const Footer = () => {
   ];
 
   const legalLinks = [
-    { href: '#', label: 'מדיניות פרטיות' },
-    { href: '#', label: 'תנאי שימוש' },
-    { href: '#', label: 'הצהרת נגישות' },
+    { href: '/privacy-policy', label: 'מדיניות פרטיות' },
+    { href: '/terms-of-service', label: 'תנאי שימוש' },
+    { href: '/accessibility-statement', label: 'הצהרת נגישות' },
   ];
 
   return (

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { SiteContent, defaultContent } from '@/types/admin';
 import { supabase } from '@/integrations/supabase/client';
@@ -41,7 +40,8 @@ export const useAdminContent = () => {
           },
           achievements: contentData.achievements || defaultContent.achievements,
           services: contentData.services || defaultContent.services,
-          articles: contentData.articles || defaultContent.articles
+          articles: contentData.articles || defaultContent.articles,
+          legalPages: contentData.legalPages || defaultContent.legalPages
         };
 
         setContent(mergedContent);
@@ -67,7 +67,8 @@ export const useAdminContent = () => {
         { name: 'contact', data: content.contact },
         { name: 'achievements', data: content.achievements },
         { name: 'services', data: content.services },
-        { name: 'articles', data: content.articles }
+        { name: 'articles', data: content.articles },
+        { name: 'legalPages', data: content.legalPages }
       ];
 
       for (const section of sections) {
@@ -133,6 +134,13 @@ export const useAdminContent = () => {
     }));
   };
 
+  const updateLegalPages = (legalPages: SiteContent['legalPages']) => {
+    setContent(prev => ({
+      ...prev,
+      legalPages
+    }));
+  };
+
   const addArticle = (newArticle: { title: string; excerpt: string; date: string; category: string }) => {
     const article = {
       ...newArticle,
@@ -162,6 +170,7 @@ export const useAdminContent = () => {
     updateContact,
     updateAchievements,
     updateServices,
+    updateLegalPages,
     addArticle,
     deleteArticle
   };

@@ -13,6 +13,7 @@ import { ContactSection } from '@/components/admin/ContactSection';
 import { SocialMediaSection } from '@/components/admin/SocialMediaSection';
 import { AchievementsSection } from '@/components/admin/AchievementsSection';
 import { ServicesSection } from '@/components/admin/ServicesSection';
+import LegalPagesSection from '@/components/admin/LegalPagesSection';
 import ThemeSettingsSection from '@/components/admin/ThemeSettingsSection';
 import TestimonialsSection from '@/components/admin/TestimonialsSection';
 import AdminLogin from '@/components/admin/AdminLogin';
@@ -31,6 +32,7 @@ const Admin = () => {
     updateContact,
     updateAchievements,
     updateServices,
+    updateLegalPages,
     addArticle,
     deleteArticle
   } = useAdminContent();
@@ -138,7 +140,7 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="hero" className="w-full">
-          <TabsList className="grid w-full grid-cols-10 mb-8 bg-lawyer-block border border-lawyer-divider">
+          <TabsList className="grid w-full grid-cols-11 mb-8 bg-lawyer-block border border-lawyer-divider">
             <TabsTrigger value="hero" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">עמוד ראשי</TabsTrigger>
             <TabsTrigger value="about" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">אודות</TabsTrigger>
             <TabsTrigger value="achievements" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">הישגים</TabsTrigger>
@@ -146,6 +148,7 @@ const Admin = () => {
             <TabsTrigger value="testimonials" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">המלצות</TabsTrigger>
             <TabsTrigger value="articles" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מאמרים</TabsTrigger>
             <TabsTrigger value="contact" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">יצירת קשר</TabsTrigger>
+            <TabsTrigger value="legal" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מידע משפטי</TabsTrigger>
             <TabsTrigger value="social" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">מדיה חברתית</TabsTrigger>
             <TabsTrigger value="theme" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">עיצוב</TabsTrigger>
             <TabsTrigger value="settings" className="text-lawyer-white data-[state=active]:bg-lawyer-gold data-[state=active]:text-lawyer-black">הגדרות</TabsTrigger>
@@ -181,6 +184,10 @@ const Admin = () => {
 
           <TabsContent value="contact">
             <ContactSection content={content} updateContact={updateContact} />
+          </TabsContent>
+
+          <TabsContent value="legal">
+            <LegalPagesSection content={content} updateLegalPages={updateLegalPages} />
           </TabsContent>
 
           <TabsContent value="social">
