@@ -1,6 +1,6 @@
 
 import { Phone, Mail, MapPin, Facebook, Linkedin, Instagram } from 'lucide-react';
-import { useContentManager } from '@/hooks/useContentManager';
+import { useAdminContent } from '@/hooks/useAdminContent';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -12,7 +12,7 @@ interface SocialLink {
 }
 
 const Footer = () => {
-  const content = useContentManager();
+  const { content } = useAdminContent();
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
 
   useEffect(() => {
