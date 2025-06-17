@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button';
 import { useAdminContent } from '@/hooks/useAdminContent';
 import { MessageCircle } from 'lucide-react';
@@ -47,7 +48,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="bg-[#121212] min-h-screen flex items-center justify-center px-4 py-16">
+    <section className="bg-lawyer-black min-h-screen flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-6xl mx-auto">
         
         {/* Two-column layout - swapped order */}
@@ -55,7 +56,7 @@ const Hero = () => {
           
           {/* Right Column - Image (now first in order for RTL) */}
           <div className="flex justify-center order-2 lg:order-1">
-            <div className="rounded-lg border-4 border-[#c5a56d] shadow-[0_0_15px_rgba(197,165,109,0.4)] overflow-hidden bg-[#121212]" 
+            <div className="rounded-lg border-4 border-lawyer-gold shadow-[0_0_15px_rgba(212,175,55,0.4)] overflow-hidden bg-lawyer-black" 
                  style={{ width: '544px', height: '653px' }}>
               {content.about.image ? (
                 <img 
@@ -70,8 +71,8 @@ const Hero = () => {
                 />
               ) : (
                 // אם אין תמונה, הצג רקע שחור
-                <div className="w-full h-full bg-[#121212] flex items-center justify-center">
-                  <span className="text-[#c5a56d] text-sm">לא הועלתה תמונה</span>
+                <div className="w-full h-full bg-lawyer-black flex items-center justify-center">
+                  <span className="text-lawyer-gold text-sm">לא הועלתה תמונה</span>
                 </div>
               )}
             </div>
@@ -95,34 +96,34 @@ const Hero = () => {
 
             {/* Row 2: Name */}
             <div className="mb-6">
-              <h1 className="text-4xl md:text-5xl font-bold text-[#c5a56d] leading-tight">
+              <h1 className="text-4xl md:text-5xl font-bold text-lawyer-gold leading-tight">
                 {content.hero.title}
               </h1>
             </div>
 
             {/* Row 3: Subtitle */}
             <div className="mb-6">
-              <h2 className="text-xl text-[#bbbbbb] font-medium">
+              <h2 className="text-xl text-lawyer-silver font-medium">
                 {content.hero.subtitle}
               </h2>
             </div>
 
             {/* Row 4: Description */}
             <div className="mb-8 flex-grow">
-              <p className="text-[#e0e0e0] text-lg leading-relaxed">
+              <p className="text-lawyer-white text-lg leading-relaxed">
                 {content.hero.description}
               </p>
             </div>
 
             {/* New Section: About */}
             <div className="mb-8">
-              <h3 className="text-2xl font-bold text-[#c5a56d] mb-4">
+              <h3 className="text-2xl font-bold text-lawyer-gold mb-4">
                 {content.about.title}
               </h3>
-              <p className="text-[#e0e0e0] text-base leading-relaxed mb-4">
+              <p className="text-lawyer-white text-base leading-relaxed mb-4">
                 {content.about.description1}
               </p>
-              <p className="text-[#e0e0e0] text-base leading-relaxed mb-6">
+              <p className="text-lawyer-white text-base leading-relaxed mb-6">
                 {content.about.description2}
               </p>
               
