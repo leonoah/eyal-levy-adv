@@ -42,15 +42,19 @@ const Articles = () => {
         console.log('Raw articles data from DB:', articlesData);
         
         // Ensure articlesData is an array and has the correct structure
-        const validArticles = Array.isArray(articlesData) ? articlesData.filter(article => 
-          article && 
-          typeof article === 'object' && 
-          'id' in article && 
-          'title' in article &&
-          'excerpt' in article &&
-          'date' in article &&
-          'category' in article
-        ) : [];
+        let validArticles: SiteContent['articles'] = [];
+        
+        if (Array.isArray(articlesData)) {
+          validArticles = articlesData.filter((article: any) => 
+            article && 
+            typeof article === 'object' && 
+            'id' in article && 
+            'title' in article &&
+            'excerpt' in article &&
+            'date' in article &&
+            'category' in article
+          ) as SiteContent['articles'];
+        }
 
         setContent(prev => ({
           ...prev,
