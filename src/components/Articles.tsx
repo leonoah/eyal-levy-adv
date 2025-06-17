@@ -1,4 +1,3 @@
-
 import { Calendar, ArrowLeft, ExternalLink } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useState, useEffect } from 'react';
@@ -80,7 +79,7 @@ const Articles = () => {
     }
     
     return {
-      text: words.slice(0, maxWords).join(' '),
+      text: words.slice(0, maxWords).join(' ') + '...',
       isTruncated: true
     };
   };
@@ -215,15 +214,6 @@ const Articles = () => {
                 {/* Article excerpt - truncated */}
                 <div className="text-lawyer-silver mb-4 leading-relaxed">
                   <p className="mb-2">{truncatedExcerpt}</p>
-                  {isTruncated && (
-                    <button
-                      onClick={() => openArticleInNewWindow(article)}
-                      className="text-lawyer-gold hover:text-yellow-400 transition-colors text-sm font-semibold flex items-center gap-1"
-                    >
-                      <span>... קרא עוד</span>
-                      <ExternalLink size={14} />
-                    </button>
-                  )}
                 </div>
 
                 {/* Article meta */}
