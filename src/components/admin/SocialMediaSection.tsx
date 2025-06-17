@@ -2,6 +2,8 @@
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Save } from 'lucide-react';
 import { SocialLink } from '@/types/admin';
 
 interface SocialMediaSectionProps {
@@ -45,11 +47,18 @@ export const SocialMediaSection = ({
                 id={`social-${link.platform}`}
                 value={link.url}
                 onChange={(e) => handleUrlChange(link.platform, e.target.value)}
-                className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold"
+                className="bg-lawyer-black border-lawyer-silver text-lawyer-white placeholder-lawyer-silver focus:border-lawyer-gold flex-1"
                 placeholder={`קישור ל${link.platform === 'facebook' ? 'פייסבוק' : 
                            link.platform === 'linkedin' ? 'לינקדין' : 
                            link.platform === 'instagram' ? 'אינסטגרם' : link.platform}`}
               />
+              <Button
+                onClick={() => handleSave(link.platform, link.url)}
+                className="bg-lawyer-gold text-lawyer-black hover:bg-yellow-400 px-4"
+              >
+                <Save size={16} />
+                שמור
+              </Button>
             </div>
           </div>
         ))}
