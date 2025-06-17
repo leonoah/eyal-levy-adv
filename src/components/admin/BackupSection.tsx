@@ -52,19 +52,12 @@ const BackupSection = () => {
   const verifyPassword = async (enteredPassword: string) => {
     try {
       const username = localStorage.getItem('adminUsername');
-      const response = await fetch('/api/admin-login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          username,
-          password: enteredPassword 
-        }),
+      const { data, error } = await supabase.functions.invoke('admin-login', {
+        body: { username, password: enteredPassword },
       });
 
-      const data = await response.json();
-      return response.ok && data.success;
+      if (error) throw error;
+      return data && data.success;
     } catch (error) {
       console.error('Password verification error:', error);
       return false;
@@ -143,7 +136,7 @@ const BackupSection = () => {
       const [contentData, socialLinksData, testimonialsData] = await Promise.all([
         supabase.from('site_content').select('*'),
         supabase.from('social_links').select('*'),
-        supabase.from('testimonials').select('*')
+        supabase.from('admin_testimonials').select('*')
       ]);
 
       const backupData = {
@@ -203,7 +196,7 @@ const BackupSection = () => {
         // שחזור תוכן האתר
         supabase.from('site_content').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
         supabase.from('social_links').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
-        supabase.from('testimonials').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+        supabase.from('admin_testimonials').delete().neq('id', '00000000-0000-0000-0000-000000000000')
       ]);
 
       // הוספת נתונים מהגיבוי
@@ -214,7 +207,7 @@ const BackupSection = () => {
         await supabase.from('social_links').insert(data.socialLinks);
       }
       if (data.testimonials?.length) {
-        await supabase.from('testimonials').insert(data.testimonials);
+        await supabase.from('admin_testimonials').insert(data.testimonials);
       }
 
       toast({
