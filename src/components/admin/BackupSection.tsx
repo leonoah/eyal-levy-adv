@@ -301,17 +301,24 @@ const BackupSection = () => {
 
       console.log('Backup restoration completed, dispatching events...');
       
-      // שליחת אירועים כדי לעדכן את כל הרכיבים
-      window.dispatchEvent(new CustomEvent('contentUpdated'));
-      window.dispatchEvent(new CustomEvent('socialLinksUpdated'));
-      window.dispatchEvent(new CustomEvent('testimonialsUpdated'));
-      window.dispatchEvent(new CustomEvent('themeUpdated'));
-      
-      // אילוץ עדכון של כל הוקים
-      setTimeout(() => {
+      // שליחת אירועים מרובים כדי לוודא שכל הרכיבים מתעדכנים
+      const dispatchEvents = () => {
+        window.dispatchEvent(new CustomEvent('contentUpdated'));
+        window.dispatchEvent(new CustomEvent('socialLinksUpdated'));
+        window.dispatchEvent(new CustomEvent('testimonialsUpdated'));
+        window.dispatchEvent(new CustomEvent('themeUpdated'));
         window.dispatchEvent(new Event('storage'));
         window.dispatchEvent(new CustomEvent('refreshAll'));
-      }, 100);
+      };
+
+      // שליחת אירועים מיידית
+      dispatchEvents();
+      
+      // שליחת אירועים נוספת אחרי 100ms
+      setTimeout(dispatchEvents, 100);
+      
+      // שליחת אירועים נוספת אחרי 500ms
+      setTimeout(dispatchEvents, 500);
 
       if (hasErrors) {
         toast({
@@ -322,7 +329,7 @@ const BackupSection = () => {
       } else {
         toast({
           title: "השחזור הושלם בהצלחה",
-          description: `האתר שוחזר לגיבוי "${backup.backup_name}". העמוד יתרענן תוך שנייה...`,
+          description: `האתר שוחזר לגיבוי "${backup.backup_name}". הדף יתרענן תוך רגע...`,
         });
       }
 

@@ -6,24 +6,23 @@ export const useAdminContent = () => {
   const [content, setContent] = useState<SiteContent>(defaultContent);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    fetchContentFromDB();
-  }, []);
-
   const fetchContentFromDB = async () => {
     try {
       setIsLoading(true);
+      console.log('useAdminContent: Fetching content from database...');
+      
       const { data, error } = await supabase
         .from('site_content')
         .select('section_name, content');
 
       if (error) {
-        console.error('Error fetching content:', error);
+        console.error('useAdminContent: Error fetching content:', error);
         setContent(defaultContent);
         return;
       }
 
       if (data && data.length > 0) {
+        console.log('useAdminContent: Content data received:', data.length, 'sections');
         const contentData: any = {};
         
         data.forEach((section) => {
@@ -44,17 +43,40 @@ export const useAdminContent = () => {
           legalPages: contentData.legalPages || defaultContent.legalPages
         };
 
+        console.log('useAdminContent: Merged content:', mergedContent);
         setContent(mergedContent);
       } else {
+        console.log('useAdminContent: No content data found, using defaults');
         setContent(defaultContent);
       }
     } catch (error) {
-      console.error('Error fetching content:', error);
+      console.error('useAdminContent: Error fetching content:', error);
       setContent(defaultContent);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchContentFromDB();
+
+    // מאזין לאירועי עדכון תוכן
+    const handleContentUpdate = (event: any) => {
+      console.log('useAdminContent: Content update event received:', event.type);
+      fetchContentFromDB();
+    };
+
+    // האזנה לאירועים שונים שעלולים להדליק על עדכון
+    window.addEventListener('contentUpdated', handleContentUpdate);
+    window.addEventListener('refreshAll', handleContentUpdate);
+    window.addEventListener('storage', handleContentUpdate);
+
+    return () => {
+      window.removeEventListener('contentUpdated', handleContentUpdate);
+      window.removeEventListener('refreshAll', handleContentUpdate);
+      window.removeEventListener('storage', handleContentUpdate);
+    };
+  }, []);
 
   const saveContent = async () => {
     try {
