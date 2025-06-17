@@ -50,7 +50,7 @@ const LegalPagesSection = ({ content, updateLegalPages }: LegalPagesSectionProps
             />
           </div>
           <div>
-            <Label htmlFor="privacy-content" className="text-lawyer-white">תוכן העמוד (HTML מותר)</Label>
+            <Label htmlFor="privacy-content" className="text-lawyer-white">תוכן העמוד</Label>
             <Textarea
               id="privacy-content"
               value={content.legalPages?.privacyPolicy?.content || ''}
@@ -79,7 +79,7 @@ const LegalPagesSection = ({ content, updateLegalPages }: LegalPagesSectionProps
             />
           </div>
           <div>
-            <Label htmlFor="terms-content" className="text-lawyer-white">תוכן העמוד (HTML מותר)</Label>
+            <Label htmlFor="terms-content" className="text-lawyer-white">תוכן העמוד</Label>
             <Textarea
               id="terms-content"
               value={content.legalPages?.termsOfService?.content || ''}
@@ -108,7 +108,7 @@ const LegalPagesSection = ({ content, updateLegalPages }: LegalPagesSectionProps
             />
           </div>
           <div>
-            <Label htmlFor="accessibility-content" className="text-lawyer-white">תוכן העמוד (HTML מותר)</Label>
+            <Label htmlFor="accessibility-content" className="text-lawyer-white">תוכן העמוד</Label>
             <Textarea
               id="accessibility-content"
               value={content.legalPages?.accessibilityStatement?.content || ''}

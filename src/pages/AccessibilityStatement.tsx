@@ -17,13 +17,10 @@ const AccessibilityStatement = () => {
           </h1>
           
           <div className="prose prose-invert max-w-none">
-            <div 
-              className="text-lawyer-silver leading-relaxed whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{
-                __html: content.legalPages?.accessibilityStatement?.content || 
-                'תוכן הצהרת הנגישות יועלה בקרוב. אנא חזור מאוחר יותר.'
-              }}
-            />
+            <div className="text-lawyer-silver leading-relaxed whitespace-pre-wrap">
+              {content.legalPages?.accessibilityStatement?.content || 
+                'תוכן הצהרת הנגישות יועלה בקרוב. אנא חזור מאוחר יותר.'}
+            </div>
           </div>
         </div>
       </main>

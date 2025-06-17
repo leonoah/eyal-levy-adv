@@ -17,13 +17,10 @@ const TermsOfService = () => {
           </h1>
           
           <div className="prose prose-invert max-w-none">
-            <div 
-              className="text-lawyer-silver leading-relaxed whitespace-pre-wrap"
-              dangerouslySetInnerHTML={{
-                __html: content.legalPages?.termsOfService?.content || 
-                'תוכן תנאי השימוש יועלה בקרוב. אנא חזור מאוחר יותר.'
-              }}
-            />
+            <div className="text-lawyer-silver leading-relaxed whitespace-pre-wrap">
+              {content.legalPages?.termsOfService?.content || 
+                'תוכן תנאי השימוש יועלה בקרוב. אנא חזור מאוחר יותר.'}
+            </div>
           </div>
         </div>
       </main>
