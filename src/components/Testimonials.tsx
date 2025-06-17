@@ -1,13 +1,13 @@
 
 import { Star } from 'lucide-react';
 import { useTestimonials } from '@/hooks/useTestimonials';
-import { useContentManager } from '@/hooks/useContentManager';
+import { useAdminContent } from '@/hooks/useAdminContent';
 import { useEffect, useState } from 'react';
 import AchievementsDisplay from '@/components/shared/AchievementsDisplay';
 
 const Testimonials = () => {
   const { testimonials, isLoading } = useTestimonials();
-  const content = useContentManager();
+  const { content } = useAdminContent();
   const [activeTestimonials, setActiveTestimonials] = useState<any[]>([]);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const Testimonials = () => {
           ))}
         </div>
 
-        {/* Trust Badges - now using achievements from content manager with shared component */}
+        {/* Trust Badges - now using achievements from admin content */}
         <AchievementsDisplay achievements={content.achievements} variant="testimonials" />
       </div>
     </section>
