@@ -39,9 +39,22 @@ const Articles = () => {
 
       if (data && data.length > 0) {
         const articlesData = data[0].content;
+        console.log('Raw articles data from DB:', articlesData);
+        
+        // Ensure articlesData is an array and has the correct structure
+        const validArticles = Array.isArray(articlesData) ? articlesData.filter(article => 
+          article && 
+          typeof article === 'object' && 
+          'id' in article && 
+          'title' in article &&
+          'excerpt' in article &&
+          'date' in article &&
+          'category' in article
+        ) : [];
+
         setContent(prev => ({
           ...prev,
-          articles: articlesData || defaultContent.articles
+          articles: validArticles.length > 0 ? validArticles : defaultContent.articles
         }));
       }
     } catch (error) {
