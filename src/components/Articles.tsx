@@ -1,12 +1,53 @@
 
 import { Calendar, ArrowLeft } from 'lucide-react';
-import { useContentManager } from '@/hooks/useContentManager';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { SiteContent, defaultContent } from '@/types/admin';
 
 const Articles = () => {
-  const content = useContentManager();
+  const [content, setContent] = useState<SiteContent>(defaultContent);
   const [selectedArticle, setSelectedArticle] = useState<any>(null);
+
+  useEffect(() => {
+    fetchContentFromDB();
+    
+    // Listen for content updates from admin
+    const handleContentUpdate = (event: CustomEvent) => {
+      console.log('Articles: Content updated from admin', event.detail);
+      setContent(event.detail);
+    };
+
+    window.addEventListener('contentUpdated', handleContentUpdate as EventListener);
+
+    return () => {
+      window.removeEventListener('contentUpdated', handleContentUpdate as EventListener);
+    };
+  }, []);
+
+  const fetchContentFromDB = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('section_name, content')
+        .eq('section_name', 'articles');
+
+      if (error) {
+        console.error('Error fetching articles content:', error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const articlesData = data[0].content;
+        setContent(prev => ({
+          ...prev,
+          articles: articlesData || defaultContent.articles
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching articles content:', error);
+    }
+  };
 
   const handleArticleClick = (article: any) => {
     setSelectedArticle(article);
