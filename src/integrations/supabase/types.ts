@@ -305,6 +305,30 @@ export type Database = {
         }
         Relationships: []
       }
+      site_backups: {
+        Row: {
+          backup_data: Json
+          backup_name: string
+          created_at: string
+          created_by: string | null
+          id: string
+        }
+        Insert: {
+          backup_data: Json
+          backup_name: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+        }
+        Update: {
+          backup_data?: Json
+          backup_name?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
       site_content: {
         Row: {
           content: Json
