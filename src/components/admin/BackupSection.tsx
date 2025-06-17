@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -160,7 +159,7 @@ const BackupSection = () => {
         testimonials: testimonialsData.data || [],
         themeSettings: themeSettingsData.data || [],
         timestamp: new Date().toISOString(),
-        version: '1.1' // גרסה מעודכנת של הגיבוי
+        version: '1.2' // גרסה מעודכנת של הגיבוי
       };
 
       const { error } = await supabase
@@ -300,6 +299,20 @@ const BackupSection = () => {
         }
       });
 
+      console.log('Backup restoration completed, dispatching events...');
+      
+      // שליחת אירועים כדי לעדכן את כל הרכיבים
+      window.dispatchEvent(new CustomEvent('contentUpdated'));
+      window.dispatchEvent(new CustomEvent('socialLinksUpdated'));
+      window.dispatchEvent(new CustomEvent('testimonialsUpdated'));
+      window.dispatchEvent(new CustomEvent('themeUpdated'));
+      
+      // אילוץ עדכון של כל הוקים
+      setTimeout(() => {
+        window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new CustomEvent('refreshAll'));
+      }, 100);
+
       if (hasErrors) {
         toast({
           title: "השחזור הושלם עם שגיאות",
@@ -309,17 +322,16 @@ const BackupSection = () => {
       } else {
         toast({
           title: "השחזור הושלם בהצלחה",
-          description: `האתר שוחזר לגיבוי "${backup.backup_name}"`,
+          description: `האתר שוחזר לגיבוי "${backup.backup_name}". העמוד יתרענן תוך שנייה...`,
         });
       }
 
-      console.log('Backup restoration completed');
+      console.log('Backup restoration events dispatched, reloading page...');
       
       // רענון העמוד כדי להציג את הנתונים המשוחזרים
       setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('contentUpdated'));
         window.location.reload();
-      }, 1000);
+      }, 1500);
       
     } catch (error) {
       console.error('Error restoring backup:', error);
