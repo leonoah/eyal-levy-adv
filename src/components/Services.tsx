@@ -1,9 +1,9 @@
 
 import { Scale, Home, FileText, Users, Briefcase, Shield, Building } from 'lucide-react';
-import { useContentManager } from '@/hooks/useContentManager';
+import { useAdminContent } from '@/hooks/useAdminContent';
 
 const Services = () => {
-  const content = useContentManager();
+  const { content } = useAdminContent();
 
   const iconMap = {
     Scale,
