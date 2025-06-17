@@ -12,20 +12,21 @@ import ThemeSettingsSection from '@/components/admin/ThemeSettingsSection';
 import TestimonialsSection from '@/components/admin/TestimonialsSection';
 import BackupSection from '@/components/admin/BackupSection';
 import PasswordChangeSection from '@/components/admin/PasswordChangeSection';
+import { SiteContent, SocialLink } from '@/types/admin';
 
 interface AdminTabsProps {
-  content: any;
-  socialLinks: any;
-  updateHero: (data: any) => void;
-  updateAbout: (data: any) => void;
-  updateContact: (data: any) => void;
-  updateAchievements: (data: any) => void;
-  updateServices: (data: any) => void;
-  updateLegalPages: (data: any) => void;
+  content: SiteContent;
+  socialLinks: SocialLink[];
+  updateHero: (field: keyof SiteContent['hero'], value: string) => void;
+  updateAbout: (field: keyof SiteContent['about'], value: string) => void;
+  updateContact: (field: keyof SiteContent['contact'], value: string) => void;
+  updateAchievements: (achievements: SiteContent['achievements']) => void;
+  updateServices: (services: SiteContent['services']) => void;
+  updateLegalPages: (legalPages: SiteContent['legalPages']) => void;
   addArticle: (data: any) => void;
   deleteArticle: (id: string) => void;
-  setSocialLinks: (links: any) => void;
-  updateSocialLink: (data: any) => void;
+  setSocialLinks: React.Dispatch<React.SetStateAction<SocialLink[]>>;
+  updateSocialLink: (platform: string, url: string) => Promise<void>;
 }
 
 const AdminTabs = ({
