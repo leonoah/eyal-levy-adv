@@ -241,122 +241,184 @@ const BackupSection = () => {
 
       // מחיקת נתונים קיימים
       console.log('Deleting existing data...');
-      await Promise.all([
+      const deletePromises = [
         supabase.from('site_content').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
         supabase.from('social_links').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
         supabase.from('admin_testimonials').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
         supabase.from('theme_settings').delete().neq('id', '00000000-0000-0000-0000-000000000000')
-      ]);
+      ];
+
+      const deleteResults = await Promise.allSettled(deletePromises);
+      deleteResults.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.warn(`Delete operation ${index} failed:`, result.reason);
+        }
+      });
 
       console.log('Existing data deleted, inserting backup data...');
 
-      // הוספת נתונים מהגיבוי
-      const insertPromises = [];
+      // הוספת נתונים מהגיבוי עם טיפול טוב יותר בשגיאות
+      const insertResults = [];
 
       if (data.content && data.content.length > 0) {
         console.log('Restoring site_content...', data.content.length, 'records');
-        insertPromises.push(
-          supabase.from('site_content').insert(data.content.map((item: any) => ({
-            section_name: item.section_name,
-            content: item.content,
-            updated_at: new Date().toISOString()
-          })))
-        );
+        for (const item of data.content) {
+          try {
+            const { error } = await supabase
+              .from('site_content')
+              .upsert({
+                section_name: item.section_name,
+                content: item.content,
+                updated_at: new Date().toISOString()
+              }, {
+                onConflict: 'section_name'
+              });
+            
+            if (error) {
+              console.error(`Error upserting content item ${item.section_name}:`, error);
+            } else {
+              console.log(`Successfully restored content: ${item.section_name}`);
+            }
+          } catch (error) {
+            console.error(`Failed to restore content item ${item.section_name}:`, error);
+          }
+        }
+        insertResults.push('content');
       }
 
       if (data.socialLinks && data.socialLinks.length > 0) {
         console.log('Restoring social_links...', data.socialLinks.length, 'records');
-        insertPromises.push(
-          supabase.from('social_links').insert(data.socialLinks.map((item: any) => ({
-            platform: item.platform,
-            url: item.url,
-            is_active: item.is_active !== undefined ? item.is_active : true,
-            updated_at: new Date().toISOString()
-          })))
-        );
+        for (const item of data.socialLinks) {
+          try {
+            const { error } = await supabase
+              .from('social_links')
+              .upsert({
+                platform: item.platform,
+                url: item.url,
+                is_active: item.is_active !== undefined ? item.is_active : true,
+                updated_at: new Date().toISOString()
+              }, {
+                onConflict: 'platform'
+              });
+            
+            if (error) {
+              console.error(`Error upserting social link ${item.platform}:`, error);
+            } else {
+              console.log(`Successfully restored social link: ${item.platform}`);
+            }
+          } catch (error) {
+            console.error(`Failed to restore social link ${item.platform}:`, error);
+          }
+        }
+        insertResults.push('socialLinks');
       }
 
       if (data.testimonials && data.testimonials.length > 0) {
         console.log('Restoring admin_testimonials...', data.testimonials.length, 'records');
-        insertPromises.push(
-          supabase.from('admin_testimonials').insert(data.testimonials.map((item: any) => ({
-            name: item.name,
-            text: item.text,
-            rating: item.rating || 5,
-            image_url: item.image_url,
-            display_order: item.display_order || 0,
-            is_active: item.is_active !== undefined ? item.is_active : true,
-            updated_at: new Date().toISOString()
-          })))
-        );
+        for (const item of data.testimonials) {
+          try {
+            const { error } = await supabase
+              .from('admin_testimonials')
+              .insert({
+                name: item.name,
+                text: item.text,
+                rating: item.rating || 5,
+                image_url: item.image_url,
+                display_order: item.display_order || 0,
+                is_active: item.is_active !== undefined ? item.is_active : true,
+                updated_at: new Date().toISOString()
+              });
+            
+            if (error) {
+              console.error(`Error inserting testimonial ${item.name}:`, error);
+            } else {
+              console.log(`Successfully restored testimonial: ${item.name}`);
+            }
+          } catch (error) {
+            console.error(`Failed to restore testimonial ${item.name}:`, error);
+          }
+        }
+        insertResults.push('testimonials');
       }
 
       if (data.themeSettings && data.themeSettings.length > 0) {
         console.log('Restoring theme_settings...', data.themeSettings.length, 'records');
-        insertPromises.push(
-          supabase.from('theme_settings').insert(data.themeSettings.map((item: any) => ({
-            background_color: item.background_color || '#121212',
-            button_color: item.button_color || '#D4AF37',
-            text_color: item.text_color || '#FFFFFF',
-            updated_at: new Date().toISOString()
-          })))
-        );
+        for (const item of data.themeSettings) {
+          try {
+            const { error } = await supabase
+              .from('theme_settings')
+              .insert({
+                background_color: item.background_color || '#121212',
+                button_color: item.button_color || '#D4AF37',
+                text_color: item.text_color || '#FFFFFF',
+                updated_at: new Date().toISOString()
+              });
+            
+            if (error) {
+              console.error(`Error inserting theme settings:`, error);
+            } else {
+              console.log(`Successfully restored theme settings`);
+            }
+          } catch (error) {
+            console.error(`Failed to restore theme settings:`, error);
+          }
+        }
+        insertResults.push('themeSettings');
       }
 
-      // ביצוע כל הפעולות
-      const results = await Promise.allSettled(insertPromises);
+      console.log('Backup restoration completed, forcing comprehensive refresh...');
       
-      // בדיקת תוצאות
-      let hasErrors = false;
-      results.forEach((result, index) => {
-        if (result.status === 'rejected') {
-          console.error(`Insert operation ${index} failed:`, result.reason);
-          hasErrors = true;
-        } else {
-          console.log(`Insert operation ${index} succeeded`);
-        }
-      });
+      // כפיית רענון מיידי וחזק של כל הנתונים
+      const forceSystemWideRefresh = () => {
+        // שליחת אירועים ספציפיים לכל רכיב
+        const events = [
+          'contentUpdated',
+          'socialLinksUpdated', 
+          'testimonialsUpdated',
+          'themeUpdated',
+          'refreshAll',
+          'storage',
+          'resize',
+          'popstate',
+          'focus',
+          'visibilitychange'
+        ];
 
-      console.log('Backup restoration completed, forcing immediate admin content refresh...');
-      
-      // כפיית רענון מיידי של כל הנתונים במערכת האדמין
-      const forceAdminRefresh = () => {
-        // שליחת אירועים ספציפיים לעדכון האדמין
-        window.dispatchEvent(new CustomEvent('contentUpdated', { detail: { forceRefresh: true } }));
-        window.dispatchEvent(new CustomEvent('socialLinksUpdated', { detail: { forceRefresh: true } }));
-        window.dispatchEvent(new CustomEvent('testimonialsUpdated', { detail: { forceRefresh: true } }));
-        window.dispatchEvent(new CustomEvent('themeUpdated', { detail: { forceRefresh: true } }));
-        window.dispatchEvent(new CustomEvent('refreshAll', { detail: { forceRefresh: true } }));
-        
-        // אירועים נוספים כדי לוודא שכל האזנות מתעדכנות
-        window.dispatchEvent(new Event('storage'));
-        window.dispatchEvent(new Event('resize'));
-        window.dispatchEvent(new Event('popstate'));
-        
-        console.log('Admin refresh events dispatched');
+        events.forEach(eventType => {
+          window.dispatchEvent(new CustomEvent(eventType, { 
+            detail: { 
+              forceRefresh: true, 
+              timestamp: Date.now(),
+              source: 'backup-restore' 
+            } 
+          }));
+          window.dispatchEvent(new Event(eventType));
+        });
+
+        console.log('Comprehensive refresh events dispatched');
       };
 
-      // רענון מיידי ומרובה
-      forceAdminRefresh();
-      setTimeout(forceAdminRefresh, 50);
-      setTimeout(forceAdminRefresh, 150);
-      setTimeout(forceAdminRefresh, 300);
-      setTimeout(forceAdminRefresh, 500);
+      // רענון מיידי ומרובה עם השהיות שונות
+      forceSystemWideRefresh();
+      setTimeout(forceSystemWideRefresh, 50);
+      setTimeout(forceSystemWideRefresh, 100);
+      setTimeout(forceSystemWideRefresh, 250);
+      setTimeout(forceSystemWideRefresh, 500);
+      setTimeout(forceSystemWideRefresh, 1000);
 
-      if (hasErrors) {
-        toast({
-          title: "השחזור הושלם עם שגיאות",
-          description: "חלק מהנתונים לא שוחזרו. בדוק את הקונסולה לפרטים נוספים.",
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "השחזור הושלם בהצלחה",
-          description: `האתר שוחזר לגיבוי "${backup.backup_name}". התוכן יתעדכן כעת...`,
-        });
-      }
+      // רענון נוסף של החלון כולו
+      setTimeout(() => {
+        if (window.location.pathname.includes('/admin')) {
+          window.location.reload();
+        }
+      }, 1500);
 
-      console.log('Backup restoration events dispatched');
+      toast({
+        title: "השחזור הושלם בהצלחה",
+        description: `האתר שוחזר לגיבוי "${backup.backup_name}". הדף ירוענן כעת...`,
+      });
+
+      console.log('Backup restoration completed successfully. Restored:', insertResults.join(', '));
       
     } catch (error) {
       console.error('Error restoring backup:', error);
