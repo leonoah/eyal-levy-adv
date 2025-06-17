@@ -132,18 +132,35 @@ const BackupSection = () => {
 
   const executeCreateBackup = async () => {
     try {
+      console.log('Starting backup creation...');
+      
       // איסוף כל הנתונים מהטבלאות השונות
-      const [contentData, socialLinksData, testimonialsData] = await Promise.all([
+      const [
+        contentData, 
+        socialLinksData, 
+        testimonialsData, 
+        themeSettingsData
+      ] = await Promise.all([
         supabase.from('site_content').select('*'),
         supabase.from('social_links').select('*'),
-        supabase.from('admin_testimonials').select('*')
+        supabase.from('admin_testimonials').select('*'),
+        supabase.from('theme_settings').select('*')
       ]);
 
+      console.log('Backup data collected:', {
+        content: contentData.data?.length || 0,
+        socialLinks: socialLinksData.data?.length || 0,
+        testimonials: testimonialsData.data?.length || 0,
+        themeSettings: themeSettingsData.data?.length || 0
+      });
+
       const backupData = {
-        content: contentData.data,
-        socialLinks: socialLinksData.data,
-        testimonials: testimonialsData.data,
-        timestamp: new Date().toISOString()
+        content: contentData.data || [],
+        socialLinks: socialLinksData.data || [],
+        testimonials: testimonialsData.data || [],
+        themeSettings: themeSettingsData.data || [],
+        timestamp: new Date().toISOString(),
+        version: '1.1' // גרסה מעודכנת של הגיבוי
       };
 
       const { error } = await supabase
@@ -155,6 +172,7 @@ const BackupSection = () => {
 
       if (error) throw error;
 
+      console.log('Backup created successfully');
       toast({
         title: "הגיבוי נוצר בהצלחה",
         description: `הגיבוי "${backupName}" נשמר במערכת`,
@@ -180,6 +198,8 @@ const BackupSection = () => {
 
   const executeRestoreBackup = async (backup: Backup) => {
     try {
+      console.log('Starting backup restoration for:', backup.backup_name);
+      
       // קבלת נתוני הגיבוי
       const { data: backupData, error: fetchError } = await supabase
         .from('site_backups')
@@ -190,33 +210,117 @@ const BackupSection = () => {
       if (fetchError) throw fetchError;
 
       const data = backupData.backup_data as any;
-
-      // מחיקת נתונים קיימים ושחזור מהגיבוי
-      await Promise.all([
-        // שחזור תוכן האתר
-        supabase.from('site_content').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
-        supabase.from('social_links').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
-        supabase.from('admin_testimonials').delete().neq('id', '00000000-0000-0000-0000-000000000000')
-      ]);
-
-      // הוספת נתונים מהגיבוי
-      if (data.content?.length) {
-        await supabase.from('site_content').insert(data.content);
-      }
-      if (data.socialLinks?.length) {
-        await supabase.from('social_links').insert(data.socialLinks);
-      }
-      if (data.testimonials?.length) {
-        await supabase.from('admin_testimonials').insert(data.testimonials);
-      }
-
-      toast({
-        title: "השחזור הושלם בהצלחה",
-        description: `האתר שוחזר לגיבוי "${backup.backup_name}"`,
+      console.log('Backup data to restore:', {
+        hasContent: !!data.content,
+        contentLength: data.content?.length || 0,
+        hasSocialLinks: !!data.socialLinks,
+        socialLinksLength: data.socialLinks?.length || 0,
+        hasTestimonials: !!data.testimonials,
+        testimonialsLength: data.testimonials?.length || 0,
+        hasThemeSettings: !!data.themeSettings,
+        themeSettingsLength: data.themeSettings?.length || 0,
+        version: data.version || 'legacy'
       });
 
+      // מחיקת נתונים קיימים
+      console.log('Deleting existing data...');
+      await Promise.all([
+        supabase.from('site_content').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
+        supabase.from('social_links').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
+        supabase.from('admin_testimonials').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
+        supabase.from('theme_settings').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+      ]);
+
+      console.log('Existing data deleted, inserting backup data...');
+
+      // הוספת נתונים מהגיבוי
+      const insertPromises = [];
+
+      if (data.content && data.content.length > 0) {
+        console.log('Restoring site_content...', data.content.length, 'records');
+        insertPromises.push(
+          supabase.from('site_content').insert(data.content.map((item: any) => ({
+            section_name: item.section_name,
+            content: item.content,
+            updated_at: new Date().toISOString()
+          })))
+        );
+      }
+
+      if (data.socialLinks && data.socialLinks.length > 0) {
+        console.log('Restoring social_links...', data.socialLinks.length, 'records');
+        insertPromises.push(
+          supabase.from('social_links').insert(data.socialLinks.map((item: any) => ({
+            platform: item.platform,
+            url: item.url,
+            is_active: item.is_active !== undefined ? item.is_active : true,
+            updated_at: new Date().toISOString()
+          })))
+        );
+      }
+
+      if (data.testimonials && data.testimonials.length > 0) {
+        console.log('Restoring admin_testimonials...', data.testimonials.length, 'records');
+        insertPromises.push(
+          supabase.from('admin_testimonials').insert(data.testimonials.map((item: any) => ({
+            name: item.name,
+            text: item.text,
+            rating: item.rating || 5,
+            image_url: item.image_url,
+            display_order: item.display_order || 0,
+            is_active: item.is_active !== undefined ? item.is_active : true,
+            updated_at: new Date().toISOString()
+          })))
+        );
+      }
+
+      if (data.themeSettings && data.themeSettings.length > 0) {
+        console.log('Restoring theme_settings...', data.themeSettings.length, 'records');
+        insertPromises.push(
+          supabase.from('theme_settings').insert(data.themeSettings.map((item: any) => ({
+            background_color: item.background_color || '#121212',
+            button_color: item.button_color || '#D4AF37',
+            text_color: item.text_color || '#FFFFFF',
+            updated_at: new Date().toISOString()
+          })))
+        );
+      }
+
+      // ביצוע כל הפעולות
+      const results = await Promise.allSettled(insertPromises);
+      
+      // בדיקת תוצאות
+      let hasErrors = false;
+      results.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.error(`Insert operation ${index} failed:`, result.reason);
+          hasErrors = true;
+        } else {
+          console.log(`Insert operation ${index} succeeded`);
+        }
+      });
+
+      if (hasErrors) {
+        toast({
+          title: "השחזור הושלם עם שגיאות",
+          description: "חלק מהנתונים לא שוחזרו. בדוק את הקונסולה לפרטים נוספים.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "השחזור הושלם בהצלחה",
+          description: `האתר שוחזר לגיבוי "${backup.backup_name}"`,
+        });
+      }
+
+      console.log('Backup restoration completed');
+      
       // רענון העמוד כדי להציג את הנתונים המשוחזרים
-      setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('contentUpdated'));
+        window.location.reload();
+      }, 1000);
+      
     } catch (error) {
       console.error('Error restoring backup:', error);
       toast({
