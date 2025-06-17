@@ -307,24 +307,27 @@ export type Database = {
       }
       site_backups: {
         Row: {
-          backup_data: Json
           backup_name: string
           created_at: string
           created_by: string | null
+          file_path: string
+          file_size: number | null
           id: string
         }
         Insert: {
-          backup_data: Json
           backup_name: string
           created_at?: string
           created_by?: string | null
+          file_path?: string
+          file_size?: number | null
           id?: string
         }
         Update: {
-          backup_data?: Json
           backup_name?: string
           created_at?: string
           created_by?: string | null
+          file_path?: string
+          file_size?: number | null
           id?: string
         }
         Relationships: []

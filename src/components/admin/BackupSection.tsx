@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +13,8 @@ interface Backup {
   id: string;
   backup_name: string;
   created_at: string;
+  file_path: string;
+  file_size: number;
 }
 
 const BackupSection = () => {
@@ -33,7 +36,7 @@ const BackupSection = () => {
     try {
       const { data, error } = await supabase
         .from('site_backups')
-        .select('id, backup_name, created_at')
+        .select('id, backup_name, created_at, file_path, file_size')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -159,22 +162,36 @@ const BackupSection = () => {
         testimonials: testimonialsData.data || [],
         themeSettings: themeSettingsData.data || [],
         timestamp: new Date().toISOString(),
-        version: '1.2' // גרסה מעודכנת של הגיבוי
+        version: '2.0' // גרסה מעודכנת לעבודה עם Storage
       };
 
-      const { error } = await supabase
+      // יצירת קובץ JSON
+      const backupJson = JSON.stringify(backupData, null, 2);
+      const fileName = `backup_${backupName}_${new Date().toISOString().slice(0, 19).replace(/[:-]/g, '')}.json`;
+      const file = new File([backupJson], fileName, { type: 'application/json' });
+
+      // העלאה ל-Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('site-backups')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      // שמירת מטא-דאטה בטבלה
+      const { error: dbError } = await supabase
         .from('site_backups')
         .insert({
           backup_name: backupName,
-          backup_data: backupData
+          file_path: uploadData.path,
+          file_size: file.size
         });
 
-      if (error) throw error;
+      if (dbError) throw dbError;
 
-      console.log('Backup created successfully');
+      console.log('Backup created successfully in storage:', uploadData.path);
       toast({
         title: "הגיבוי נוצר בהצלחה",
-        description: `הגיבוי "${backupName}" נשמר במערכת`,
+        description: `הגיבוי "${backupName}" נשמר ב-Storage`,
       });
 
       setBackupName('');
@@ -199,16 +216,17 @@ const BackupSection = () => {
     try {
       console.log('Starting backup restoration for:', backup.backup_name);
       
-      // קבלת נתוני הגיבוי
-      const { data: backupData, error: fetchError } = await supabase
-        .from('site_backups')
-        .select('backup_data')
-        .eq('id', backup.id)
-        .single();
+      // קבלת קובץ הגיבוי מ-Storage
+      const { data: fileData, error: downloadError } = await supabase.storage
+        .from('site-backups')
+        .download(backup.file_path);
 
-      if (fetchError) throw fetchError;
+      if (downloadError) throw downloadError;
 
-      const data = backupData.backup_data as any;
+      // קריאת תוכן הקובץ
+      const fileText = await fileData.text();
+      const data = JSON.parse(fileText);
+      
       console.log('Backup data to restore:', {
         hasContent: !!data.content,
         contentLength: data.content?.length || 0,
@@ -358,12 +376,22 @@ const BackupSection = () => {
 
   const executeDeleteBackup = async (backup: Backup) => {
     try {
-      const { error } = await supabase
+      // מחיקת הקובץ מ-Storage
+      const { error: storageError } = await supabase.storage
+        .from('site-backups')
+        .remove([backup.file_path]);
+
+      if (storageError) {
+        console.warn('Storage delete warning (file may not exist):', storageError);
+      }
+
+      // מחיקת הרשומה מהטבלה
+      const { error: dbError } = await supabase
         .from('site_backups')
         .delete()
         .eq('id', backup.id);
 
-      if (error) throw error;
+      if (dbError) throw dbError;
 
       toast({
         title: "הגיבוי נמחק בהצלחה",
@@ -386,16 +414,24 @@ const BackupSection = () => {
     setShowPasswordDialog(true);
   };
 
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
   return (
     <div className="space-y-6">
       <Card className="bg-lawyer-block border-lawyer-divider">
         <CardHeader>
           <CardTitle className="text-lawyer-gold flex items-center gap-2">
             <Download size={20} />
-            ניהול גיבויים
+            ניהול גיבויים (Storage)
           </CardTitle>
           <CardDescription className="text-lawyer-white">
-            צור וניהל גיבויים של תוכן האתר (מקסימום 4 גיבויים)
+            צור וניהל גיבויים של תוכן האתר. הגיבויים נשמרים ב-Supabase Storage (מקסימום 4 גיבויים)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -442,6 +478,9 @@ const BackupSection = () => {
                       <p className="text-lawyer-white font-medium">{backup.backup_name}</p>
                       <p className="text-lawyer-silver text-sm">
                         {new Date(backup.created_at).toLocaleDateString('he-IL')} - {new Date(backup.created_at).toLocaleTimeString('he-IL')}
+                        {backup.file_size > 0 && (
+                          <span className="ml-2">({formatFileSize(backup.file_size)})</span>
+                        )}
                       </p>
                     </div>
                     <div className="flex gap-2">
