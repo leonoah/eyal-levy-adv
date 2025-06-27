@@ -61,25 +61,23 @@ const Hero = () => {
   };
 
   const backgroundStyle = {
-    backgroundColor: themeSettings?.heroBackgroundColor || 'var(--lawyer-black)',
+    backgroundColor: themeSettings?.background_color || 'var(--lawyer-black)',
   };
 
   return (
     <section 
-      className="min-h-screen flex items-center justify-center px-4 py-16 transition-all duration-1000"
+      className="min-h-screen flex items-center justify-center px-4 py-8 md:py-16 transition-all duration-1000"
       style={backgroundStyle}
     >
       <div className="w-full max-w-6xl mx-auto">
         
-        {/* Two-column layout - swapped order */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        {/* Two-column layout - responsive */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-start">
           
-          {/* Right Column - Image (now first in order for RTL) */}
-          <div className={`flex justify-center order-2 lg:order-1 transition-all duration-1000 delay-300 ${
-            isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
-          }`}>
-            <div className="rounded-lg border-4 border-lawyer-gold shadow-[0_0_15px_rgba(212,175,55,0.4)] overflow-hidden bg-lawyer-black" 
-                 style={{ width: '544px', height: '653px' }}>
+          {/* Right Column - Image */}
+          <div className="flex justify-center order-2 lg:order-1 transition-all duration-1000 delay-300">
+            <div className="rounded-lg border-4 border-lawyer-gold shadow-[0_0_15px_rgba(212,175,55,0.4)] overflow-hidden bg-lawyer-black max-w-sm md:max-w-md lg:max-w-none" 
+                 style={{ width: '100%', maxWidth: '544px', aspectRatio: '544/653' }}>
               {content.about.image ? (
                 <img 
                   src={content.about.image} 
@@ -87,12 +85,10 @@ const Hero = () => {
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     console.log('Image failed to load:', content.about.image);
-                    // במקרה של שגיאה בטעינת התמונה, הצג רקע שחור
                     e.currentTarget.style.display = 'none';
                   }}
                 />
               ) : (
-                // אם אין תמונה, הצג רקע שחור
                 <div className="w-full h-full bg-lawyer-black flex items-center justify-center">
                   <span className="text-lawyer-gold text-sm">לא הועלתה תמונה</span>
                 </div>
@@ -100,64 +96,51 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Left Column - Content (now second in order for RTL) */}
-          <div className={`flex flex-col h-full justify-between text-center order-1 lg:order-2 transition-all duration-1000 ${
-            isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
-          }`}>
+          {/* Left Column - Content */}
+          <div className="flex flex-col h-full justify-between text-center order-1 lg:order-2 transition-all duration-1000 space-y-4 md:space-y-6">
             
             {/* Row 1: Logo */}
-            <div className={`mb-6 flex justify-center transition-all duration-700 delay-200 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-            }`}>
+            <div className="flex justify-center transition-all duration-700 delay-200">
               <img 
                 src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
                 alt="לוגו עו''ד אייל לוי" 
-                className="h-20"
+                className="h-16 md:h-20"
                 onError={(e) => {
-                  // במקרה של שגיאה בטעינת הלוגו, הסתר אותו
                   e.currentTarget.style.display = 'none';
                 }}
               />
             </div>
 
             {/* Row 2: Name */}
-            <div className={`mb-6 transition-all duration-700 delay-300 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-            }`}>
-              <h1 className="text-4xl md:text-5xl font-bold text-lawyer-gold leading-tight">
+            <div className="transition-all duration-700 delay-300">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-lawyer-gold leading-tight">
                 {content.hero.title}
               </h1>
             </div>
 
             {/* Row 3: Subtitle */}
-            <div className={`mb-6 transition-all duration-700 delay-400 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-            }`}>
-              <h2 className="text-xl text-lawyer-silver font-medium">
+            <div className="transition-all duration-700 delay-400">
+              <h2 className="text-lg md:text-xl text-lawyer-silver font-medium">
                 {content.hero.subtitle}
               </h2>
             </div>
 
             {/* Row 4: Description */}
-            <div className={`mb-8 flex-grow transition-all duration-700 delay-500 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-            }`}>
-              <p className="text-lawyer-white text-lg leading-relaxed">
+            <div className="flex-grow transition-all duration-700 delay-500">
+              <p className="text-lawyer-white text-base md:text-lg leading-relaxed">
                 {content.hero.description}
               </p>
             </div>
 
             {/* New Section: About */}
-            <div className={`mb-8 transition-all duration-700 delay-600 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-            }`}>
-              <h3 className="text-2xl font-bold text-lawyer-gold mb-4">
+            <div className="transition-all duration-700 delay-600">
+              <h3 className="text-xl md:text-2xl font-bold text-lawyer-gold mb-3 md:mb-4">
                 {content.about.title}
               </h3>
-              <p className="text-lawyer-white text-base leading-relaxed mb-4">
+              <p className="text-lawyer-white text-sm md:text-base leading-relaxed mb-3 md:mb-4">
                 {content.about.description1}
               </p>
-              <p className="text-lawyer-white text-base leading-relaxed mb-6">
+              <p className="text-lawyer-white text-sm md:text-base leading-relaxed mb-4 md:mb-6">
                 {content.about.description2}
               </p>
               
@@ -166,14 +149,12 @@ const Hero = () => {
             </div>
 
             {/* Row 5: CTA Buttons */}
-            <div className={`mt-auto flex justify-center gap-4 transition-all duration-700 delay-700 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}>
+            <div className="mt-auto flex justify-center gap-4 transition-all duration-700 delay-700">
               <button 
                 onClick={handleWhatsAppClick}
-                className="bg-[#25d366] text-white text-lg font-semibold px-8 py-3 rounded-lg hover:bg-[#20c55a] transition flex items-center gap-2 hover:scale-105 transform"
+                className="bg-[#25d366] text-white text-base md:text-lg font-semibold px-6 md:px-8 py-2.5 md:py-3 rounded-lg hover:bg-[#20c55a] transition flex items-center gap-2 hover:scale-105 transform"
               >
-                <MessageCircle size={20} />
+                <MessageCircle size={18} className="md:w-5 md:h-5" />
                 צור קשר
               </button>
             </div>

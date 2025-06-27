@@ -1,3 +1,4 @@
+
 import { Calendar, ArrowLeft, ExternalLink } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useState, useEffect } from 'react';
@@ -183,43 +184,43 @@ const Articles = () => {
     <section id="articles" className="section-spacing bg-lawyer-black">
       <div className="container mx-auto px-4">
         {/* Section title */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold mb-6">
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-lawyer-gold mb-4 md:mb-6">
             מאמרים ועדכונים
           </h2>
-          <p className="text-xl text-lawyer-silver max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-lawyer-silver max-w-2xl mx-auto">
             עדכונים משפטיים, מדריכים וטיפים שימושיים בתחומי הדין השונים
           </p>
         </div>
 
-        {/* Articles grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Articles grid - responsive */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
           {content.articles.map((article, index) => {
             const { text: truncatedExcerpt, isTruncated } = truncateText(article.excerpt);
             
             return (
               <article key={article.id} className="lawyer-card group">
                 {/* Category badge */}
-                <div className="mb-4">
-                  <span className="inline-block bg-lawyer-gold text-lawyer-black px-3 py-1 rounded-full text-sm font-semibold">
+                <div className="mb-3 md:mb-4">
+                  <span className="inline-block bg-lawyer-gold text-lawyer-black px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold">
                     {article.category}
                   </span>
                 </div>
 
                 {/* Article title */}
-                <h3 className="text-xl font-bold text-lawyer-gold mb-3 group-hover:text-yellow-400 transition-colors">
+                <h3 className="text-lg md:text-xl font-bold text-lawyer-gold mb-2 md:mb-3 group-hover:text-yellow-400 transition-colors">
                   {article.title}
                 </h3>
 
                 {/* Article excerpt - truncated */}
-                <div className="text-lawyer-silver mb-4 leading-relaxed">
-                  <p className="mb-2">{truncatedExcerpt}</p>
+                <div className="text-lawyer-silver mb-3 md:mb-4 leading-relaxed">
+                  <p className="mb-2 text-sm md:text-base">{truncatedExcerpt}</p>
                 </div>
 
                 {/* Article meta */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2 space-x-reverse text-lawyer-silver text-sm">
-                    <Calendar size={16} />
+                  <div className="flex items-center space-x-2 space-x-reverse text-lawyer-silver text-xs md:text-sm">
+                    <Calendar size={14} className="md:w-4 md:h-4" />
                     <span>{article.date}</span>
                   </div>
 
@@ -227,15 +228,15 @@ const Articles = () => {
                     <DialogTrigger asChild>
                       <button 
                         onClick={() => handleArticleClick(article)}
-                        className="flex items-center space-x-1 space-x-reverse text-lawyer-gold hover:text-lawyer-white transition-colors text-sm font-semibold"
+                        className="flex items-center space-x-1 space-x-reverse text-lawyer-gold hover:text-lawyer-white transition-colors text-xs md:text-sm font-semibold"
                       >
                         <span>למאמר המלא</span>
-                        <ArrowLeft size={16} />
+                        <ArrowLeft size={14} className="md:w-4 md:h-4" />
                       </button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-lawyer-black border border-lawyer-gold">
+                    <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-lawyer-black border border-lawyer-gold mx-4">
                       <DialogHeader>
-                        <DialogTitle className="text-2xl font-bold text-lawyer-gold text-right">
+                        <DialogTitle className="text-xl md:text-2xl font-bold text-lawyer-gold text-right">
                           {selectedArticle?.title}
                         </DialogTitle>
                       </DialogHeader>
@@ -247,10 +248,10 @@ const Articles = () => {
                           </span>
                         </div>
                         <div className="prose prose-invert max-w-none text-lawyer-white text-right">
-                          <p className="text-lg leading-relaxed mb-6">
+                          <p className="text-base md:text-lg leading-relaxed mb-4 md:mb-6">
                             {selectedArticle?.excerpt}
                           </p>
-                          <div className="space-y-4 text-base leading-relaxed">
+                          <div className="space-y-4 text-sm md:text-base leading-relaxed">
                             <p>
                               זהו התוכן המלא של המאמר. כאן ניתן להציג את המידע המפורט, 
                               הסברים משפטיים מעמיקים, דוגמאות רלוונטיות ומידע נוסף שיעזור 
@@ -276,10 +277,10 @@ const Articles = () => {
         </div>
 
         {/* View all button */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 md:mt-12">
           <a 
             href="#" 
-            className="inline-block lawyer-button-secondary"
+            className="inline-block lawyer-button-secondary text-sm md:text-base px-6 md:px-8 py-2 md:py-3"
           >
             צפייה בכל המאמרים
           </a>

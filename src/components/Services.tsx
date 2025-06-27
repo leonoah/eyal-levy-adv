@@ -48,21 +48,21 @@ const Services = () => {
     >
       <div className="container mx-auto px-4">
         {/* Section title */}
-        <div className="text-center mb-16">
-          <h2 className={`text-4xl md:text-5xl font-bold text-lawyer-gold mb-6 transition-all duration-700 delay-200 ${
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold text-lawyer-gold mb-4 md:mb-6 transition-all duration-700 delay-200 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
             תחומי התמחות
           </h2>
-          <p className={`text-xl text-lawyer-silver max-w-2xl mx-auto transition-all duration-700 delay-300 ${
+          <p className={`text-lg md:text-xl text-lawyer-silver max-w-2xl mx-auto transition-all duration-700 delay-300 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
             אנו מתמחים במגוון רחב של תחומי דין ומספקים שירות מקצועי ואמין
           </p>
         </div>
 
-        {/* Services grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Services grid - responsive */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
           {content.services && content.services.length > 0 ? content.services.map((service, index) => {
             const IconComponent = iconMap[service.icon as keyof typeof iconMap] || Scale;
             return (
@@ -73,18 +73,18 @@ const Services = () => {
                 }`}
                 style={{ transitionDelay: `${400 + index * 150}ms` }}
               >
-                <div className="mb-6">
+                <div className="mb-4 md:mb-6">
                   <IconComponent 
-                    size={48} 
-                    className="text-lawyer-gold mx-auto group-hover:scale-110 transition-transform duration-300" 
+                    size={40} 
+                    className="text-lawyer-gold mx-auto group-hover:scale-110 transition-transform duration-300 md:w-12 md:h-12" 
                   />
                 </div>
                 
-                <h3 className="text-xl font-bold text-lawyer-gold mb-4">
+                <h3 className="text-lg md:text-xl font-bold text-lawyer-gold mb-3 md:mb-4">
                   {service.title}
                 </h3>
                 
-                <p className="text-lawyer-silver leading-relaxed">
+                <p className="text-lawyer-silver leading-relaxed text-sm md:text-base">
                   {service.description}
                 </p>
               </div>
