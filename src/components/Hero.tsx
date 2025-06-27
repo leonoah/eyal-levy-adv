@@ -4,10 +4,21 @@ import { useAdminContent } from '@/hooks/useAdminContent';
 import { MessageCircle } from 'lucide-react';
 import AchievementsDisplay from '@/components/shared/AchievementsDisplay';
 import { useThemeSettings } from '@/hooks/useThemeSettings';
+import { useEffect, useState } from 'react';
 
 const Hero = () => {
   const { content } = useAdminContent();
   const { themeSettings } = useThemeSettings();
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Trigger animation after component mounts
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // פונקציה ליצירת קישור WhatsApp תקני
   const createWhatsAppLink = (phoneNumber: string, messageText?: string) => {
@@ -50,12 +61,12 @@ const Hero = () => {
   };
 
   const backgroundStyle = {
-    backgroundColor: themeSettings?.background_color || 'var(--lawyer-black)',
+    backgroundColor: themeSettings?.heroBackgroundColor || 'var(--lawyer-black)',
   };
 
   return (
     <section 
-      className="min-h-screen flex items-center justify-center px-4 py-16"
+      className="min-h-screen flex items-center justify-center px-4 py-16 transition-all duration-1000"
       style={backgroundStyle}
     >
       <div className="w-full max-w-6xl mx-auto">
@@ -64,7 +75,9 @@ const Hero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           
           {/* Right Column - Image (now first in order for RTL) */}
-          <div className="flex justify-center order-2 lg:order-1">
+          <div className={`flex justify-center order-2 lg:order-1 transition-all duration-1000 delay-300 ${
+            isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+          }`}>
             <div className="rounded-lg border-4 border-lawyer-gold shadow-[0_0_15px_rgba(212,175,55,0.4)] overflow-hidden bg-lawyer-black" 
                  style={{ width: '544px', height: '653px' }}>
               {content.about.image ? (
@@ -88,10 +101,14 @@ const Hero = () => {
           </div>
 
           {/* Left Column - Content (now second in order for RTL) */}
-          <div className="flex flex-col h-full justify-between text-center order-1 lg:order-2">
+          <div className={`flex flex-col h-full justify-between text-center order-1 lg:order-2 transition-all duration-1000 ${
+            isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+          }`}>
             
             {/* Row 1: Logo */}
-            <div className="mb-6 flex justify-center">
+            <div className={`mb-6 flex justify-center transition-all duration-700 delay-200 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+            }`}>
               <img 
                 src="/lovable-uploads/2e50d3be-b4db-4bf9-a1df-a4f54e34d9eb.png" 
                 alt="לוגו עו''ד אייל לוי" 
@@ -104,28 +121,36 @@ const Hero = () => {
             </div>
 
             {/* Row 2: Name */}
-            <div className="mb-6">
+            <div className={`mb-6 transition-all duration-700 delay-300 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+            }`}>
               <h1 className="text-4xl md:text-5xl font-bold text-lawyer-gold leading-tight">
                 {content.hero.title}
               </h1>
             </div>
 
             {/* Row 3: Subtitle */}
-            <div className="mb-6">
+            <div className={`mb-6 transition-all duration-700 delay-400 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+            }`}>
               <h2 className="text-xl text-lawyer-silver font-medium">
                 {content.hero.subtitle}
               </h2>
             </div>
 
             {/* Row 4: Description */}
-            <div className="mb-8 flex-grow">
+            <div className={`mb-8 flex-grow transition-all duration-700 delay-500 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+            }`}>
               <p className="text-lawyer-white text-lg leading-relaxed">
                 {content.hero.description}
               </p>
             </div>
 
             {/* New Section: About */}
-            <div className="mb-8">
+            <div className={`mb-8 transition-all duration-700 delay-600 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+            }`}>
               <h3 className="text-2xl font-bold text-lawyer-gold mb-4">
                 {content.about.title}
               </h3>
@@ -141,7 +166,9 @@ const Hero = () => {
             </div>
 
             {/* Row 5: CTA Buttons */}
-            <div className="mt-auto flex justify-center gap-4">
+            <div className={`mt-auto flex justify-center gap-4 transition-all duration-700 delay-700 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}>
               <button 
                 onClick={handleWhatsAppClick}
                 className="bg-[#25d366] text-white text-lg font-semibold px-8 py-3 rounded-lg hover:bg-[#20c55a] transition flex items-center gap-2 hover:scale-105 transform"

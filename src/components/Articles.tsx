@@ -1,15 +1,12 @@
-
 import { Calendar, ArrowLeft, ExternalLink } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { SiteContent, defaultContent } from '@/types/admin';
 
 const Articles = () => {
   const [content, setContent] = useState<SiteContent>(defaultContent);
   const [selectedArticle, setSelectedArticle] = useState<any>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchContentFromDB();
@@ -25,26 +22,6 @@ const Articles = () => {
     return () => {
       window.removeEventListener('contentUpdated', handleContentUpdate as EventListener);
     };
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '50px'
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
   }, []);
 
   const fetchContentFromDB = async () => {
@@ -203,24 +180,14 @@ const Articles = () => {
   };
 
   return (
-    <section 
-      id="articles" 
-      ref={sectionRef}
-      className={`section-spacing bg-lawyer-black transition-all duration-1000 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-      }`}
-    >
+    <section id="articles" className="section-spacing bg-lawyer-black">
       <div className="container mx-auto px-4">
         {/* Section title */}
         <div className="text-center mb-16">
-          <h2 className={`text-4xl md:text-5xl font-bold text-lawyer-gold mb-6 transition-all duration-700 delay-200 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}>
+          <h2 className="text-4xl md:text-5xl font-bold text-lawyer-gold mb-6">
             מאמרים ועדכונים
           </h2>
-          <p className={`text-xl text-lawyer-silver max-w-2xl mx-auto transition-all duration-700 delay-300 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}>
+          <p className="text-xl text-lawyer-silver max-w-2xl mx-auto">
             עדכונים משפטיים, מדריכים וטיפים שימושיים בתחומי הדין השונים
           </p>
         </div>
@@ -231,13 +198,7 @@ const Articles = () => {
             const { text: truncatedExcerpt, isTruncated } = truncateText(article.excerpt);
             
             return (
-              <article 
-                key={article.id} 
-                className={`lawyer-card group transition-all duration-700 ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
-                style={{ transitionDelay: `${400 + index * 150}ms` }}
-              >
+              <article key={article.id} className="lawyer-card group">
                 {/* Category badge */}
                 <div className="mb-4">
                   <span className="inline-block bg-lawyer-gold text-lawyer-black px-3 py-1 rounded-full text-sm font-semibold">
@@ -315,9 +276,7 @@ const Articles = () => {
         </div>
 
         {/* View all button */}
-        <div className={`text-center mt-12 transition-all duration-700 delay-700 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-        }`}>
+        <div className="text-center mt-12">
           <a 
             href="#" 
             className="inline-block lawyer-button-secondary"
