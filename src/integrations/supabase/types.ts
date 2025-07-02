@@ -20,6 +20,7 @@ export type Database = {
           is_active: boolean | null
           name: string
           price: string
+          project_id: string | null
           updated_at: string
         }
         Insert: {
@@ -32,6 +33,7 @@ export type Database = {
           is_active?: boolean | null
           name: string
           price: string
+          project_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -44,9 +46,18 @@ export type Database = {
           is_active?: boolean | null
           name?: string
           price?: string
+          project_id?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "admin_menu_items_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
       }
       admin_testimonials: {
         Row: {
@@ -56,6 +67,7 @@ export type Database = {
           image_url: string | null
           is_active: boolean | null
           name: string
+          project_id: string | null
           rating: number | null
           text: string
           updated_at: string
@@ -67,6 +79,7 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean | null
           name: string
+          project_id?: string | null
           rating?: number | null
           text: string
           updated_at?: string
@@ -78,11 +91,20 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean | null
           name?: string
+          project_id?: string | null
           rating?: number | null
           text?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "admin_testimonials_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
       }
       admin_users: {
         Row: {
@@ -116,6 +138,7 @@ export type Database = {
           description: string | null
           id: string
           image_url: string | null
+          project_id: string | null
           section_name: string
           subtitle: string | null
           title: string | null
@@ -128,6 +151,7 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          project_id?: string | null
           section_name: string
           subtitle?: string | null
           title?: string | null
@@ -140,12 +164,71 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          project_id?: string | null
           section_name?: string
           subtitle?: string | null
           title?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "content_sections_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
+      galleries: {
+        Row: {
+          category: string | null
+          cloudinary_folder_name: string | null
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          project_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          cloudinary_folder_name?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          project_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          cloudinary_folder_name?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          project_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "galleries_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
       }
       gallery_images: {
         Row: {
@@ -153,11 +236,14 @@ export type Database = {
           created_at: string
           description: string | null
           display_order: number | null
+          gallery_id: string | null
           id: string
           image_url: string
           is_active: boolean | null
+          is_favorite: boolean | null
           is_featured_on_homepage: boolean | null
           media_type: string | null
+          project_id: string | null
           title: string
           updated_at: string
           video_url: string | null
@@ -167,11 +253,14 @@ export type Database = {
           created_at?: string
           description?: string | null
           display_order?: number | null
+          gallery_id?: string | null
           id?: string
           image_url: string
           is_active?: boolean | null
+          is_favorite?: boolean | null
           is_featured_on_homepage?: boolean | null
           media_type?: string | null
+          project_id?: string | null
           title: string
           updated_at?: string
           video_url?: string | null
@@ -181,16 +270,34 @@ export type Database = {
           created_at?: string
           description?: string | null
           display_order?: number | null
+          gallery_id?: string | null
           id?: string
           image_url?: string
           is_active?: boolean | null
+          is_favorite?: boolean | null
           is_featured_on_homepage?: boolean | null
           media_type?: string | null
+          project_id?: string | null
           title?: string
           updated_at?: string
           video_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "gallery_images_gallery_id_fkey"
+            columns: ["gallery_id"]
+            isOneToOne: false
+            referencedRelation: "galleries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gallery_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
       }
       messages: {
         Row: {
@@ -305,6 +412,89 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          project_id: string
+          project_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          project_id: string
+          project_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          project_id?: string
+          project_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string
+          description: string
+          display_order: number | null
+          duration: string | null
+          features: Json | null
+          icon_name: string
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          price: string | null
+          project_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          display_order?: number | null
+          duration?: string | null
+          features?: Json | null
+          icon_name?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          price?: string | null
+          project_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          display_order?: number | null
+          duration?: string | null
+          features?: Json | null
+          icon_name?: string
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          price?: string | null
+          project_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
       site_backups: {
         Row: {
           backup_name: string
@@ -337,6 +527,7 @@ export type Database = {
           content: Json
           created_at: string
           id: string
+          project_id: string | null
           section_name: string
           updated_at: string
         }
@@ -344,6 +535,7 @@ export type Database = {
           content: Json
           created_at?: string
           id?: string
+          project_id?: string | null
           section_name: string
           updated_at?: string
         }
@@ -351,10 +543,19 @@ export type Database = {
           content?: Json
           created_at?: string
           id?: string
+          project_id?: string | null
           section_name?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "site_content_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
       }
       social_links: {
         Row: {
@@ -362,6 +563,7 @@ export type Database = {
           id: string
           is_active: boolean | null
           platform: string
+          project_id: string | null
           updated_at: string
           url: string
         }
@@ -370,6 +572,7 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           platform: string
+          project_id?: string | null
           updated_at?: string
           url: string
         }
@@ -378,10 +581,19 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           platform?: string
+          project_id?: string | null
           updated_at?: string
           url?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "social_links_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
       }
       theme_settings: {
         Row: {
@@ -389,6 +601,7 @@ export type Database = {
           button_color: string
           created_at: string
           id: string
+          project_id: string | null
           text_color: string
           updated_at: string
         }
@@ -397,6 +610,7 @@ export type Database = {
           button_color?: string
           created_at?: string
           id?: string
+          project_id?: string | null
           text_color?: string
           updated_at?: string
         }
@@ -405,10 +619,19 @@ export type Database = {
           button_color?: string
           created_at?: string
           id?: string
+          project_id?: string | null
           text_color?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "theme_settings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
       }
     }
     Views: {

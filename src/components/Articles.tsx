@@ -1,9 +1,10 @@
-
 import { Calendar, ArrowLeft, ExternalLink } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { SiteContent, defaultContent } from '@/types/admin';
+
+const PROJECT_ID = 'eyal_levi_adv';
 
 const Articles = () => {
   const [content, setContent] = useState<SiteContent>(defaultContent);
@@ -30,7 +31,8 @@ const Articles = () => {
       const { data, error } = await supabase
         .from('site_content')
         .select('section_name, content')
-        .eq('section_name', 'articles');
+        .eq('section_name', 'articles')
+        .eq('project_id', PROJECT_ID);
 
       if (error) {
         console.error('Error fetching articles content:', error);

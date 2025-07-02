@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { SiteContent, defaultContent } from '@/types/admin';
 import { supabase } from '@/integrations/supabase/client';
 
+const PROJECT_ID = 'eyal_levi_adv';
+
 export const useAdminContent = () => {
   const [content, setContent] = useState<SiteContent>(defaultContent);
   const [isLoading, setIsLoading] = useState(true);
@@ -13,7 +15,8 @@ export const useAdminContent = () => {
       
       const { data, error } = await supabase
         .from('site_content')
-        .select('section_name, content');
+        .select('section_name, content')
+        .eq('project_id', PROJECT_ID);
 
       if (error) {
         console.error('useAdminContent: Error fetching content:', error);
@@ -113,9 +116,10 @@ export const useAdminContent = () => {
           .upsert({
             section_name: section.name,
             content: section.data,
+            project_id: PROJECT_ID,
             updated_at: new Date().toISOString()
           }, {
-            onConflict: 'section_name'
+            onConflict: 'section_name,project_id'
           });
 
         if (error) {

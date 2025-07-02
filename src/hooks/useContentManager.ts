@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { SiteContent, defaultContent } from '@/types/admin';
 import { supabase } from '@/integrations/supabase/client';
 
+const PROJECT_ID = 'eyal_levi_adv';
+
 export const useContentManager = () => {
   const [content, setContent] = useState<SiteContent>(defaultContent);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,7 +14,8 @@ export const useContentManager = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from('site_content')
-        .select('section_name, content');
+        .select('section_name, content')
+        .eq('project_id', PROJECT_ID);
 
       if (error) {
         console.error('Error fetching content:', error);
