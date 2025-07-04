@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -58,14 +57,20 @@ const TestimonialsSection = () => {
   const handleSave = async () => {
     try {
       if (editingId) {
-        await updateTestimonial(editingId, formData);
+        await updateTestimonial({ 
+          id: editingId, 
+          ...formData 
+        });
         toast({
           title: "ההמלצה עודכנה בהצלחה",
           description: "השינויים נשמרו במסד הנתונים",
         });
         setEditingId(null);
       } else {
-        await addTestimonial(formData);
+        await addTestimonial({
+          ...formData,
+          project_id: 'eyal_levi_adv'
+        });
         toast({
           title: "ההמלצה נוספה בהצלחה",
           description: "ההמלצה החדשה נשמרה במסד הנתונים",
