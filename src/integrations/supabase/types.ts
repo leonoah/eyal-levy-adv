@@ -503,6 +503,7 @@ export type Database = {
           file_path: string
           file_size: number | null
           id: string
+          project_id: string | null
         }
         Insert: {
           backup_name: string
@@ -511,6 +512,7 @@ export type Database = {
           file_path?: string
           file_size?: number | null
           id?: string
+          project_id?: string | null
         }
         Update: {
           backup_name?: string
@@ -519,6 +521,7 @@ export type Database = {
           file_path?: string
           file_size?: number | null
           id?: string
+          project_id?: string | null
         }
         Relationships: []
       }
@@ -550,6 +553,76 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "site_content_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
+      site_content_batel: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          project_id: string | null
+          section_name: string
+          updated_at: string
+        }
+        Insert: {
+          content: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          section_name: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          section_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_content_batel_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
+      site_content_inbal: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          project_id: string | null
+          section_name: string
+          updated_at: string
+        }
+        Insert: {
+          content: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          section_name: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          section_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_content_duplicate_inbal_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
@@ -595,6 +668,44 @@ export type Database = {
           },
         ]
       }
+      social_links_inbal: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          platform: string
+          project_id: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform: string
+          project_id?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform?: string
+          project_id?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_links_duplicate_inbal_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
       theme_settings: {
         Row: {
           background_color: string
@@ -626,6 +737,82 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "theme_settings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
+      theme_settings_batel: {
+        Row: {
+          background_color: string
+          button_color: string
+          created_at: string
+          id: string
+          project_id: string | null
+          text_color: string
+          updated_at: string
+        }
+        Insert: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          text_color?: string
+          updated_at?: string
+        }
+        Update: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          text_color?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "theme_settings_batel_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
+      theme_settings_Inbal: {
+        Row: {
+          background_color: string
+          button_color: string
+          created_at: string
+          id: string
+          project_id: string | null
+          text_color: string
+          updated_at: string
+        }
+        Insert: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          text_color?: string
+          updated_at?: string
+        }
+        Update: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          text_color?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "theme_settings_Inbal_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"

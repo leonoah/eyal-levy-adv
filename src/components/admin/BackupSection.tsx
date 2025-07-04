@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,12 +8,15 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Download, Upload, Trash2, AlertTriangle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
+const PROJECT_ID = 'eyal_levi_adv';
+
 interface Backup {
   id: string;
   backup_name: string;
   created_at: string;
   file_path: string;
   file_size: number;
+  project_id: string;
 }
 
 const BackupSection = () => {
@@ -36,7 +38,8 @@ const BackupSection = () => {
     try {
       const { data, error } = await supabase
         .from('site_backups')
-        .select('id, backup_name, created_at, file_path, file_size')
+        .select('id, backup_name, created_at, file_path, file_size, project_id')
+        .eq('project_id', PROJECT_ID)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -136,17 +139,17 @@ const BackupSection = () => {
     try {
       console.log('Starting backup creation...');
       
-      // איסוף כל הנתונים מהטבלאות השונות
+      // איסוף כל הנתונים מהטבלאות השונות עם פילטר project_id
       const [
         contentData, 
         socialLinksData, 
         testimonialsData, 
         themeSettingsData
       ] = await Promise.all([
-        supabase.from('site_content').select('*'),
-        supabase.from('social_links').select('*'),
-        supabase.from('admin_testimonials').select('*'),
-        supabase.from('theme_settings').select('*')
+        supabase.from('site_content').select('*').eq('project_id', PROJECT_ID),
+        supabase.from('social_links').select('*').eq('project_id', PROJECT_ID),
+        supabase.from('admin_testimonials').select('*').eq('project_id', PROJECT_ID),
+        supabase.from('theme_settings').select('*').eq('project_id', PROJECT_ID)
       ]);
 
       console.log('Backup data collected:', {
@@ -162,7 +165,8 @@ const BackupSection = () => {
         testimonials: testimonialsData.data || [],
         themeSettings: themeSettingsData.data || [],
         timestamp: new Date().toISOString(),
-        version: '2.0' // גרסה מעודכנת לעבודה עם Storage
+        version: '2.0',
+        project_id: PROJECT_ID
       };
 
       // יצירת קובץ JSON
@@ -177,13 +181,14 @@ const BackupSection = () => {
 
       if (uploadError) throw uploadError;
 
-      // שמירת מטא-דאטה בטבלה
+      // שמירת מטא-דאטה בטבלה עם project_id
       const { error: dbError } = await supabase
         .from('site_backups')
         .insert({
           backup_name: backupName,
           file_path: uploadData.path,
-          file_size: file.size
+          file_size: file.size,
+          project_id: PROJECT_ID
         });
 
       if (dbError) throw dbError;
@@ -239,13 +244,13 @@ const BackupSection = () => {
         version: data.version || 'legacy'
       });
 
-      // מחיקת נתונים קיימים
-      console.log('Deleting existing data...');
+      // מחיקת נתונים קיימים לפרויקט הנוכחי בלבד
+      console.log('Deleting existing data for project:', PROJECT_ID);
       const deletePromises = [
-        supabase.from('site_content').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
-        supabase.from('social_links').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
-        supabase.from('admin_testimonials').delete().neq('id', '00000000-0000-0000-0000-000000000000'),
-        supabase.from('theme_settings').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+        supabase.from('site_content').delete().eq('project_id', PROJECT_ID),
+        supabase.from('social_links').delete().eq('project_id', PROJECT_ID),
+        supabase.from('admin_testimonials').delete().eq('project_id', PROJECT_ID),
+        supabase.from('theme_settings').delete().eq('project_id', PROJECT_ID)
       ];
 
       const deleteResults = await Promise.allSettled(deletePromises);
@@ -257,7 +262,7 @@ const BackupSection = () => {
 
       console.log('Existing data deleted, inserting backup data...');
 
-      // הוספת נתונים מהגיבוי עם טיפול טוב יותר בשגיאות
+      // הוספת נתונים מהגיבוי עם project_id נכון
       const insertResults = [];
 
       if (data.content && data.content.length > 0) {
@@ -269,9 +274,10 @@ const BackupSection = () => {
               .upsert({
                 section_name: item.section_name,
                 content: item.content,
+                project_id: PROJECT_ID,
                 updated_at: new Date().toISOString()
               }, {
-                onConflict: 'section_name'
+                onConflict: 'section_name,project_id'
               });
             
             if (error) {
@@ -296,9 +302,10 @@ const BackupSection = () => {
                 platform: item.platform,
                 url: item.url,
                 is_active: item.is_active !== undefined ? item.is_active : true,
+                project_id: PROJECT_ID,
                 updated_at: new Date().toISOString()
               }, {
-                onConflict: 'platform'
+                onConflict: 'platform,project_id'
               });
             
             if (error) {
@@ -326,6 +333,7 @@ const BackupSection = () => {
                 image_url: item.image_url,
                 display_order: item.display_order || 0,
                 is_active: item.is_active !== undefined ? item.is_active : true,
+                project_id: PROJECT_ID,
                 updated_at: new Date().toISOString()
               });
             
@@ -351,6 +359,7 @@ const BackupSection = () => {
                 background_color: item.background_color || '#121212',
                 button_color: item.button_color || '#D4AF37',
                 text_color: item.text_color || '#FFFFFF',
+                project_id: PROJECT_ID,
                 updated_at: new Date().toISOString()
               });
             
@@ -451,7 +460,8 @@ const BackupSection = () => {
       const { error: dbError } = await supabase
         .from('site_backups')
         .delete()
-        .eq('id', backup.id);
+        .eq('id', backup.id)
+        .eq('project_id', PROJECT_ID);
 
       if (dbError) throw dbError;
 
@@ -490,10 +500,10 @@ const BackupSection = () => {
         <CardHeader>
           <CardTitle className="text-lawyer-gold flex items-center gap-2">
             <Download size={20} />
-            ניהול גיבויים (Storage)
+            ניהול גיבויים (Storage) - פרויקט: {PROJECT_ID}
           </CardTitle>
           <CardDescription className="text-lawyer-white">
-            צור וניהל גיבויים של תוכן האתר. הגיבויים נשמרים ב-Supabase Storage (מקסימום 4 גיבויים)
+            צור וניהל גיבויים של תוכן האתר עבור פרויקט {PROJECT_ID}. הגיבויים נשמרים ב-Supabase Storage (מקסימום 4 גיבויים)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
