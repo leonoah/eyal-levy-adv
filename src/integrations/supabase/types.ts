@@ -7,6 +7,11 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instanciate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "12.2.3 (519615d)"
+  }
   public: {
     Tables: {
       admin_menu_items: {
@@ -59,6 +64,111 @@ export type Database = {
           },
         ]
       }
+      admin_projects: {
+        Row: {
+          category: string | null
+          client_name: string | null
+          completion_date: string | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          is_featured: boolean | null
+          project_id: string | null
+          project_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          client_name?: string | null
+          completion_date?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          project_id?: string | null
+          project_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          client_name?: string | null
+          completion_date?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          project_id?: string | null
+          project_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      admin_service: {
+        Row: {
+          created_at: string
+          description: string
+          display_order: number | null
+          duration: string | null
+          features: Json | null
+          icon_name: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          is_featured: boolean
+          is_visible: boolean
+          price: string | null
+          project_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          display_order?: number | null
+          duration?: string | null
+          features?: Json | null
+          icon_name?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean
+          is_visible?: boolean
+          price?: string | null
+          project_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          display_order?: number | null
+          duration?: string | null
+          features?: Json | null
+          icon_name?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean
+          is_visible?: boolean
+          price?: string | null
+          project_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       admin_testimonials: {
         Row: {
           created_at: string
@@ -99,6 +209,53 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "admin_testimonials_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
+      admin_testimonials_inbal: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          name: string
+          project_id: string | null
+          rating: number | null
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name: string
+          project_id?: string | null
+          rating?: number | null
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name?: string
+          project_id?: string | null
+          rating?: number | null
+          text?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_testimonials_inbal_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
@@ -299,6 +456,96 @@ export type Database = {
           },
         ]
       }
+      homepage_content: {
+        Row: {
+          about_text_en: string | null
+          about_text_he: string | null
+          hero_badge_text_en: string | null
+          hero_badge_text_he: string | null
+          hero_button1_text_en: string | null
+          hero_button1_text_he: string | null
+          hero_button2_text_en: string | null
+          hero_button2_text_he: string | null
+          hero_stat1_number: string | null
+          hero_stat1_text_en: string | null
+          hero_stat1_text_he: string | null
+          hero_stat2_number: string | null
+          hero_stat2_text_en: string | null
+          hero_stat2_text_he: string | null
+          hero_stat3_number: string | null
+          hero_stat3_text_en: string | null
+          hero_stat3_text_he: string | null
+          hero_subtitle_en: string | null
+          hero_subtitle_he: string | null
+          hero_text_en: string | null
+          hero_text_he: string | null
+          hero_title_en: string | null
+          hero_title_he: string | null
+          id: string
+          project_id: string | null
+          socials: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          about_text_en?: string | null
+          about_text_he?: string | null
+          hero_badge_text_en?: string | null
+          hero_badge_text_he?: string | null
+          hero_button1_text_en?: string | null
+          hero_button1_text_he?: string | null
+          hero_button2_text_en?: string | null
+          hero_button2_text_he?: string | null
+          hero_stat1_number?: string | null
+          hero_stat1_text_en?: string | null
+          hero_stat1_text_he?: string | null
+          hero_stat2_number?: string | null
+          hero_stat2_text_en?: string | null
+          hero_stat2_text_he?: string | null
+          hero_stat3_number?: string | null
+          hero_stat3_text_en?: string | null
+          hero_stat3_text_he?: string | null
+          hero_subtitle_en?: string | null
+          hero_subtitle_he?: string | null
+          hero_text_en?: string | null
+          hero_text_he?: string | null
+          hero_title_en?: string | null
+          hero_title_he?: string | null
+          id?: string
+          project_id?: string | null
+          socials?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          about_text_en?: string | null
+          about_text_he?: string | null
+          hero_badge_text_en?: string | null
+          hero_badge_text_he?: string | null
+          hero_button1_text_en?: string | null
+          hero_button1_text_he?: string | null
+          hero_button2_text_en?: string | null
+          hero_button2_text_he?: string | null
+          hero_stat1_number?: string | null
+          hero_stat1_text_en?: string | null
+          hero_stat1_text_he?: string | null
+          hero_stat2_number?: string | null
+          hero_stat2_text_en?: string | null
+          hero_stat2_text_he?: string | null
+          hero_stat3_number?: string | null
+          hero_stat3_text_en?: string | null
+          hero_stat3_text_he?: string | null
+          hero_subtitle_en?: string | null
+          hero_subtitle_he?: string | null
+          hero_text_en?: string | null
+          hero_text_he?: string | null
+          hero_title_en?: string | null
+          hero_title_he?: string | null
+          id?: string
+          project_id?: string | null
+          socials?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           created_at: string
@@ -409,6 +656,57 @@ export type Database = {
           id?: string
           name?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      project_content: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          date: string | null
+          description: string | null
+          details: string | null
+          featured: boolean | null
+          features: Json | null
+          id: string
+          image: string | null
+          images: Json | null
+          location: string | null
+          title: string | null
+          updated_at: string | null
+          visible: boolean | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          date?: string | null
+          description?: string | null
+          details?: string | null
+          featured?: boolean | null
+          features?: Json | null
+          id?: string
+          image?: string | null
+          images?: Json | null
+          location?: string | null
+          title?: string | null
+          updated_at?: string | null
+          visible?: boolean | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          date?: string | null
+          description?: string | null
+          details?: string | null
+          featured?: boolean | null
+          features?: Json | null
+          id?: string
+          image?: string | null
+          images?: Json | null
+          location?: string | null
+          title?: string | null
+          updated_at?: string | null
+          visible?: boolean | null
         }
         Relationships: []
       }
@@ -525,6 +823,36 @@ export type Database = {
         }
         Relationships: []
       }
+      site_backups_inbal: {
+        Row: {
+          backup_name: string
+          created_at: string
+          created_by: string | null
+          file_path: string
+          file_size: number | null
+          id: string
+          project_id: string | null
+        }
+        Insert: {
+          backup_name: string
+          created_at?: string
+          created_by?: string | null
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          project_id?: string | null
+        }
+        Update: {
+          backup_name?: string
+          created_at?: string
+          created_by?: string | null
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          project_id?: string | null
+        }
+        Relationships: []
+      }
       site_content: {
         Row: {
           content: Json
@@ -595,6 +923,41 @@ export type Database = {
           },
         ]
       }
+      site_content_gal: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          project_id: string | null
+          section_name: string
+          updated_at: string
+        }
+        Insert: {
+          content: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          section_name: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          section_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_content_gal_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
       site_content_inbal: {
         Row: {
           content: Json
@@ -623,6 +986,41 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "site_content_duplicate_inbal_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
+      site_content_vered: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          project_id: string | null
+          section_name: string
+          updated_at: string
+        }
+        Insert: {
+          content: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          section_name: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          section_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_content_vered_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
@@ -668,6 +1066,44 @@ export type Database = {
           },
         ]
       }
+      social_links_gal: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          platform: string
+          project_id: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform: string
+          project_id?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform?: string
+          project_id?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_links_gal_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
       social_links_inbal: {
         Row: {
           created_at: string
@@ -699,6 +1135,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "social_links_duplicate_inbal_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
+      social_links_vered: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          platform: string
+          project_id: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform: string
+          project_id?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          platform?: string
+          project_id?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_links_vered_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
@@ -782,6 +1256,47 @@ export type Database = {
           },
         ]
       }
+      theme_settings_gal: {
+        Row: {
+          background_color: string
+          button_color: string
+          created_at: string
+          id: string
+          major_color: string
+          project_id: string | null
+          text_color: string
+          updated_at: string
+        }
+        Insert: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          major_color?: string
+          project_id?: string | null
+          text_color?: string
+          updated_at?: string
+        }
+        Update: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          major_color?: string
+          project_id?: string | null
+          text_color?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "theme_settings_gal_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: true
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
       theme_settings_Inbal: {
         Row: {
           background_color: string
@@ -820,6 +1335,74 @@ export type Database = {
           },
         ]
       }
+      theme_settings_vered: {
+        Row: {
+          background_color: string
+          button_color: string
+          created_at: string
+          id: string
+          project_id: string | null
+          text_color: string
+          updated_at: string
+        }
+        Insert: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          text_color?: string
+          updated_at?: string
+        }
+        Update: {
+          background_color?: string
+          button_color?: string
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          text_color?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "theme_settings_vered_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
+      translations: {
+        Row: {
+          created_at: string
+          english: string
+          hebrew: string
+          id: string
+          project_id: string
+          section_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          english: string
+          hebrew: string
+          id?: string
+          project_id?: string
+          section_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          english?: string
+          hebrew?: string
+          id?: string
+          project_id?: string
+          section_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -836,21 +1419,25 @@ export type Database = {
   }
 }
 
-type DefaultSchema = Database[Extract<keyof Database, "public">]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
@@ -868,14 +1455,16 @@ export type Tables<
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
@@ -891,14 +1480,16 @@ export type TablesInsert<
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
@@ -914,14 +1505,16 @@ export type TablesUpdate<
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
@@ -929,14 +1522,16 @@ export type Enums<
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
