@@ -1,4 +1,5 @@
 import { Calendar, ArrowLeft, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
@@ -280,12 +281,12 @@ const Articles = () => {
 
         {/* View all button */}
         <div className="text-center mt-8 md:mt-12">
-          <a 
-            href="#" 
+          <Link 
+            to="/articles" 
             className="inline-block lawyer-button-secondary text-sm md:text-base px-6 md:px-8 py-2 md:py-3"
           >
             צפייה בכל המאמרים
-          </a>
+          </Link>
         </div>
       </div>
     </section>
