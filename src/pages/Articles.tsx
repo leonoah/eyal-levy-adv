@@ -88,15 +88,12 @@ const ArticlesPage = () => {
       
       <main className="pt-20">
         {/* Hero Section */}
-        <section className="bg-gradient-to-l from-lawyer-gold to-yellow-600 py-16 md:py-24">
+        <section className="bg-gradient-to-l from-lawyer-gold to-yellow-600 py-8 md:py-12">
           <div className="container mx-auto px-4">
             <div className="text-center">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-lawyer-black mb-4">
+              <h1 className="text-2xl md:text-3xl font-bold text-lawyer-black mb-3">
                 מאמרים ועדכונים משפטיים
               </h1>
-              <p className="text-lg md:text-xl text-lawyer-black/80 max-w-3xl mx-auto mb-8">
-                מידע מקצועי, עדכונים חקיקתיים ומדריכים שימושיים בתחומי הדין השונים
-              </p>
               <Link 
                 to="/" 
                 className="inline-flex items-center space-x-2 space-x-reverse text-lawyer-black hover:text-lawyer-black/80 transition-colors"
