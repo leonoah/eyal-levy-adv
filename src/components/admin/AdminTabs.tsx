@@ -25,6 +25,7 @@ interface AdminTabsProps {
   updateLegalPages: (legalPages: SiteContent['legalPages']) => void;
   addArticle: (data: any) => void;
   deleteArticle: (id: string) => void;
+  updateArticle: (id: string, article: { title: string; excerpt: string; date: string; category: string }) => void;
   setSocialLinks: React.Dispatch<React.SetStateAction<SocialLink[]>>;
   updateSocialLink: (platform: string, url: string) => Promise<void>;
 }
@@ -40,6 +41,7 @@ const AdminTabs = ({
   updateLegalPages,
   addArticle,
   deleteArticle,
+  updateArticle,
   setSocialLinks,
   updateSocialLink
 }: AdminTabsProps) => {
@@ -81,11 +83,12 @@ const AdminTabs = ({
       </TabsContent>
 
       <TabsContent value="articles">
-        <ArticlesSection 
-          content={content} 
-          addArticle={addArticle} 
-          deleteArticle={deleteArticle} 
-        />
+            <ArticlesSection 
+              content={content} 
+              addArticle={addArticle}
+              deleteArticle={deleteArticle}
+              updateArticle={updateArticle}
+            />
       </TabsContent>
 
       <TabsContent value="contact">

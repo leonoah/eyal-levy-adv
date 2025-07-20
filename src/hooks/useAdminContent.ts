@@ -201,6 +201,17 @@ export const useAdminContent = () => {
     }));
   };
 
+  const updateArticle = (id: string, updatedArticle: { title: string; excerpt: string; date: string; category: string }) => {
+    setContent(prev => ({
+      ...prev,
+      articles: prev.articles.map(article => 
+        article.id === id 
+          ? { ...article, ...updatedArticle }
+          : article
+      )
+    }));
+  };
+
   return {
     content,
     isLoading,
@@ -212,6 +223,7 @@ export const useAdminContent = () => {
     updateServices,
     updateLegalPages,
     addArticle,
-    deleteArticle
+    deleteArticle,
+    updateArticle
   };
 };

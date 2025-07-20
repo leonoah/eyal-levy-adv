@@ -22,7 +22,8 @@ const AdminContent = ({ onLogout }: AdminContentProps) => {
     updateServices,
     updateLegalPages,
     addArticle,
-    deleteArticle
+    deleteArticle,
+    updateArticle
   } = useAdminContent();
   
   const {
@@ -72,6 +73,7 @@ const AdminContent = ({ onLogout }: AdminContentProps) => {
           updateLegalPages={updateLegalPages}
           addArticle={addArticle}
           deleteArticle={deleteArticle}
+          updateArticle={updateArticle}
           setSocialLinks={setSocialLinks}
           updateSocialLink={updateSocialLink}
         />
